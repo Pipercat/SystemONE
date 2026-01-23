@@ -1,0 +1,257 @@
+<div class="documents-page">
+  <!-- Header with Filters -->
+  <header class="page-header">
+    <div class="header-top">
+      <div>
+        <h1>📁 Documents</h1>
+        <p class="text-muted">{{ totalDocs() }} total documents</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-icon" (click)="toggleViewMode()" title="Toggle view">
+          {{ viewMode() === 'table' ? '⊞' : '☰' }}
+        </button>
+        <button class="btn-primary" (click)="openUploadDialog()">
+          <span>⬆</span>
+          Upload
+        </button>
+      </div>
+    </div>
+
+    <!-- Filters Bar -->
+    <div class="filters-bar">
+      <!-- Search -->
+      <div class="search-box">
+        <input 
+          type="text" 
+          placeholder="Search documents..." 
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="onSearch()"
+          class="search-input"
+        />
+        <button class="search-btn" (click)="onSearch()">🔍</button>
+      </div>
+
+      <!-- Status Filter -->
+      <select 
+        [(ngModel)]="statusFilter" 
+        (change)="onStatusFilterChange($any($event.target).value)"
+        class="filter-select"
+      >
+        <option value="all">All Status</option>
+        <option value="inbox">Inbox</option>
+        <option value="ingested">Ingested</option>
+        <option value="classified">Classified</option>
+        <option value="reviewed">Reviewed</option>
+        <option value="sorted">Sorted</option>
+        <option value="archived">Archived</option>
+        <option value="error">Error</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Error Message -->
+  @if (error()) {
+    <div class="alert alert-error">
+      ⚠️ {{ error() }}
+    </div>
+  }
+
+  <!-- Loading State -->
+  @if (loading() && documents().length === 0) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading documents...</p>
+    </div>
+  }
+
+  <!-- Table View -->
+  @if (!loading() && viewMode() === 'table') {
+    <div class="table-container">
+      <table class="documents-table">
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Status</th>
+            <th>Classification</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (doc of documents(); track doc.id) {
+            <tr class="doc-row">
+              <td class="file-cell">
+                <span class="file-icon">{{ getFileIcon(doc.mime_type) }}</span>
+                <span class="file-name">{{ doc.original_filename }}</span>
+              </td>
+              <td>
+                <span class="type-badge">{{ doc.mime_type.split('/')[1] }}</span>
+              </td>
+              <td class="text-muted">{{ formatFileSize(doc.file_size_bytes) }}</td>
+              <td>
+                <span 
+                  class="status-badge" 
+                  [style.color]="getStatusColor(doc.status)"
+                >
+                  {{ doc.status }}
+                </span>
+              </td>
+              <td>
+                @if (doc.category) {
+                  <div class="classification-info">
+                    <div>{{ doc.category }}</div>
+                    @if (doc.classification_confidence) {
+                      <div class="confidence text-muted">
+                        {{ (doc.classification_confidence * 100).toFixed(0) }}% confidence
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <span class="text-muted">—</span>
+                }
+              </td>
+              <td class="text-muted">{{ formatDate(doc.created_at) }}</td>
+              <td class="actions-cell">
+                <button class="btn-icon-small" title="View">👁️</button>
+                <button class="btn-icon-small" title="Download">⬇️</button>
+                <button class="btn-icon-small" title="Delete">🗑️</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="empty-cell">
+                <div class="empty-state">
+                  <p>No documents found</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Grid View -->
+  @if (!loading() && viewMode() === 'grid') {
+    <div class="documents-grid">
+      @for (doc of documents(); track doc.id) {
+        <div class="doc-card">
+          <div class="doc-card-icon">{{ getFileIcon(doc.mime_type) }}</div>
+          <div class="doc-card-content">
+            <h3 class="doc-card-title">{{ doc.original_filename }}</h3>
+            <div class="doc-card-meta">
+              <span class="text-muted">{{ formatFileSize(doc.file_size_bytes) }}</span>
+              <span 
+                class="status-badge" 
+                [style.color]="getStatusColor(doc.status)"
+              >
+                {{ doc.status }}
+              </span>
+            </div>
+            @if (doc.category) {
+              <div class="doc-card-classification">
+                <span>{{ doc.category }}</span>
+                @if (doc.classification_confidence) {
+                  <span class="text-muted">
+                    {{ (doc.classification_confidence * 100).toFixed(0) }}%
+                  </span>
+                }
+              </div>
+            }
+          </div>
+          <div class="doc-card-actions">
+            <button class="btn-icon-small" title="View">👁️</button>
+            <button class="btn-icon-small" title="Download">⬇️</button>
+            <button class="btn-icon-small" title="Delete">🗑️</button>
+          </div>
+        </div>
+      } @empty {
+        <div class="empty-state">
+          <p>No documents found</p>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Pagination -->
+  @if (totalDocs() > 0) {
+    <div class="pagination">
+      <button 
+        class="btn-secondary" 
+        (click)="previousPage()"
+        [disabled]="currentPage() === 1"
+      >
+        ← Previous
+      </button>
+      <span class="pagination-info">
+        Page {{ currentPage() }} of {{ getTotalPages() }}
+        ({{ totalDocs() }} total)
+      </span>
+      <button 
+        class="btn-secondary" 
+        (click)="nextPage()"
+        [disabled]="!hasMore()"
+      >
+        Next →
+      </button>
+    </div>
+  }
+
+  <!-- Upload Dialog -->
+  @if (showUploadDialog()) {
+    <div class="modal-overlay" (click)="closeUploadDialog()">
+      <div class="modal-dialog" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>⬆️ Upload Documents</h2>
+          <button class="btn-close" (click)="closeUploadDialog()">✕</button>
+        </div>
+        
+        <div class="modal-body">
+          @if (!uploading()) {
+            <div class="upload-area">
+              <input 
+                type="file" 
+                id="file-input" 
+                multiple 
+                (change)="onFileSelected($event)"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
+                style="display: none;"
+              />
+              <label for="file-input" class="upload-label">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">
+                  <p><strong>Click to select files</strong></p>
+                  <p class="text-muted">or drag and drop files here</p>
+                </div>
+                <div class="upload-info">
+                  <p class="text-muted">Supported: PDF, DOC, DOCX, JPG, PNG, TXT</p>
+                  <p class="text-muted">Max size: 100MB per file</p>
+                </div>
+              </label>
+            </div>
+          } @else {
+            <div class="upload-progress">
+              <div class="progress-icon">⏳</div>
+              <p>Uploading files...</p>
+              <div class="progress-bar">
+                <div 
+                  class="progress-fill" 
+                  [style.width.%]="uploadProgress()"
+                ></div>
+              </div>
+              <p class="text-muted">{{ uploadProgress() }}%</p>
+            </div>
+          }
+        </div>
+        
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeUploadDialog()" [disabled]="uploading()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

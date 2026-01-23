@@ -1,0 +1,112 @@
+/* SmartSortierer Pro - Global Styles (Dark Tech Theme) */
+
+:root {
+  /* Farben - Hauptpalette */
+  --bg: #0b1220;
+  --panel: #0f1a2b;
+  --panel2: #0c1626;
+  --card: #111f34;
+  
+  /* Textfarben */
+  --text: #e7f0ff;
+  --muted: #8ea4c3;
+  
+  /* Akzentfarben */
+  --accent: #4da3ff;
+  --accent2: #9b7bff;
+  
+  /* Statusfarben */
+  --good: #3ddc97;
+  --warn: #ffcc66;
+  --bad: #ff6b6b;
+  
+  /* Linien / Rahmen */
+  --line: rgba(255,255,255,.08);
+  
+  /* Formen */
+  --radius: 18px;
+  --radius2: 24px;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  
+  /* Layout */
+  --sidebar-width: 280px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 22px;
+  
+  /* Typografie */
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 13px;
+  --font-size-lg: 14px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--font-size-base);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--accent2);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,.15);
+}
+
+/* Utility Classes */
+.text-muted {
+  color: var(--muted);
+}
+
+.text-good {
+  color: var(--good);
+}
+
+.text-warn {
+  color: var(--warn);
+}
+
+.text-bad {
+  color: var(--bad);
+}

@@ -1,0 +1,156 @@
+<div class="dashboard">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div>
+      <h1>📊 Dashboard</h1>
+      <p class="text-muted">SmartSortierer Pro v{{ health()?.version || '...' }}</p>
+    </div>
+    <div class="system-status">
+      @if (health(); as h) {
+        <span class="status-badge" [style.color]="getStatusColor(h.status)">
+          {{ h.status === 'ok' ? '✓' : '⚠' }} System {{ h.status }}
+        </span>
+        <span class="status-detail text-muted">DB: {{ h.checks.database }}</span>
+      }
+    </div>
+  </header>
+
+  <!-- Error Message -->
+  @if (error()) {
+    <div class="alert alert-error">
+      ⚠️ {{ error() }}
+    </div>
+  }
+
+  <!-- Loading State -->
+  @if (loading() && !stats()) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading dashboard...</p>
+    </div>
+  }
+
+  <!-- Main Content -->
+  @if (stats(); as s) {
+    <!-- Stats Overview -->
+    <section class="stats-grid">
+      <!-- Total Documents -->
+      <div class="stat-card highlight">
+        <div class="stat-icon">📄</div>
+        <div class="stat-content">
+          <div class="stat-label">Total Documents</div>
+          <div class="stat-value">{{ s.total_documents }}</div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="stat-card">
+        <div class="stat-icon">🕒</div>
+        <div class="stat-content">
+          <div class="stat-label">Last 24 Hours</div>
+          <div class="stat-value">{{ s.recent_activity.last_24h }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-content">
+          <div class="stat-label">Last 7 Days</div>
+          <div class="stat-value">{{ s.recent_activity.last_7d }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📆</div>
+        <div class="stat-content">
+          <div class="stat-label">Last 30 Days</div>
+          <div class="stat-value">{{ s.recent_activity.last_30d }}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Two Column Layout -->
+    <div class="grid-2col">
+      <!-- Status Breakdown -->
+      <div class="card">
+        <h2>📊 Documents by Status</h2>
+        <div class="status-list">
+          @for (item of getStatusEntries(); track item.key) {
+            <div class="status-item">
+              <div class="status-label">
+                <span class="status-dot" [style.background]="getStatusColor(item.key)"></span>
+                <span>{{ item.key }}</span>
+              </div>
+              <span class="status-count">{{ item.value }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Type Breakdown -->
+      <div class="card">
+        <h2>📑 Documents by Type</h2>
+        @if (getTypeEntries().length > 0) {
+          <div class="status-list">
+            @for (item of getTypeEntries(); track item.key) {
+              <div class="status-item">
+                <div class="status-label">
+                  <span class="type-icon">📄</span>
+                  <span>{{ item.key }}</span>
+                </div>
+                <span class="status-count">{{ item.value }}</span>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-state">
+            <p class="text-muted">No document types classified yet</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Recent Documents -->
+    <div class="card">
+      <h2>📄 Recent Documents</h2>
+      @if (recentDocs().length > 0) {
+        <div class="document-list">
+          @for (doc of recentDocs(); track doc.id) {
+            <div class="document-item">
+              <div class="document-icon">
+                @if (doc.mime_type.includes('pdf')) { 📕 }
+                @else if (doc.mime_type.includes('image')) { 🖼️ }
+                @else if (doc.mime_type.includes('word') || doc.mime_type.includes('document')) { 📘 }
+                @else { 📄 }
+              </div>
+              <div class="document-content">
+                <div class="document-name">{{ doc.original_filename }}</div>
+                <div class="document-meta">
+                  <span class="text-muted">{{ formatFileSize(doc.file_size_bytes) }}</span>
+                  <span class="status-badge" [style.color]="getStatusColor(doc.status)">
+                    {{ doc.status }}
+                  </span>
+                  @if (doc.category) {
+                    <span class="text-muted">
+                      {{ doc.category }}
+                      @if (doc.classification_confidence) {
+                        ({{ (doc.classification_confidence * 100).toFixed(0) }}%)
+                      }
+                    </span>
+                  }
+                </div>
+              </div>
+              <div class="document-time text-muted">
+                {{ formatDate(doc.created_at) }}
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <p class="text-muted">No recent documents</p>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,48 @@
+<div class="app-container">
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <h1 class="logo">📄 SmartSortierer</h1>
+      <p class="version">Pro v0.4</p>
+    </div>
+    
+    <ul class="nav-menu">
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/documents" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">📁</span>
+          <span class="nav-label">Documents</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/rules" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-label">Rules</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/review" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">✓</span>
+          <span class="nav-label">Review</span>
+        </a>
+      </li>
+    </ul>
+    
+    <div class="sidebar-footer">
+      <div class="status-indicator">
+        <span class="status-dot"></span>
+        <span>System OK</span>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
