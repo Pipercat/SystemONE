@@ -6,7 +6,7 @@
 ========================================================= -->
 
 <p align="right">
-  <img src="Generator_3/logo/logo_groß.png" alt="SystemONE Logo" width="130"/>
+  <img src="Generator_3/logo/logo_schild.png" alt="SystemONE Logo" width="130"/>
 </p>
 
 <h1>SystemONE</h1>
@@ -229,4 +229,3 @@ SystemONE/
 
 
 <p>Built by <b>Pipercat</b>.</p>
-```
