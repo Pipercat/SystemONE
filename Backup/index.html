@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Gridfinity — Online UI (No Install)</title>
+  <link rel="stylesheet" href="./styles.css"/>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="panel sidebar">
+      <div class="brandbar">
+        <div class="brandleft">
+          <div class="logo" aria-hidden="true"></div>
+          <div class="brandtitle">
+            <b>Gridfinity UI</b>
+            <span>0 Install · Browser only</span>
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span>online</div>
+      </div>
+
+      <div class="nav">
+        <div class="item active" data-view="generator" onclick="UI.setView('generator')">
+          <span>Generator</span><span class="badge">UI</span>
+        </div>
+        <div class="item" data-view="history" onclick="UI.setView('history')">
+          <span>Verlauf</span><span class="badge" id="histCount">0</span>
+        </div>
+        <div class="item" data-view="about" onclick="UI.setView('about')">
+          <span>Info</span><span class="badge">free</span>
+        </div>
+      </div>
+
+      <div class="sidecard">
+        <h3>Tool Auswahl</h3>
+        <p>
+          Für <b>identische Ergebnisse</b> nimm „Perplexing Labs".
+          Alternative: „Web OpenSCAD Customizer" (auch gratis).
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <div class="k">Ziel</div>
+            <div class="v">STL Export</div>
+          </div>
+          <div class="stat">
+            <div class="k">Install</div>
+            <div class="v">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="help">
+        Du stellst hier Parameter ein → klickst <b>Open Generator</b> → dort renderst du & lädst STL herunter.
+        (Wir können später Deep-Link/Share-Links integrieren, falls das Tool URL-Parameter unterstützt.)
+      </div>
+    </aside>
+
+    <main class="panel main">
+      <div class="topbar">
+        <div class="headline">
+          <h1 id="viewTitle">Generator</h1>
+          <div class="sub" id="viewSubtitle">SmartSorter Dark UI · kostenloser Online-Renderer</div>
+        </div>
+        <div class="actions">
+          <button class="btn" onclick="UI.defaults()">↩ Defaults</button>
+          <button class="btn" onclick="UI.copySummary()">Copy Summary</button>
+          <button class="btn primary" onclick="UI.openSelectedTool()">Open Generator</button>
+        </div>
+      </div>
+
+      <!-- Generator View -->
+      <section id="view-generator">
+        <div class="tabs" role="tablist" aria-label="Tabs">
+          <div class="tab active" id="tab-bin" onclick="UI.switchTab('bin')">Box</div>
+          <div class="tab" id="tab-baseplate" onclick="UI.switchTab('baseplate')">Baseplate</div>
+        </div>
+
+        <div class="grid">
+          <!-- Left: params -->
+          <div class="card">
+            <h2>Parameter</h2>
+            <p class="sub">Wähle Tool, setze Maße, öffne Generator (keine Installation).</p>
+
+            <div class="field">
+              <label>Renderer Tool <span class="mini">gratis online</span></label>
+              <select id="toolSelect" onchange="UI.updatePreview()">
+                <option value="perplexing" selected>Perplexing Labs (beste Chance: gleiche Ergebnisse)</option>
+                <option value="webopenscad">Web OpenSCAD Customizer (OpenSCAD im Browser)</option>
+                <option value="gridfinitygen">gridfinitygenerator.com (kostenloser Editor)</option>
+              </select>
+            </div>
+
+            <div class="hr"></div>
+
+            <!-- BIN PANEL -->
+            <div id="panel-bin">
+              <div class="formgrid">
+                <div class="field">
+                  <label>X (Raster) <span class="mini">gridx</span></label>
+                  <input id="bin_x" type="number" min="1" max="50" value="2" oninput="UI.updatePreview()"/>
+                </div>
+                <div class="field">
+                  <label>Y (Raster) <span class="mini">gridy</span></label>
+                  <input id="bin_y" type="number" min="1" max="50" value="2" oninput="UI.updatePreview()"/>
+                </div>
+                <div class="field">
+                  <label>Z (Höhe) <span class="mini">gridz</span></label>
+                  <input id="bin_z" type="number" min="1" max="50" value="6" oninput="UI.updatePreview()"/>
+                </div>
+                <div class="field">
+                  <label>Divider X/Y <span class="mini">optional</span></label>
+                  <div class="twocol">
+                    <input id="bin_divx" type="number" min="1" max="10" value="1" oninput="UI.updatePreview()"/>
+                    <input id="bin_divy" type="number" min="1" max="10" value="1" oninput="UI.updatePreview()"/>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chips">
+                <div class="chip" onclick="UI.preset('bin','1x1x6')">Preset 1×1×6</div>
+                <div class="chip" onclick="UI.preset('bin','2x3x6')">Preset 2×3×6</div>
+                <div class="chip" onclick="UI.preset('bin','3x3x6')">Preset 3×3×6</div>
+              </div>
+            </div>
+
+            <!-- BASEPLATE PANEL -->
+            <div id="panel-baseplate" class="hidden">
+              <div class="formgrid">
+                <div class="field">
+                  <label>X (Raster) <span class="mini">gridx</span></label>
+                  <input id="bp_x" type="number" min="1" max="200" value="4" oninput="UI.updatePreview()"/>
+                </div>
+                <div class="field">
+                  <label>Y (Raster) <span class="mini">gridy</span></label>
+                  <input id="bp_y" type="number" min="1" max="200" value="6" oninput="UI.updatePreview()"/>
+                </div>
+                <div class="field">
+                  <label>Style <span class="mini">thin/weighted/skeleton</span></label>
+                  <select id="bp_style" onchange="UI.updatePreview()">
+                    <option value="0" selected>0 · Thin</option>
+                    <option value="1">1 · Weighted</option>
+                    <option value="2">2 · Skeleton</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Magnet <span class="mini">optional</span></label>
+                  <select id="bp_magnet" onchange="UI.updatePreview()">
+                    <option value="0" selected>Off</option>
+                    <option value="1">On</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="chips">
+                <div class="chip" onclick="UI.preset('baseplate','4x6')">Preset 4×6</div>
+                <div class="chip" onclick="UI.preset('baseplate','6x10')">Preset 6×10</div>
+                <div class="chip" onclick="UI.preset('baseplate','8x8')">Preset 8×8</div>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="field">
+              <label>Deine Parameter-Zusammenfassung <span class="mini">für Copy/Paste</span></label>
+              <input id="paramSummary" readonly value="—" style="font-family: var(--mono)"/>
+            </div>
+
+            <div class="row">
+              <button class="btn" onclick="UI.addHistory()">In Verlauf</button>
+              <button class="btn primary" onclick="UI.openSelectedTool()">Open Generator</button>
+            </div>
+
+          </div>
+
+          <!-- Right: preview -->
+          <div class="card">
+            <h2>Preview</h2>
+            <p class="sub">
+              Hinweis: Einige Online-Generatoren blocken iFrames. Wenn Preview leer bleibt → „Open Generator“ nutzen.
+            </p>
+
+            <div class="previewbox" id="iframeBox">
+              <div class="wire" aria-hidden="true"></div>
+              <div class="previewbadge" id="previewBadge">
+                <span id="previewIcon">📦</span>
+                <span id="previewTitle">Box</span>
+                <code id="previewCode">2×2×6</code>
+              </div>
+
+              <iframe id="toolFrame" class="toolframe" title="Tool Preview"></iframe>
+            </div>
+
+            <div class="kpi">
+              <div class="box"><div class="k">Tool</div><div class="v" id="kpiTool">Perplexing Labs</div></div>
+              <div class="box"><div class="k">Typ</div><div class="v" id="kpiType">Box</div></div>
+              <div class="box"><div class="k">Export</div><div class="v">STL</div></div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="field">
+              <label>Link (öffnet im neuen Tab) <span class="mini">falls iFrame blockt</span></label>
+              <input id="toolLink" readonly value="—" style="font-family: var(--mono)"/>
+            </div>
+
+            <button class="btn primary" style="width:100%" onclick="UI.openSelectedTool()">Open Generator</button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- History View -->
+      <section id="view-history" class="hidden">
+        <div class="card">
+          <h2>Verlauf</h2>
+          <p class="sub">Gespeicherte Parameter (localStorage) — du kannst sie später wieder laden.</p>
+
+          <div id="historyList" class="history"></div>
+
+          <div class="row" style="margin-top:12px">
+            <button class="btn" onclick="UI.clearHistory()">🧹 Clear</button>
+            <button class="btn" onclick="UI.exportHistory()">⬇ Export JSON</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- About View -->
+      <section id="view-about" class="hidden">
+        <div class="card">
+          <h2>ℹ️ Info</h2>
+          <p class="sub">
+            Diese UI rendert nicht selbst. Sie nutzt kostenlose Online-Generatoren im Browser.
+            Für „identisch wie Perplexing Labs": nutze den Perplexing-Labs Generator. :contentReference[oaicite:3]{index=3}
+          </p>
+
+          <div class="sidecard" style="margin-top:10px">
+            <h3>Design (SmartSorter Standard)</h3>
+            <p>
+              Dark-Dashboard · große Radien · klare Cards · Sidebar 320px · Primary Gradient Button.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Toast -->
+      <div class="toast" id="toast"><div class="ticon"></div><div id="toastText">OK</div></div>
+    </main>
+  </div>
+</body>
+</html>

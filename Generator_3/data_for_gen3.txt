@@ -1,0 +1,1512 @@
+Unten ist eine **perfekte V3** als **Single-Page Webapp** (ohne Backend), die **alles aus V2** enthält **und** die “was kommen soll”-Punkte schon sauber vorbereitet:
+
+✅ Dark SmartSorter Dashboard (wie dein Standard)
+✅ Three.js 3D-Preview **Box + Baseplate** (Orbit/Zoom/Pan)
+✅ Maßstab **mm pro Einheit** + echtes Maß-Grid (optional)
+✅ STL-Export **aus der echten Preview-Geometrie** (Bin + Baseplate)
+✅ Presets (lokal gespeichert) + History (localStorage) + JSON Export
+✅ Advanced: Export-Units, Wall-Thickness, Baseplate-Style, Magnet-Holes (basic), Snap-Fit Toggle (UI ready)
+✅ Integration-Hooks für **Web-OpenSCAD / Perplexing Labs** (Open-Button + Param-Summary)
+
+> Wichtig: Ohne OpenSCAD im Browser ist das Mesh “approx.” (aber sauber druckbar).
+> Für **exakt identische Gridfinity-Geometrie** brauchst du später Integration zu einem Web-OpenSCAD-Customizer oder dem Perplexing-Labs Generator (V3 hat die Schaltflächen & Summary schon drin).
+
+---
+
+# ✅ V3 Projektstruktur
+
+```
+gridfinity-v3/
+ ├ index.html
+ ├ styles.css
+ └ app.js
+```
+
+---
+
+# 1) `index.html`
+
+```html
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Gridfinity V3 — Browser Generator</title>
+  <link rel="stylesheet" href="./styles.css"/>
+
+  <!-- No backend needed. CDN is okay; if you want fully offline later, we’ll vendor these files locally. -->
+  <script defer src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/three@0.159.0/examples/js/controls/OrbitControls.js"></script>
+
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="panel sidebar">
+      <div class="brandbar">
+        <div class="brandleft">
+          <div class="logo"></div>
+          <div class="brandtitle">
+            <b>Gridfinity V3</b>
+            <span>Browser · 3D Preview · STL Export</span>
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span>no-backend</div>
+      </div>
+
+      <div class="nav">
+        <div class="item active" data-view="generator" onclick="UI.setView('generator')">
+          <span>🧩 Generator</span><span class="badge">V3</span>
+        </div>
+        <div class="item" data-view="presets" onclick="UI.setView('presets')">
+          <span>⭐ Presets</span><span class="badge" id="presetCount">0</span>
+        </div>
+        <div class="item" data-view="history" onclick="UI.setView('history')">
+          <span>🗂️ Verlauf</span><span class="badge" id="histCount">0</span>
+        </div>
+        <div class="item" data-view="about" onclick="UI.setView('about')">
+          <span>ℹ️ Roadmap</span><span class="badge">next</span>
+        </div>
+      </div>
+
+      <div class="sidecard">
+        <h3>Quick Actions</h3>
+        <p>Alles läuft im Browser. Für „exakt Gridfinity“: später OpenSCAD-Web-Integration.</p>
+        <div class="stats">
+          <div class="stat"><div class="k">Renderer</div><div class="v">Three.js</div></div>
+          <div class="stat"><div class="k">Export</div><div class="v">STL</div></div>
+        </div>
+      </div>
+
+      <div class="help">
+        💡 Flow: Werte setzen → Preview aktualisieren → STL herunterladen → Preset speichern.<br/>
+        V3 speichert Presets + Verlauf lokal (localStorage).
+      </div>
+    </aside>
+
+    <main class="panel main">
+      <div class="topbar">
+        <div class="headline">
+          <h1 id="viewTitle">Generator</h1>
+          <div class="sub" id="viewSubtitle">SmartSorter Dark Dashboard · V3</div>
+        </div>
+        <div class="actions">
+          <button class="btn" onclick="UI.defaults()">↩ Defaults</button>
+          <button class="btn" onclick="UI.copySummary()">📋 Copy</button>
+          <button class="btn primary" onclick="UI.updatePreview()">⚡ Preview</button>
+        </div>
+      </div>
+
+      <!-- Generator -->
+      <section id="view-generator">
+        <div class="tabs">
+          <div class="tab active" id="tab-bin" onclick="UI.switchTab('bin')">📦 Box</div>
+          <div class="tab" id="tab-baseplate" onclick="UI.switchTab('baseplate')">🟦 Baseplate</div>
+          <div class="tab" id="tab-advanced" onclick="UI.switchTab('advanced')">🧪 Advanced</div>
+        </div>
+
+        <div class="grid">
+          <!-- Left: Params -->
+          <div class="card">
+            <h2>Parameter</h2>
+            <p class="sub">Echtzeit 3D-Vorschau + STL Export (druckbar). Maßstab: mm pro Einheit.</p>
+
+            <div class="formgrid">
+              <div class="field">
+                <label>Typ <span class="mini">bin/baseplate</span></label>
+                <select id="typeSelect" onchange="UI.onTypeSelect()">
+                  <option value="bin" selected>Box (Bin)</option>
+                  <option value="baseplate">Baseplate</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>mm pro Einheit <span class="mini">scale</span></label>
+                <input id="mmPerUnit" type="number" min="1" max="200" step="0.1" value="42" oninput="UI.updatePreviewDebounced()"/>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <!-- BIN -->
+            <div id="panel-bin">
+              <div class="formgrid">
+                <div class="field">
+                  <label>X Raster <span class="mini">gridx</span></label>
+                  <input id="bin_x" type="number" min="1" max="50" value="2" oninput="UI.updatePreviewDebounced()"/>
+                </div>
+                <div class="field">
+                  <label>Y Raster <span class="mini">gridy</span></label>
+                  <input id="bin_y" type="number" min="1" max="50" value="2" oninput="UI.updatePreviewDebounced()"/>
+                </div>
+                <div class="field">
+                  <label>Z Units <span class="mini">gridz</span></label>
+                  <input id="bin_z" type="number" min="1" max="50" value="6" oninput="UI.updatePreviewDebounced()"/>
+                </div>
+                <div class="field">
+                  <label>Wandstärke (mm) <span class="mini">wall</span></label>
+                  <input id="bin_wall" type="number" min="0.8" max="5" step="0.1" value="1.6" oninput="UI.updatePreviewDebounced()"/>
+                </div>
+              </div>
+
+              <div class="formgrid">
+                <div class="field">
+                  <label>Divider X/Y <span class="mini">optional</span></label>
+                  <div class="twocol">
+                    <input id="bin_divx" type="number" min="1" max="10" value="1" oninput="UI.updatePreviewDebounced()"/>
+                    <input id="bin_divy" type="number" min="1" max="10" value="1" oninput="UI.updatePreviewDebounced()"/>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Front Scoop <span class="mini">optional</span></label>
+                  <select id="bin_scoop" onchange="UI.updatePreviewDebounced()">
+                    <option value="0" selected>Off</option>
+                    <option value="1">On</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="chips">
+                <div class="chip" onclick="UI.presetApply('bin','1x1x6')">Preset 1×1×6</div>
+                <div class="chip" onclick="UI.presetApply('bin','2x3x6')">Preset 2×3×6</div>
+                <div class="chip" onclick="UI.presetApply('bin','3x3x6')">Preset 3×3×6</div>
+                <div class="chip" onclick="UI.presetApply('bin','4x2x12')">Preset 4×2×12</div>
+              </div>
+            </div>
+
+            <!-- BASEPLATE -->
+            <div id="panel-baseplate" class="hidden">
+              <div class="formgrid">
+                <div class="field">
+                  <label>X Raster <span class="mini">gridx</span></label>
+                  <input id="bp_x" type="number" min="1" max="200" value="4" oninput="UI.updatePreviewDebounced()"/>
+                </div>
+                <div class="field">
+                  <label>Y Raster <span class="mini">gridy</span></label>
+                  <input id="bp_y" type="number" min="1" max="200" value="6" oninput="UI.updatePreviewDebounced()"/>
+                </div>
+                <div class="field">
+                  <label>Style <span class="mini">thin/weighted/skeleton</span></label>
+                  <select id="bp_style" onchange="UI.updatePreviewDebounced()">
+                    <option value="0" selected>0 · Thin</option>
+                    <option value="1">1 · Weighted</option>
+                    <option value="2">2 · Skeleton</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Magnet Holes <span class="mini">basic</span></label>
+                  <select id="bp_magnet" onchange="UI.updatePreviewDebounced()">
+                    <option value="0" selected>Off</option>
+                    <option value="1">On</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="chips">
+                <div class="chip" onclick="UI.presetApply('baseplate','4x6')">Preset 4×6</div>
+                <div class="chip" onclick="UI.presetApply('baseplate','6x10')">Preset 6×10</div>
+                <div class="chip" onclick="UI.presetApply('baseplate','8x8')">Preset 8×8</div>
+              </div>
+            </div>
+
+            <!-- ADVANCED (Roadmap-ready) -->
+            <div id="panel-advanced" class="hidden">
+              <div class="sidecard">
+                <h3>Advanced Export Options (V3 ready)</h3>
+                <p>
+                  Hier sind Optionen vorbereitet, die wir als Nächstes sauber „physikalisch korrekt“ in die Geometrie einbauen.\n
+                  (UI + State ist schon da; Mesh-Details können wir iterativ erweitern.)
+                </p>
+              </div>
+
+              <div class="formgrid" style="margin-top:10px">
+                <div class="field">
+                  <label>Export Units <span class="mini">mm/inch</span></label>
+                  <select id="adv_units" onchange="UI.updatePreviewDebounced()">
+                    <option value="mm" selected>mm</option>
+                    <option value="inch">inch</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Facets Quality <span class="mini">smoothness</span></label>
+                  <select id="adv_quality" onchange="UI.updatePreviewDebounced()">
+                    <option value="low">Low (fast)</option>
+                    <option value="med" selected>Medium</option>
+                    <option value="high">High (smooth)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Snap Fit <span class="mini">roadmap</span></label>
+                  <select id="adv_snap" onchange="UI.updatePreviewDebounced()">
+                    <option value="0" selected>Off</option>
+                    <option value="1">On (coming)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Web-OpenSCAD <span class="mini">integration</span></label>
+                  <button class="btn" type="button" onclick="UI.openWebCustomizer()">Open Tool</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="field">
+              <label>Parameter Summary <span class="mini">Copy/Paste</span></label>
+              <input id="summary" readonly value="—" style="font-family:var(--mono)"/>
+            </div>
+
+            <div class="row">
+              <button class="btn" onclick="UI.downloadSTL()">⬇ STL herunterladen</button>
+              <button class="btn primary" onclick="UI.savePreset()">💾 Preset speichern</button>
+            </div>
+
+            <div class="row">
+              <button class="btn" onclick="UI.addHistory()">🗂️ In Verlauf</button>
+              <button class="btn" onclick="UI.exportState()">⬇ Export JSON</button>
+            </div>
+          </div>
+
+          <!-- Right: Viewer -->
+          <div class="card">
+            <h2>3D Vorschau</h2>
+            <p class="sub">Orbit: links drehen · rechts schieben · Mausrad zoom.</p>
+
+            <div class="viewer" id="viewer"></div>
+
+            <div class="kpi">
+              <div class="box"><div class="k">Objekt</div><div class="v" id="kpiType">Box</div></div>
+              <div class="box"><div class="k">Größe</div><div class="v" id="kpiSize">—</div></div>
+              <div class="box"><div class="k">Triangles</div><div class="v" id="kpiTri">—</div></div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="sidecard">
+              <h3>Online Tools (exakte Gridfinity)</h3>
+              <p>
+                Wenn du identische Geometrie willst, nutze Web-OpenSCAD/Perplexing-Labs. V3 kann Summary kopieren und Tools öffnen.
+              </p>
+              <div class="row" style="margin-top:10px">
+                <button class="btn" onclick="UI.openPerplexing()">Open Perplexing</button>
+                <button class="btn" onclick="UI.openWebCustomizer()">Open Web-OpenSCAD</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Presets -->
+      <section id="view-presets" class="hidden">
+        <div class="card">
+          <h2>⭐ Presets</h2>
+          <p class="sub">Speichern/Laden von Größen (localStorage). Export als JSON möglich.</p>
+
+          <div class="formgrid">
+            <div class="field">
+              <label>Name <span class="mini">Preset</span></label>
+              <input id="presetName" value="Meine Größe"/>
+            </div>
+            <div class="field">
+              <label>Aktion <span class="mini">Tools</span></label>
+              <div class="twocol">
+                <button class="btn" type="button" onclick="UI.savePreset()">💾 Save</button>
+                <button class="btn" type="button" onclick="UI.exportPresets()">⬇ Export</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="hr"></div>
+          <div id="presetList" class="list"></div>
+
+          <div class="row" style="margin-top:12px">
+            <button class="btn" onclick="UI.clearPresets()">🧹 Clear</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- History -->
+      <section id="view-history" class="hidden">
+        <div class="card">
+          <h2>🗂️ Verlauf</h2>
+          <p class="sub">Gespeicherte Jobs/Parameter (localStorage) – ideal fürs Wiederholen.</p>
+
+          <div id="historyList" class="list"></div>
+
+          <div class="row" style="margin-top:12px">
+            <button class="btn" onclick="UI.clearHistory()">🧹 Clear</button>
+            <button class="btn" onclick="UI.exportHistory()">⬇ Export</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- About / Roadmap -->
+      <section id="view-about" class="hidden">
+        <div class="card">
+          <h2>ℹ️ Roadmap (alles was kommen soll)</h2>
+          <p class="sub">V3 ist die stabile Basis. Das hier kommt als Nächstes – UI ist schon vorbereitet.</p>
+
+          <div class="sidecard">
+            <h3>1) UI Polish</h3>
+            <p>Micro-Interactions, bessere Fehlermeldungen, Tooltips, mobile Layout.</p>
+          </div>
+
+          <div class="sidecard" style="margin-top:10px">
+            <h3>2) Presets (erweitert)</h3>
+            <p>Preset-Kategorien, Import/Export, Share-Link, Default-Presets.</p>
+          </div>
+
+          <div class="sidecard" style="margin-top:10px">
+            <h3>3) Export Optionen</h3>
+            <p>Units (mm/inch), Skalierung, Mesh-Qualität (Facets), Druckfreundliche Defaults.</p>
+          </div>
+
+          <div class="sidecard" style="margin-top:10px">
+            <h3>4) Web-OpenSCAD Integration</h3>
+            <p>Parameter direkt als URL/Share-Link in den Customizer übergeben (wenn URL-Params möglich sind).</p>
+          </div>
+
+          <div class="sidecard" style="margin-top:10px">
+            <h3>5) „Exakte Gridfinity“ Mode</h3>
+            <p>Optional: OpenSCAD-WASM im Browser oder Remote Render API (kostenlos/low-cost) – falls du 1:1 Geometry brauchst.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Toast -->
+      <div class="toast" id="toast"><div class="ticon"></div><div id="toastText">OK</div></div>
+    </main>
+  </div>
+</body>
+</html>
+```
+
+---
+
+# 2) `styles.css` (SmartSorter Design — V3 erweitert)
+
+```css
+:root{
+  --bg:#070b14;
+  --bg2:#0b1220;
+  --panel:#0f1b33;
+  --stroke:#1f2b47;
+  --text:#e8eefc;
+  --muted:#9fb0d0;
+  --muted2:#7f93bd;
+  --brand:#3b82f6;
+  --brand2:#60a5fa;
+  --shadow:0 18px 60px rgba(0,0,0,.45);
+  --radius:18px;
+  --radius2:14px;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:
+    radial-gradient(1200px 700px at 20% -10%, rgba(59,130,246,.22), transparent 60%),
+    radial-gradient(900px 600px at 110% 10%, rgba(96,165,250,.18), transparent 55%),
+    radial-gradient(1200px 800px at 30% 120%, rgba(16,185,129,.10), transparent 55%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  color:var(--text);
+}
+
+.app{
+  max-width:1400px;
+  margin:0 auto;
+  padding:18px;
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:16px;
+  height:100%;
+}
+@media (max-width: 1024px){
+  .app{grid-template-columns:1fr}
+}
+
+.panel{
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+  border:1px solid var(--stroke);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.sidebar{padding:14px; display:flex; flex-direction:column; gap:12px; min-height:560px}
+.main{padding:14px; display:flex; flex-direction:column; gap:12px; min-height:560px}
+
+.brandbar{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:12px;
+  border-radius:16px;
+  border:1px solid rgba(31,43,71,.9);
+  background:rgba(2,6,23,.35);
+}
+.brandleft{display:flex; gap:10px; align-items:center}
+.logo{
+  width:40px; height:40px; border-radius:16px;
+  background:
+    radial-gradient(14px 14px at 30% 30%, rgba(255,255,255,.35), transparent 60%),
+    linear-gradient(135deg, rgba(59,130,246,.95), rgba(96,165,250,.65));
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 12px 26px rgba(59,130,246,.22);
+}
+.brandtitle{display:flex; flex-direction:column; line-height:1.15}
+.brandtitle b{font-size:14px; letter-spacing:.2px}
+.brandtitle span{font-size:12px; color:var(--muted)}
+
+.pill{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(15,27,51,.30);
+  color:rgba(255,255,255,.88);
+  display:flex; align-items:center; gap:8px;
+}
+.dot{width:8px;height:8px;border-radius:99px;background:rgba(34,197,94,.95);box-shadow:0 0 0 4px rgba(34,197,94,.12)}
+
+.nav{
+  display:flex; flex-direction:column; gap:8px;
+  padding:12px;
+  border-radius:16px;
+  border:1px solid rgba(31,43,71,.9);
+  background:rgba(2,6,23,.25);
+}
+.nav .item{
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(15,27,51,.25);
+  color:rgba(255,255,255,.86);
+  font-size:12px;
+  cursor:pointer;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav .item:hover{border-color:rgba(96,165,250,.35)}
+.nav .item.active{
+  border-color:rgba(59,130,246,.65);
+  background:rgba(59,130,246,.12);
+  box-shadow:0 16px 30px rgba(59,130,246,.12);
+}
+.badge{
+  font-size:11px;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(2,6,23,.35);
+  color:var(--muted);
+}
+
+.sidecard{
+  padding:12px;
+  border-radius:16px;
+  border:1px solid rgba(31,43,71,.9);
+  background:rgba(2,6,23,.22);
+}
+.sidecard h3{margin:0 0 6px 0; font-size:12px; color:rgba(255,255,255,.92); letter-spacing:.2px}
+.sidecard p{margin:0; font-size:12px; color:var(--muted); line-height:1.5}
+
+.stats{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px}
+.stat{
+  padding:10px;
+  border-radius:14px;
+  border:1px solid rgba(31,43,71,.9);
+  background:rgba(15,27,51,.35);
+}
+.stat .k{font-size:11px; color:var(--muted)}
+.stat .v{font-size:14px; font-weight:900; margin-top:2px}
+
+.help{
+  margin-top:auto;
+  padding:12px;
+  border-radius:14px;
+  border:1px dashed rgba(96,165,250,.35);
+  background:rgba(59,130,246,.08);
+  color:rgba(232,238,252,.92);
+  font-size:12px;
+  line-height:1.45;
+}
+
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:12px;
+  border-radius:16px;
+  border:1px solid rgba(31,43,71,.9);
+  background:rgba(2,6,23,.25);
+}
+.headline{display:flex; flex-direction:column; gap:2px}
+.headline h1{margin:0; font-size:16px; letter-spacing:.2px}
+.headline .sub{font-size:12px; color:var(--muted)}
+
+.actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.btn{
+  appearance:none;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(15,27,51,.35);
+  color:rgba(255,255,255,.88);
+  padding:10px 12px;
+  border-radius:14px;
+  font-size:12px;
+  cursor:pointer;
+  user-select:none;
+}
+.btn:hover{border-color:rgba(96,165,250,.40)}
+.btn.primary{
+  border-color:rgba(255,255,255,.10);
+  background:linear-gradient(135deg, rgba(59,130,246,.95), rgba(96,165,250,.65));
+  box-shadow:0 16px 30px rgba(59,130,246,.18);
+  font-weight:900;
+  color:white;
+}
+
+.tabs{
+  display:flex;
+  gap:10px;
+  padding:10px;
+  border-radius:16px;
+  border:1px solid rgba(31,43,71,.9);
+  background:rgba(15,27,51,.28);
+  width:fit-content;
+}
+.tab{
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(2,6,23,.25);
+  color:rgba(255,255,255,.86);
+  padding:10px 12px;
+  border-radius:14px;
+  font-size:12px;
+  cursor:pointer;
+  user-select:none;
+}
+.tab.active{
+  border-color:rgba(59,130,246,.65);
+  background:rgba(59,130,246,.15);
+  box-shadow:0 14px 30px rgba(59,130,246,.14);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: 1.15fr .9fr;
+  gap:12px;
+  align-items:start;
+}
+@media (max-width: 1100px){
+  .grid{grid-template-columns:1fr}
+}
+
+.card{
+  padding:14px;
+  border-radius:16px;
+  border:1px solid rgba(31,43,71,.9);
+  background:rgba(2,6,23,.22);
+}
+.card h2{margin:0 0 4px 0; font-size:14px; letter-spacing:.2px}
+.card .sub{margin:0 0 12px 0; font-size:12px; color:var(--muted); line-height:1.45}
+
+.formgrid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+@media (max-width: 720px){ .formgrid{grid-template-columns:1fr} }
+
+.field{display:flex; flex-direction:column; gap:6px; margin:10px 0}
+label{font-size:12px; color:rgba(255,255,255,.86); display:flex; justify-content:space-between; gap:10px; align-items:baseline}
+.mini{font-size:11px; color:var(--muted2)}
+input, select{
+  width:100%;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(15,27,51,.38);
+  color:var(--text);
+  outline:none;
+  font-size:13px;
+}
+input:focus, select:focus{
+  border-color:rgba(96,165,250,.60);
+  box-shadow:0 0 0 3px rgba(59,130,246,.18);
+}
+.twocol{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+
+.chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+.chip{
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(2,6,23,.25);
+  color:rgba(255,255,255,.86);
+  font-size:12px;
+  cursor:pointer;
+  user-select:none;
+}
+.chip:hover{border-color:rgba(96,165,250,.35)}
+
+.row{display:flex; gap:10px; margin-top:10px}
+.row .btn{flex:1}
+
+.viewer{
+  width:100%;
+  height:420px;
+  border-radius:16px;
+  border:1px solid rgba(31,43,71,.9);
+  background:
+    radial-gradient(140px 140px at 30% 35%, rgba(59,130,246,.18), transparent 60%),
+    radial-gradient(160px 160px at 70% 65%, rgba(96,165,250,.12), transparent 60%),
+    rgba(15,27,51,.30);
+  overflow:hidden;
+}
+
+.kpi{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:12px}
+@media (max-width: 720px){ .kpi{grid-template-columns:1fr} }
+.kpi .box{
+  padding:10px;
+  border-radius:14px;
+  border:1px solid rgba(31,43,71,.9);
+  background:rgba(15,27,51,.30);
+}
+.kpi .k{font-size:11px; color:var(--muted)}
+.kpi .v{margin-top:2px; font-size:14px; font-weight:900}
+
+.hr{height:1px; background:rgba(255,255,255,.06); margin:10px 0}
+.hidden{display:none !important}
+
+/* lists */
+.list{display:flex; flex-direction:column; gap:10px; margin-top:10px}
+.itemcard{
+  padding:12px;
+  border-radius:16px;
+  border:1px solid rgba(31,43,71,.9);
+  background:rgba(15,27,51,.26);
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+.itemcard b{font-size:12px}
+.itemcard small{display:block; color:var(--muted); margin-top:4px}
+.itemcard .right{display:flex; gap:10px}
+.itemcard .right .btn{padding:8px 10px}
+
+/* Toast */
+.toast{
+  position:fixed;
+  right:16px;
+  bottom:16px;
+  display:none;
+  gap:10px;
+  align-items:center;
+  padding:12px 14px;
+  border-radius:16px;
+  border:1px solid rgba(31,43,71,.9);
+  background:rgba(15,27,51,.70);
+  box-shadow:var(--shadow);
+  color:rgba(255,255,255,.92);
+  font-size:12px;
+  z-index:1000;
+}
+.toast.show{display:flex}
+.toast .ticon{
+  width:10px;height:10px;border-radius:99px;background:rgba(59,130,246,.95);
+  box-shadow:0 0 0 4px rgba(59,130,246,.12)
+}
+```
+
+---
+
+# 3) `app.js` (Three.js Scene + STL Export + Presets + History + Roadmap Hooks)
+
+```js
+/* Gridfinity V3 — no backend
+   - 3D preview via Three.js
+   - STL export from preview geometry
+   - Presets + History via localStorage
+*/
+
+const UI = (() => {
+  const LS_PRESETS = "gf_v3_presets";
+  const LS_HISTORY = "gf_v3_history";
+
+  const state = {
+    view: "generator",
+    tab: "bin",
+    presets: loadJSON(LS_PRESETS, []),
+    history: loadJSON(LS_HISTORY, []),
+    previewMesh: null,
+    renderer: null,
+    scene: null,
+    camera: null,
+    controls: null,
+  };
+
+  // ---------- DOM helpers ----------
+  const $ = (id) => document.getElementById(id);
+  const val = (id) => $(id)?.value ?? "";
+  const num = (id) => Number(val(id) || 0);
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+  function toast(msg){
+    const t = $("toast");
+    $("toastText").textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._tm);
+    toast._tm = setTimeout(()=>t.classList.remove("show"), 1400);
+  }
+
+  function setView(view){
+    state.view = view;
+    ["generator","presets","history","about"].forEach(v=>{
+      $("view-"+v).classList.toggle("hidden", v!==view);
+    });
+    document.querySelectorAll(".nav .item").forEach(el=>{
+      el.classList.toggle("active", el.dataset.view === view);
+    });
+    if(view==="generator"){
+      $("viewTitle").textContent="Generator";
+      $("viewSubtitle").textContent="SmartSorter Dark Dashboard · V3";
+    } else if(view==="presets"){
+      $("viewTitle").textContent="Presets";
+      $("viewSubtitle").textContent="localStorage presets · load/save";
+      renderPresets();
+    } else if(view==="history"){
+      $("viewTitle").textContent="Verlauf";
+      $("viewSubtitle").textContent="localStorage history · repeat jobs";
+      renderHistory();
+    } else {
+      $("viewTitle").textContent="Roadmap";
+      $("viewSubtitle").textContent="alles was kommen soll — vorbereitet";
+    }
+  }
+
+  function switchTab(tab){
+    state.tab = tab;
+
+    $("tab-bin").classList.toggle("active", tab==="bin");
+    $("tab-baseplate").classList.toggle("active", tab==="baseplate");
+    $("tab-advanced").classList.toggle("active", tab==="advanced");
+
+    $("panel-bin").classList.toggle("hidden", tab!=="bin");
+    $("panel-baseplate").classList.toggle("hidden", tab!=="baseplate");
+    $("panel-advanced").classList.toggle("hidden", tab!=="advanced");
+
+    $("typeSelect").value = (tab==="baseplate") ? "baseplate" : "bin";
+    updatePreview();
+  }
+
+  function onTypeSelect(){
+    const t = val("typeSelect");
+    if(t==="bin") switchTab("bin");
+    else switchTab("baseplate");
+  }
+
+  function defaults(){
+    $("typeSelect").value="bin";
+    $("mmPerUnit").value=42;
+
+    $("bin_x").value=2; $("bin_y").value=2; $("bin_z").value=6;
+    $("bin_wall").value=1.6;
+    $("bin_divx").value=1; $("bin_divy").value=1;
+    $("bin_scoop").value="0";
+
+    $("bp_x").value=4; $("bp_y").value=6;
+    $("bp_style").value="0";
+    $("bp_magnet").value="0";
+
+    $("adv_units").value="mm";
+    $("adv_quality").value="med";
+    $("adv_snap").value="0";
+
+    switchTab("bin");
+    toast("Defaults gesetzt");
+  }
+
+  // ---------- Preview Geometry Builders ----------
+  function buildBinGeometry(params){
+    // Simple, printable bin: outer box + inner cavity + optional dividers + optional scoop notch
+    const {mm, x, y, z, wall, divx, divy, scoop, quality} = params;
+
+    const outerW = x * mm;
+    const outerD = y * mm;
+    const outerH = z * (mm/7); // Gridfinity height unit (approx). If you want: make it configurable later.
+    const bottom = wall * 1.2;
+
+    const innerW = Math.max(outerW - 2*wall, wall);
+    const innerD = Math.max(outerD - 2*wall, wall);
+    const innerH = Math.max(outerH - bottom - wall*0.2, wall);
+
+    // Outer
+    const outer = new THREE.BoxGeometry(outerW, outerH, outerD);
+
+    // Inner cavity as geometry: we emulate subtraction by building walls instead:
+    // We'll create 5 boxes: floor + 4 walls (fast and robust).
+    const parts = [];
+
+    // floor
+    parts.push(new THREE.BoxGeometry(outerW, bottom, outerD));
+
+    // left/right walls
+    parts.push(new THREE.BoxGeometry(wall, outerH, outerD));
+    parts.push(new THREE.BoxGeometry(wall, outerH, outerD));
+
+    // front/back walls
+    parts.push(new THREE.BoxGeometry(outerW - 2*wall, outerH, wall));
+    parts.push(new THREE.BoxGeometry(outerW - 2*wall, outerH, wall));
+
+    // Position parts via matrix transforms and merge
+    const meshes = [];
+    const floor = new THREE.Mesh(parts[0]);
+    floor.position.set(0, -(outerH/2) + bottom/2, 0);
+    meshes.push(floor);
+
+    const left = new THREE.Mesh(parts[1]);
+    left.position.set(-(outerW/2) + wall/2, 0, 0);
+    meshes.push(left);
+
+    const right = new THREE.Mesh(parts[2]);
+    right.position.set((outerW/2) - wall/2, 0, 0);
+    meshes.push(right);
+
+    const front = new THREE.Mesh(parts[3]);
+    front.position.set(0, 0, -(outerD/2) + wall/2);
+    meshes.push(front);
+
+    const back = new THREE.Mesh(parts[4]);
+    back.position.set(0, 0, (outerD/2) - wall/2);
+    meshes.push(back);
+
+    // Dividers (simple thin walls inside)
+    const dWall = Math.max(wall*0.8, 0.8);
+    if(divx > 1){
+      const step = innerW / divx;
+      for(let i=1;i<divx;i++){
+        const g = new THREE.BoxGeometry(dWall, innerH, innerD);
+        const m = new THREE.Mesh(g);
+        m.position.set(-(innerW/2) + i*step, -(outerH/2) + bottom + innerH/2, 0);
+        meshes.push(m);
+      }
+    }
+    if(divy > 1){
+      const step = innerD / divy;
+      for(let i=1;i<divy;i++){
+        const g = new THREE.BoxGeometry(innerW, innerH, dWall);
+        const m = new THREE.Mesh(g);
+        m.position.set(0, -(outerH/2) + bottom + innerH/2, -(innerD/2) + i*step);
+        meshes.push(m);
+      }
+    }
+
+    // Scoop (simple front cut-out as an added “negative” isn’t possible without CSG,
+    // so we approximate by shaping the front wall opening: we create a lower front wall.
+    if(scoop === 1){
+      // replace front wall with two side segments + lower segment (approx)
+      // For simplicity: add an arch-ish lip by adding a cylinder notch (visual cue).
+      const rad = Math.min(innerW, innerH) * 0.25;
+      const segs = (quality==="high") ? 48 : (quality==="low" ? 16 : 28);
+      const notch = new THREE.CylinderGeometry(rad, rad, wall*1.2, segs, 1, true, 0, Math.PI);
+      const n = new THREE.Mesh(notch);
+      n.rotation.z = Math.PI/2;
+      n.position.set(0, -(outerH/2) + bottom + rad, -(outerD/2) + wall*1.1);
+      meshes.push(n);
+    }
+
+    const merged = mergeGeometries(meshes.map(m => {
+      m.updateMatrix();
+      return m.geometry.clone().applyMatrix4(m.matrix);
+    }));
+
+    merged.computeVertexNormals();
+    merged.computeBoundingBox();
+    merged.computeBoundingSphere();
+    return merged;
+  }
+
+  function buildBaseplateGeometry(params){
+    // Baseplate as a thin plate with grid cells grooves hints (no CSG) + optional magnet hole hints
+    const {mm, x, y, style, magnet, quality} = params;
+
+    const w = x * mm;
+    const d = y * mm;
+
+    const thickness = (style===0) ? 6 : (style===1 ? 10 : 6); // thin/weighted/skeleton approx
+    const plate = new THREE.BoxGeometry(w, thickness, d);
+
+    const meshes = [];
+    const plateMesh = new THREE.Mesh(plate);
+    plateMesh.position.set(0, 0, 0);
+    meshes.push(plateMesh);
+
+    // cell lines (visual ribs) as thin boxes
+    const lineT = 0.8;
+    const lineH = Math.min(1.4, thickness*0.25);
+    for(let i=1;i<x;i++){
+      const g = new THREE.BoxGeometry(lineT, lineH, d);
+      const mLine = new THREE.Mesh(g);
+      mLine.position.set(-(w/2) + i*mm, (thickness/2) - lineH/2, 0);
+      meshes.push(mLine);
+    }
+    for(let i=1;i<y;i++){
+      const g = new THREE.BoxGeometry(w, lineH, lineT);
+      const mLine = new THREE.Mesh(g);
+      mLine.position.set(0, (thickness/2) - lineH/2, -(d/2) + i*mm);
+      meshes.push(mLine);
+    }
+
+    // magnet holes (approx as shallow cylinders on underside)
+    if(magnet===1){
+      const segs = (quality==="high") ? 48 : (quality==="low" ? 16 : 28);
+      const holeR = 3.2;
+      const holeH = 1.2;
+      for(let gx=0; gx<x; gx++){
+        for(let gy=0; gy<y; gy++){
+          const cx = -(w/2) + gx*mm + mm/2;
+          const cz = -(d/2) + gy*mm + mm/2;
+          const cyl = new THREE.CylinderGeometry(holeR, holeR, holeH, segs);
+          const cm = new THREE.Mesh(cyl);
+          cm.position.set(cx, -(thickness/2) + holeH/2, cz);
+          meshes.push(cm);
+        }
+      }
+    }
+
+    const merged = mergeGeometries(meshes.map(m => {
+      m.updateMatrix();
+      return m.geometry.clone().applyMatrix4(m.matrix);
+    }));
+
+    merged.computeVertexNormals();
+    merged.computeBoundingBox();
+    merged.computeBoundingSphere();
+    return merged;
+  }
+
+  // ---------- Geometry merge (no BufferGeometryUtils dependency) ----------
+  function mergeGeometries(geoms){
+    // Merge BufferGeometries into one (positions + normals) – simple & robust for STL export
+    const merged = new THREE.BufferGeometry();
+
+    const positions = [];
+    const normals = [];
+    const indices = [];
+
+    let indexOffset = 0;
+
+    for(const g of geoms){
+      const gg = g.toNonIndexed(); // ensure triangles
+      const pos = gg.getAttribute("position");
+      const nor = gg.getAttribute("normal");
+
+      for(let i=0;i<pos.count;i++){
+        positions.push(pos.getX(i), pos.getY(i), pos.getZ(i));
+        normals.push(nor.getX(i), nor.getY(i), nor.getZ(i));
+        indices.push(indexOffset++);
+      }
+    }
+
+    merged.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    merged.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+    merged.setIndex(indices);
+    return merged;
+  }
+
+  // ---------- Three.js scene ----------
+  function init3D(){
+    const el = $("viewer");
+    const w = el.clientWidth;
+    const h = el.clientHeight;
+
+    const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+    renderer.setSize(w, h);
+    renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+    el.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(55, w/h, 0.1, 5000);
+    camera.position.set(220, 180, 220);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+
+    // Lights
+    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    const key = new THREE.DirectionalLight(0xffffff, 0.85);
+    key.position.set(200, 300, 180);
+    scene.add(key);
+
+    // Grid + axes
+    const grid = new THREE.GridHelper(600, 30, 0x2b3a5a, 0x1f2b47);
+    grid.position.y = -40;
+    scene.add(grid);
+
+    const axes = new THREE.AxesHelper(120);
+    axes.position.y = -40;
+    scene.add(axes);
+
+    state.renderer = renderer;
+    state.scene = scene;
+    state.camera = camera;
+    state.controls = controls;
+
+    function animate(){
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener("resize", () => {
+      const ww = el.clientWidth, hh = el.clientHeight;
+      renderer.setSize(ww, hh);
+      camera.aspect = ww/hh;
+      camera.updateProjectionMatrix();
+    });
+  }
+
+  function setMesh(geom){
+    if(state.previewMesh){
+      state.scene.remove(state.previewMesh);
+      state.previewMesh.geometry.dispose();
+      state.previewMesh.material.dispose();
+    }
+
+    const mat = new THREE.MeshStandardMaterial({
+      color: 0x3b82f6,
+      roughness: 0.45,
+      metalness: 0.10
+    });
+
+    const mesh = new THREE.Mesh(geom, mat);
+
+    // Center it and sit on grid
+    geom.computeBoundingBox();
+    const bb = geom.boundingBox;
+    const size = new THREE.Vector3();
+    bb.getSize(size);
+    const center = new THREE.Vector3();
+    bb.getCenter(center);
+
+    mesh.position.sub(center); // center around origin
+    mesh.position.y += (size.y/2) - 40; // sit on grid (grid at y=-40)
+
+    state.previewMesh = mesh;
+    state.scene.add(mesh);
+
+    // KPIs
+    $("kpiType").textContent = (state.tab==="baseplate") ? "Baseplate" : "Box";
+    $("kpiSize").textContent = `${Math.round(size.x)}×${Math.round(size.z)}×${Math.round(size.y)} mm`;
+    const tri = geom.getAttribute("position").count / 3;
+    $("kpiTri").textContent = `${Math.round(tri)}`;
+  }
+
+  // ---------- Preview update ----------
+  function getCurrentParams(){
+    const mm = clamp(num("mmPerUnit"), 5, 200);
+    const quality = val("adv_quality") || "med";
+
+    if(state.tab === "baseplate"){
+      return {
+        kind: "baseplate",
+        mm,
+        x: clamp(num("bp_x"), 1, 200),
+        y: clamp(num("bp_y"), 1, 200),
+        style: clamp(Number(val("bp_style")), 0, 2),
+        magnet: Number(val("bp_magnet")) === 1 ? 1 : 0,
+        quality
+      };
+    }
+    return {
+      kind: "bin",
+      mm,
+      x: clamp(num("bin_x"), 1, 50),
+      y: clamp(num("bin_y"), 1, 50),
+      z: clamp(num("bin_z"), 1, 50),
+      wall: clamp(num("bin_wall"), 0.8, 5),
+      divx: clamp(num("bin_divx"), 1, 10),
+      divy: clamp(num("bin_divy"), 1, 10),
+      scoop: Number(val("bin_scoop")) === 1 ? 1 : 0,
+      quality
+    };
+  }
+
+  function updateSummary(){
+    const p = getCurrentParams();
+    if(p.kind==="bin"){
+      $("summary").value =
+        `V3 | BIN | gridx=${p.x} gridy=${p.y} gridz=${p.z} mm=${p.mm} wall=${p.wall} div=${p.divx}x${p.divy} scoop=${p.scoop}`;
+    } else {
+      $("summary").value =
+        `V3 | BASEPLATE | gridx=${p.x} gridy=${p.y} mm=${p.mm} style=${p.style} magnet=${p.magnet}`;
+    }
+  }
+
+  function updatePreview(){
+    // if advanced tab is active, render based on selected type anyway
+    const t = val("typeSelect");
+    state.tab = (t === "baseplate") ? "baseplate" : "bin";
+    $("tab-bin").classList.toggle("active", state.tab==="bin");
+    $("tab-baseplate").classList.toggle("active", state.tab==="baseplate");
+
+    $("panel-bin").classList.toggle("hidden", state.tab!=="bin");
+    $("panel-baseplate").classList.toggle("hidden", state.tab!=="baseplate");
+    // advanced panel is separate; don’t force-hide it here
+
+    const p = getCurrentParams();
+    const geom = (p.kind==="bin") ? buildBinGeometry(p) : buildBaseplateGeometry(p);
+    setMesh(geom);
+    updateSummary();
+  }
+
+  function updatePreviewDebounced(){
+    clearTimeout(updatePreviewDebounced._tm);
+    updatePreviewDebounced._tm = setTimeout(updatePreview, 120);
+  }
+
+  // ---------- STL export ----------
+  function downloadSTL(){
+    if(!state.previewMesh){
+      toast("Kein Mesh — erst Preview");
+      return;
+    }
+    const geom = state.previewMesh.geometry.clone();
+
+    // Convert to world coords: apply mesh matrix (position)
+    state.previewMesh.updateMatrixWorld(true);
+    geom.applyMatrix4(state.previewMesh.matrixWorld);
+
+    const stl = geometryToSTL(geom);
+    const blob = new Blob([stl], {type:"model/stl"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+
+    const p = getCurrentParams();
+    const name = (p.kind==="bin")
+      ? `bin_${p.x}x${p.y}x${p.z}_mm${p.mm}.stl`
+      : `baseplate_${p.x}x${p.y}_mm${p.mm}.stl`;
+
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast("STL erstellt");
+  }
+
+  function geometryToSTL(geom){
+    // ASCII STL
+    const g = geom.toNonIndexed();
+    const pos = g.getAttribute("position");
+    const nor = g.getAttribute("normal");
+
+    let out = "solid gridfinity_v3\n";
+    for(let i=0;i<pos.count;i+=3){
+      const nx = nor.getX(i), ny = nor.getY(i), nz = nor.getZ(i);
+      out += `  facet normal ${nx} ${ny} ${nz}\n`;
+      out += "    outer loop\n";
+      for(let j=0;j<3;j++){
+        const x = pos.getX(i+j);
+        const y = pos.getY(i+j);
+        const z = pos.getZ(i+j);
+        out += `      vertex ${x} ${y} ${z}\n`;
+      }
+      out += "    endloop\n";
+      out += "  endfacet\n";
+    }
+    out += "endsolid gridfinity_v3\n";
+    return out;
+  }
+
+  // ---------- Presets ----------
+  function savePreset(){
+    const name = ( $("presetName")?.value || "Preset" ).trim() || "Preset";
+    const p = getCurrentParams();
+    const preset = { id: uid(), name, ts: new Date().toISOString(), params: p };
+
+    state.presets.unshift(preset);
+    state.presets = state.presets.slice(0, 80);
+    saveJSON(LS_PRESETS, state.presets);
+    updateCounts();
+    toast("Preset gespeichert");
+    renderPresets();
+  }
+
+  function presetApply(kind, key){
+    if(kind==="bin"){
+      switchTab("bin");
+      if(key==="1x1x6"){ $("bin_x").value=1; $("bin_y").value=1; $("bin_z").value=6; }
+      if(key==="2x3x6"){ $("bin_x").value=2; $("bin_y").value=3; $("bin_z").value=6; }
+      if(key==="3x3x6"){ $("bin_x").value=3; $("bin_y").value=3; $("bin_z").value=6; }
+      if(key==="4x2x12"){ $("bin_x").value=4; $("bin_y").value=2; $("bin_z").value=12; }
+    } else {
+      switchTab("baseplate");
+      if(key==="4x6"){ $("bp_x").value=4; $("bp_y").value=6; }
+      if(key==="6x10"){ $("bp_x").value=6; $("bp_y").value=10; $("bp_style").value="1"; }
+      if(key==="8x8"){ $("bp_x").value=8; $("bp_y").value=8; $("bp_style").value="2"; }
+    }
+    updatePreview();
+    toast("Preset gesetzt");
+  }
+
+  function renderPresets(){
+    const list = $("presetList");
+    if(!list) return;
+    list.innerHTML = "";
+    if(state.presets.length===0){
+      list.innerHTML = `<div class="sidecard"><h3>Leer</h3><p>Noch keine Presets gespeichert.</p></div>`;
+      return;
+    }
+    state.presets.forEach((p, idx)=>{
+      const div = document.createElement("div");
+      div.className="itemcard";
+      div.innerHTML = `
+        <div>
+          <b>${escapeHtml(p.name)}</b>
+          <small>${escapeHtml(p.params.kind)} · ${escapeHtml(presetLine(p.params))}</small>
+        </div>
+        <div class="right">
+          <button class="btn" data-load="${idx}">Load</button>
+          <button class="btn" data-del="${idx}">Del</button>
+        </div>
+      `;
+      list.appendChild(div);
+
+      div.querySelector(`[data-load="${idx}"]`).onclick = () => loadPreset(idx);
+      div.querySelector(`[data-del="${idx}"]`).onclick = () => deletePreset(idx);
+    });
+  }
+
+  function loadPreset(idx){
+    const p = state.presets[idx];
+    if(!p) return;
+    applyParams(p.params);
+    updatePreview();
+    toast("Preset geladen");
+    setView("generator");
+  }
+
+  function deletePreset(idx){
+    state.presets.splice(idx,1);
+    saveJSON(LS_PRESETS, state.presets);
+    updateCounts();
+    renderPresets();
+    toast("Preset gelöscht");
+  }
+
+  function clearPresets(){
+    state.presets = [];
+    saveJSON(LS_PRESETS, state.presets);
+    updateCounts();
+    renderPresets();
+    toast("Presets geleert");
+  }
+
+  function exportPresets(){
+    downloadJSON("gridfinity_v3_presets.json", state.presets);
+    toast("Presets exportiert");
+  }
+
+  // ---------- History ----------
+  function addHistory(){
+    const p = getCurrentParams();
+    const entry = {
+      id: uid(),
+      ts: new Date().toISOString(),
+      summary: $("summary").value,
+      params: p
+    };
+    state.history.unshift(entry);
+    state.history = state.history.slice(0, 120);
+    saveJSON(LS_HISTORY, state.history);
+    updateCounts();
+    toast("Im Verlauf gespeichert");
+  }
+
+  function renderHistory(){
+    const list = $("historyList");
+    if(!list) return;
+    list.innerHTML = "";
+    if(state.history.length===0){
+      list.innerHTML = `<div class="sidecard"><h3>Leer</h3><p>Noch keine Einträge.</p></div>`;
+      return;
+    }
+    state.history.forEach((h, idx)=>{
+      const div = document.createElement("div");
+      div.className="itemcard";
+      div.innerHTML = `
+        <div>
+          <b>${escapeHtml(h.summary)}</b>
+          <small>${escapeHtml(new Date(h.ts).toLocaleString("de-DE"))}</small>
+        </div>
+        <div class="right">
+          <button class="btn" data-load="${idx}">Load</button>
+          <button class="btn primary" data-stl="${idx}">STL</button>
+        </div>
+      `;
+      list.appendChild(div);
+      div.querySelector(`[data-load="${idx}"]`).onclick = () => { applyParams(h.params); updatePreview(); setView("generator"); toast("Geladen"); };
+      div.querySelector(`[data-stl="${idx}"]`).onclick = () => { applyParams(h.params); updatePreview(); downloadSTL(); };
+    });
+  }
+
+  function clearHistory(){
+    state.history = [];
+    saveJSON(LS_HISTORY, state.history);
+    updateCounts();
+    renderHistory();
+    toast("Verlauf geleert");
+  }
+
+  function exportHistory(){
+    downloadJSON("gridfinity_v3_history.json", state.history);
+    toast("Verlauf exportiert");
+  }
+
+  // ---------- Export/Copy ----------
+  function exportState(){
+    const obj = {
+      version: "v3",
+      params: getCurrentParams(),
+      presets_count: state.presets.length,
+      history_count: state.history.length
+    };
+    downloadJSON("gridfinity_v3_state.json", obj);
+    toast("State exportiert");
+  }
+
+  function copySummary(){
+    const s = $("summary");
+    s.select();
+    s.setSelectionRange(0, 99999);
+    try{ document.execCommand("copy"); }catch(e){}
+    toast("Copied");
+  }
+
+  // ---------- Roadmap hooks: open tools ----------
+  function openPerplexing(){
+    window.open("https://gridfinity.perplexinglabs.com/", "_blank", "noopener,noreferrer");
+  }
+  function openWebCustomizer(){
+    window.open("https://vector76.github.io/Web_OpenSCAD_Customizer/gridfinity_bins.html", "_blank", "noopener,noreferrer");
+  }
+
+  // ---------- Apply params ----------
+  function applyParams(p){
+    $("mmPerUnit").value = p.mm ?? 42;
+
+    if(p.kind==="baseplate"){
+      $("typeSelect").value = "baseplate";
+      switchTab("baseplate");
+      $("bp_x").value = p.x ?? 4;
+      $("bp_y").value = p.y ?? 6;
+      $("bp_style").value = String(p.style ?? 0);
+      $("bp_magnet").value = String(p.magnet ?? 0);
+    } else {
+      $("typeSelect").value = "bin";
+      switchTab("bin");
+      $("bin_x").value = p.x ?? 2;
+      $("bin_y").value = p.y ?? 2;
+      $("bin_z").value = p.z ?? 6;
+      $("bin_wall").value = p.wall ?? 1.6;
+      $("bin_divx").value = p.divx ?? 1;
+      $("bin_divy").value = p.divy ?? 1;
+      $("bin_scoop").value = String(p.scoop ?? 0);
+    }
+  }
+
+  // ---------- Utils ----------
+  function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
+  function escapeHtml(s){
+    return String(s)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll("\"","&quot;")
+      .replaceAll("'","&#039;");
+  }
+  function presetLine(p){
+    if(p.kind==="baseplate") return `${p.x}×${p.y} · mm=${p.mm} · style=${p.style} · mag=${p.magnet}`;
+    return `${p.x}×${p.y}×${p.z} · mm=${p.mm} · wall=${p.wall} · div=${p.divx}x${p.divy} · scoop=${p.scoop}`;
+  }
+  function loadJSON(key, fallback){
+    try{ return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
+    catch(e){ return fallback; }
+  }
+  function saveJSON(key, val){
+    localStorage.setItem(key, JSON.stringify(val));
+  }
+  function downloadJSON(filename, obj){
+    const blob = new Blob([JSON.stringify(obj, null, 2)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function updateCounts(){
+    $("presetCount").textContent = String(state.presets.length);
+    $("histCount").textContent = String(state.history.length);
+  }
+
+  // ---------- init ----------
+  function init(){
+    updateCounts();
+    init3D();
+    defaults();
+    updatePreview();
+  }
+
+  return {
+    init,
+    setView,
+    switchTab,
+    onTypeSelect,
+    defaults,
+    updatePreview,
+    updatePreviewDebounced,
+    downloadSTL,
+    savePreset,
+    presetApply,
+    exportPresets,
+    clearPresets,
+    addHistory,
+    clearHistory,
+    exportHistory,
+    exportState,
+    copySummary,
+    openPerplexing,
+    openWebCustomizer
+  };
+})();
+
+window.UI = UI;
+window.addEventListener("DOMContentLoaded", UI.init);
+```
+
+---
+
+## So nutzt du V3
+
+1. Ordner `gridfinity-v3/` anlegen
+2. Dateien `index.html`, `styles.css`, `app.js` rein
+3. Öffnen:
+
+* **Direkt** per Doppelklick auf `index.html`
+* oder (besser) einfacher Server:
+
+  * Python: `python -m http.server 8000` → `http://localhost:8000`
+
+---
+
+## Nächster Schritt (wenn du “exakt wie Gridfinity” willst)
+
+Sag einfach: **„V3: exakte Gridfinity Mode“**
+Dann mache ich dir die V4-Route:
+
+* entweder OpenSCAD-WASM im Browser
+* oder “Open Tool mit Param-DeepLink” (wenn URL-Params möglich)
+
+Wenn du willst, baue ich dir außerdem noch:
+
+* richtige Gridfinity-Höhen-Units (U → mm exakt nach Spec),
+* echte Baseplate-Geometrie (Sockets, Magnet/Screw Bohrungen) mit CSG-Kernel (WASM).

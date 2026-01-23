@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gridfinity Browser-Generator</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Three.js (old build with example scripts available) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.110.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.110.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.110.0/examples/js/exporters/STLExporter.js"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <h2>Gridfinity Generator</h2>
+      <p>Vorschau und STL-Export komplett im Browser — kein Backend nötig.</p>
+      <div class="section">
+        <label for="type">Typ</label>
+        <select id="type">
+          <option value="bin">Box / Bin</option>
+          <option value="base">Baseplate</option>
+        </select>
+      </div>
+
+      <div id="controls">
+        <div class="section">
+          <label for="x">X (Grid)</label>
+          <input id="x" type="number" min="1" max="50" value="2">
+        </div>
+        <div class="section">
+          <label for="y">Y (Grid)</label>
+          <input id="y" type="number" min="1" max="50" value="2">
+        </div>
+        <div class="section" id="z-section">
+          <label for="z">Z (Höhe)</label>
+          <input id="z" type="number" min="1" max="50" value="6">
+        </div>
+
+        <div class="section">
+          <label for="scale">Maßstab (mm pro Einheit)</label>
+          <input id="scale" type="number" min="1" value="20">
+        </div>
+
+        <div class="buttons">
+          <button id="previewBtn">Vorschau aktualisieren</button>
+          <button id="downloadBtn">STL herunterladen</button>
+        </div>
+
+        <p class="muted">Hinweis: Öffnen Sie die Datei per einfachem HTTP-Server (z.B. <code>python -m http.server</code>) falls Ressourcen blockiert werden.</p>
+      </div>
+
+      <footer class="footer">Erstellt — Browser-only Gridfinity Generator</footer>
+    </aside>
+
+    <main class="main">
+      <h1>Vorschau</h1>
+      <div id="preview"></div>
+      <div class="info" id="info"></div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

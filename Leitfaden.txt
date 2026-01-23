@@ -1,0 +1,390 @@
+Alles klar – hier ist der **Leitfaden “SystemOne Mockup”** so, dass wir künftig immer wissen: **was es gibt, wo es sitzt, wie es funktioniert, und welche Daten/Flows dahinter hängen.**
+(Genau wie im Mockup gedacht – SmartSorter Dark Dashboard Style.)
+
+---
+
+# SystemOne – UI & Funktions-Leitfaden (Mockup-Stand)
+
+## 0) Grundidee
+
+**SystemOne** ist dein **lokales Control-Center** für:
+
+* **KI (PEET)**: Chat, Agent, Wissensbasis
+* **NAS**: Dateien finden, sortieren, öffnen, verschieben, taggen
+* **SmartHome (Home Assistant)**: Geräte sehen + schalten + Automationen
+* **3D Creator / Gridfinity**: Objekte erstellen, live ansehen, exportieren
+* **Druck/Produktion**: Optional direkt an Drucker / Slicer / Queue schicken
+* **Systemstatus**: Server, Docker, Dienste, Logs, Health
+
+Alles läuft im gleichen UI-Stil: **dunkel, clean, kartenbasiert, klare Piktogramme, wenig Emoji.**
+
+---
+
+# 1) Layout-Übersicht (so wie im Mockup)
+
+## 1.1 Topbar (ganz oben)
+
+**Zweck:** Orientierung + globale Aktionen.
+
+**Elemente:**
+
+* **Links:** SystemOne Logo / Name
+* **Mitte:** Global Search (Suche über ALLES)
+
+  * durchsucht: Dokumente, Projekte, Automationen, Geräte, Logs
+* **Rechts:** Schnellstatus + Profil
+
+  * Datum/Uhrzeit
+  * Server-Status (Online/Offline)
+  * Benutzerprofil auswählen (Start-Dialog)
+  * Settings (Theme, API Keys lokal, Speicherorte)
+
+**Funktion:**
+
+* Suche ist der “Schnelleinstieg” in jede Funktion.
+* Topbar bleibt immer sichtbar.
+
+---
+
+## 1.2 Left Sidebar (Navigation)
+
+**Zweck:** Hauptmodule wechseln – immer gleiche Position.
+
+**Menüpunkte (wie im Mockup):**
+
+1. **Dashboard**
+2. **PEET Chat**
+3. **Files / NAS**
+4. **SmartHome**
+5. **Automations**
+6. **3D Creator**
+7. **Gridfinity Generator**
+8. **Print / Queue**
+9. **Logs / Monitor**
+10. **Settings**
+
+**Verhalten:**
+
+* Sidebar ist fix (sticky).
+* Aktiver Bereich ist klar markiert.
+* Icons minimalistisch.
+
+---
+
+## 1.3 Main Content Area (Mitte)
+
+**Zweck:** Hier passiert alles – modulabhängig.
+
+Aufbau im Mockup-Stil:
+
+* **Cards/Container** (abgerundet, dunkel, feine Kontur)
+* **Sektionen** wie “Status”, “Aktionen”, “Letzte Aktivitäten”
+* **Grid Layout** (2–3 Spalten je nach Screen)
+
+---
+
+## 1.4 Right Panel (Context Panel)
+
+**Zweck:** Kontextbezogene Infos ohne Seitenwechsel.
+
+Beispiele:
+
+* Wenn du eine Datei anklickst → zeigt Metadaten, Vorschau, Tags, Aktionen
+* Wenn du ein Gerät anklickst → zeigt Zustand, Steuerung, Automations
+* Wenn du im 3D Creator bist → zeigt Parameter/Export-Optionen
+* Wenn du mit PEET chatest → zeigt Quellen, Memory, Tools, Verlauf
+
+**Verhalten:**
+
+* Ein-/ausblendbar
+* Merkt sich zuletzt geöffneten Kontext
+
+---
+
+# 2) Module im Detail (Funktionen + Verhalten)
+
+## 2.1 Dashboard (Startseite)
+
+**Ziel:** Alles auf einen Blick.
+
+**Cards im Dashboard:**
+
+* **System Health**
+
+  * Docker Dienste online/offline
+  * CPU/RAM/Storage
+  * NAS erreichbar?
+  * HA erreichbar?
+  * Ollama/LLM erreichbar?
+* **Recent Activity**
+
+  * zuletzt sortierte Dateien
+  * zuletzt genutzte Chats/Prompts
+  * letzte SmartHome-Aktionen
+* **Quick Actions**
+
+  * “Scan Eingang”
+  * “Sortierung starten”
+  * “Neues 3D Objekt”
+  * “Druck starten”
+  * “Automation anlegen”
+* **Alerts**
+
+  * Speicher knapp
+  * Dienst down
+  * HA Token abgelaufen
+  * Drucker offline
+
+**Soll-Funktion:**
+
+* Dashboard ist “Kontrollzentrum” + Einstieg.
+* Alles klickbar → führt ins jeweilige Modul.
+
+---
+
+## 2.2 PEET Chat (KI)
+
+**Ziel:** Chat + Agent mit Tools.
+
+**UI-Aufbau:**
+
+* Chatfenster (Mitte)
+* Tool-Leiste (z. B. “Dokumente”, “SmartHome”, “Files”, “3D”)
+* Rechtes Kontextpanel: Quellen / Memory / Aktionen
+
+**Funktionen:**
+
+* **Chat mit Dokumenten (RAG)**
+
+  * fragt in: NAS-Dokumenten, Notizen, Projektdokus
+* **Agent Mode**
+
+  * kann Aktionen ausführen (je nach Rechte):
+
+    * Dateien umbenennen/verschieben
+    * Geräte schalten (HA)
+    * Automationen erstellen (n8n/HA)
+    * 3D Export vorbereiten
+* **Chat-Verlauf**
+
+  * Projekte / Threads
+  * Suchbar
+* **“Quellen anzeigen”**
+
+  * welche Dateien wurden benutzt
+  * Textstellen/Abschnitte (mit Link zur Datei)
+
+**Soll-Verhalten:**
+
+* PEET ist “die Kommandozentrale”.
+* Jede Aktion ist nachvollziehbar (Audit Trail / Log).
+
+---
+
+## 2.3 Files / NAS
+
+**Ziel:** Dateisystem wie Finder/Explorer – plus KI-Features.
+
+**UI-Aufbau:**
+
+* Linke Spalte: Ordnerbaum / Favoriten
+* Mitte: Datei-Liste / Grid
+* Rechts: Preview + Metadaten + Aktionen
+
+**Funktionen:**
+
+* Öffnen/Download (lokal)
+* Tagging / Kategorien
+* “Smart Rename” (KI)
+* “Smart Move” (KI Vorschlag: Zielordner)
+* Duplikate erkennen
+* OCR / PDF-Text (falls nötig)
+* Versionierung optional (später)
+
+**Soll-Verhalten:**
+
+* Der “Eingangsordner” ist zentral:
+
+  * neue Dateien werden erkannt
+  * manuell “Sortieren” möglich
+  * automatisch per Regeln/Agent möglich
+
+---
+
+## 2.4 SmartHome (Home Assistant)
+
+**Ziel:** Geräte steuern + Zustand sehen.
+
+**UI-Aufbau (Mockup-Style Cards):**
+
+* Räume/Filter oben (Wohnzimmer, Küche, Außen…)
+* Device Cards (Lampe, Steckdose, Sensor)
+* Automationen & Szenen als Buttons
+* Rechts: Gerätedetails / History
+
+**Funktionen:**
+
+* Schalten/Dimmen/Farbe (wenn vorhanden)
+* Sensorwerte live
+* Szenen starten
+* Automationen anzeigen/triggern
+* PEET kann Befehle ausführen (mit Bestätigung, je nach Modus)
+
+**Soll-Verhalten:**
+
+* “Schnellsteuerung” + “Detailansicht”
+* Aktionen erscheinen im Log.
+
+---
+
+## 2.5 Automations
+
+**Ziel:** Prozesse definieren (Sortieren, SmartHome, Druck, Backups)
+
+**Funktionen:**
+
+* Workflows:
+
+  * “Wenn neue Rechnung → OCR → Kategorie → NAS Ordner → Tag”
+  * “Wenn Bewegung → Licht → Kamera Clip speichern”
+  * “Wenn 3D Export → Slicer starten → Queue”
+* Trigger:
+
+  * File Watcher
+  * Zeitplan
+  * Webhook
+  * SmartHome Event
+* Aktionen:
+
+  * API Calls
+  * Script Jobs
+  * HA Service Calls
+  * Print Jobs
+
+**Soll-Verhalten:**
+
+* Visual Builder später möglich
+* Anfang: “Template-basiert” + “Edit JSON/YAML”
+
+---
+
+## 2.6 3D Creator
+
+**Ziel:** 3D Objekte erzeugen + live ansehen.
+
+**Funktionen:**
+
+* Live Preview (WebGL / Three.js)
+* Parameter Panels (rechts)
+* Export STL/OBJ
+* Projekte speichern (Presets)
+* Objektbibliothek (deine Modelle)
+
+**Soll-Verhalten:**
+
+* Alles im selben UI, kein extra Tool-Wildwuchs.
+* “One Click” von Creator → Gridfinity → Print.
+
+---
+
+## 2.7 Gridfinity Generator
+
+**Ziel:** Gridfinity-like Generator (lokal/offline) integriert.
+
+**Funktionen:**
+
+* Parameter: gridx, gridy, gridz, wall, scale…
+* Preview
+* Export STL
+* Presets speichern
+* Verlauf (localStorage / DB)
+
+**Soll-Verhalten:**
+
+* Generator ist ein “Modul” in SystemOne, nicht extern.
+
+---
+
+## 2.8 Print / Queue
+
+**Ziel:** Druckaufträge verwalten.
+
+**Funktionen (optional stufenweise):**
+
+* Export → “Add to Queue”
+* Drucker auswählen
+* Slicer-Profil wählen
+* Job-Status (wartend, läuft, fertig, fehlgeschlagen)
+* History + Materialverbrauch (später)
+
+**Soll-Verhalten:**
+
+* Anfang: “Queue-Verwaltung” ohne echten Druck
+* Später: direkte Integration (OctoPrint / Bambu / Prusa etc.)
+
+---
+
+## 2.9 Logs / Monitor
+
+**Ziel:** Transparenz & Debugging.
+
+**Cards:**
+
+* Service Status (Docker)
+* Logs pro Service (API, Worker, HA Bridge, LLM)
+* Alerts & Errors
+* Audit Trail (wer hat was gemacht)
+
+**Soll-Verhalten:**
+
+* Wenn etwas nicht geht, findest du es hier sofort.
+
+---
+
+## 2.10 Settings
+
+**Ziel:** Systemweit konfigurieren.
+
+**Bereiche:**
+
+* Benutzerprofile
+* Speicherorte (NAS Mounts)
+* Tokens (HA, ggf. n8n)
+* LLM Settings (Ollama Modell, Limits)
+* UI Settings (Theme bleibt gleich, nur Feintuning)
+* Backups / Export Config
+
+---
+
+# 3) Globale Regeln (Design + UX)
+
+* Dark Dashboard Style (SmartSorter)
+* Runde Container, weiche Schatten, dünne Linien
+* Wenige Piktogramme statt Emojis
+* Alles klickbar, aber ruhig/clean
+* Kein Chaos: immer Cards, immer Grid
+* Context Panel rechts ist Standard
+
+---
+
+# 4) Globale Datenflüsse (Wie es “zusammenhängt”)
+
+1. **Files** liefern Input (Dokumente, PDFs, Scans)
+2. **PEET** versteht Inhalte (RAG/LLM) und kann Aktionen empfehlen
+3. **Automations** führen wiederkehrende Aufgaben aus
+4. **SmartHome** ist steuerbar per UI + PEET
+5. **3D/Generator** erzeugt Modelle → Export
+6. **Print Queue** nimmt Exporte und verwaltet Ausführung
+7. **Logs/Monitor** protokolliert alles
+
+---
+
+# 5) “Definition of Done” für das Mockup (damit wir nie durcheinander kommen)
+
+Wenn wir sagen “SystemOne ist wie im Mockup”, dann bedeutet das:
+
+* Navigation + Layout steht (Topbar, Sidebar, Main, Right Panel)
+* Jedes Modul hat seine Cards/Ansichten wie oben
+* Grundaktionen sind klickbar (auch wenn Backend noch Dummy ist)
+* Alles fühlt sich wie **ein System** an, nicht wie 10 Einzeltools
+

@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Gridfinity V3 — Offline Browser Generator</title>
+  <link rel="stylesheet" href="./styles.css"/>
+</head>
+
+<body>
+  <div class="app">
+    <aside class="panel sidebar">
+      <div class="brandbar">
+        <div class="brandleft">
+          <div class="logo"></div>
+          <div class="brandtitle">
+            <b>Gridfinity V3</b>
+            <span>Offline · 3D Preview · STL Import/Export</span>
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span>offline</div>
+      </div>
+
+      <div class="nav">
+        <div class="item active" data-view="generator" onclick="UI.setView('generator')">
+          <span>🧩 Generator</span><span class="badge">V3</span>
+        </div>
+        <div class="item" data-view="presets" onclick="UI.setView('presets')">
+          <span>⭐ Presets</span><span class="badge" id="presetCount">0</span>
+        </div>
+        <div class="item" data-view="history" onclick="UI.setView('history')">
+          <span>🗂️ Verlauf</span><span class="badge" id="histCount">0</span>
+        </div>
+        <div class="item" data-view="about" onclick="UI.setView('about')">
+          <span>ℹ️ Roadmap</span><span class="badge">next</span>
+        </div>
+      </div>
+
+      <div class="sidecard">
+        <h3>Quick Actions</h3>
+        <p>Alles läuft lokal im Browser. Wenn du „exakt Gridfinity“ willst: STL aus Online-Tool exportieren und hier importieren (1:1).</p>
+        <div class="stats">
+          <div class="stat"><div class="k">Renderer</div><div class="v">Three.js (local)</div></div>
+          <div class="stat"><div class="k">Export</div><div class="v">STL</div></div>
+        </div>
+      </div>
+
+      <div class="help">
+        💡 Flow: Werte setzen → Preview → STL herunterladen → Preset speichern.<br/>
+        Presets + Verlauf: localStorage.
+      </div>
+    </aside>
+
+    <main class="panel main">
+
+      <div class="topbar">
+        <div class="headline">
+          <h1 id="viewTitle">Generator</h1>
+          <div class="sub" id="viewSubtitle">SmartSorter Dark Dashboard · V3 Offline</div>
+        </div>
+        <div class="actions">
+          <button class="btn" onclick="UI.defaults()">↩ Defaults</button>
+          <button class="btn" onclick="UI.copySummary()">📋 Copy</button>
+          <button class="btn primary" onclick="UI.updatePreview()">⚡ Preview</button>
+        </div>
+      </div>
+
+      <!-- GENERATOR -->
+      <section id="view-generator" class="view">
+        <div class="tabs">
+          <div class="tab active" id="tab-bin" onclick="UI.switchTab('bin')">📦 Box</div>
+          <div class="tab" id="tab-baseplate" onclick="UI.switchTab('baseplate')">🟦 Baseplate</div>
+          <div class="tab" id="tab-advanced" onclick="UI.switchTab('advanced')">🧪 Advanced</div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h2>Parameter</h2>
+            <p class="sub">Preview ist „gridfinity-like“. Für 1:1: STL importieren.</p>
+
+            <div class="formgrid">
+              <div class="field">
+                <label>Typ <span class="mini">bin/baseplate</span></label>
+                <select id="typeSelect" onchange="UI.onTypeSelect()">
+                  <option value="bin" selected>Box (Bin)</option>
+                  <option value="baseplate">Baseplate</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>mm pro Einheit <span class="mini">scale</span></label>
+                <input id="mmPerUnit" type="number" min="5" max="200" step="0.1" value="42" oninput="UI.updatePreviewDebounced()"/>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div id="panel-bin">
+              <div class="formgrid">
+                <div class="field">
+                  <label>X Raster <span class="mini">gridx</span></label>
+                  <input id="bin_x" type="number" min="1" max="50" value="2" oninput="UI.updatePreviewDebounced()"/>
+                </div>
+                <div class="field">
+                  <label>Y Raster <span class="mini">gridy</span></label>
+                  <input id="bin_y" type="number" min="1" max="50" value="2" oninput="UI.updatePreviewDebounced()"/>
+                </div>
+                <div class="field">
+                  <label>Z Units <span class="mini">gridz</span></label>
+                  <input id="bin_z" type="number" min="1" max="50" value="6" oninput="UI.updatePreviewDebounced()"/>
+                </div>
+                <div class="field">
+                  <label>Wandstärke (mm) <span class="mini">wall</span></label>
+                  <input id="bin_wall" type="number" min="0.8" max="5" step="0.1" value="1.6" oninput="UI.updatePreviewDebounced()"/>
+                </div>
+              </div>
+            </div>
+
+            <div id="panel-baseplate" class="hidden">
+              <div class="formgrid">
+                <div class="field">
+                  <label>X Raster <span class="mini">gridx</span></label>
+                  <input id="bp_x" type="number" min="1" max="200" value="4" oninput="UI.updatePreviewDebounced()"/>
+                </div>
+                <div class="field">
+                  <label>Y Raster <span class="mini">gridy</span></label>
+                  <input id="bp_y" type="number" min="1" max="200" value="6" oninput="UI.updatePreviewDebounced()"/>
+                </div>
+                <div class="field">
+                  <label>Style <span class="mini">thin/weighted/skeleton</span></label>
+                  <select id="bp_style" onchange="UI.updatePreviewDebounced()">
+                    <option value="0" selected>0 · Thin</option>
+                    <option value="1">1 · Weighted</option>
+                    <option value="2">2 · Skeleton</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Magnet Holes <span class="mini">hint</span></label>
+                  <select id="bp_magnet" onchange="UI.updatePreviewDebounced()">
+                    <option value="0" selected>Off</option>
+                    <option value="1">On</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div id="panel-advanced" class="hidden">
+              <div class="formgrid">
+                <div class="field">
+                  <label>Facets Quality <span class="mini">smoothness</span></label>
+                  <select id="adv_quality" onchange="UI.updatePreviewDebounced()">
+                    <option value="low">Low</option>
+                    <option value="med" selected>Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Export Units <span class="mini">roadmap</span></label>
+                  <select id="adv_units">
+                    <option value="mm" selected>mm</option>
+                    <option value="inch">inch</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="field">
+              <label>Parameter Summary <span class="mini">Copy</span></label>
+              <input id="summary" readonly value="—" class="mono"/>
+            </div>
+
+            <div class="row">
+              <button class="btn" onclick="UI.downloadSTL()">⬇ STL herunterladen</button>
+              <button class="btn primary" onclick="UI.savePreset()">💾 Preset speichern</button>
+            </div>
+
+            <div class="row">
+              <button class="btn" onclick="UI.addHistory()">🗂️ In Verlauf</button>
+              <button class="btn" onclick="UI.exportState()">⬇ Export JSON</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>3D Vorschau</h2>
+            <p class="sub">Orbit: links drehen · rechts schieben · Mausrad zoom.</p>
+
+            <div class="viewer" id="viewer"></div>
+
+            <div class="kpi">
+              <div class="box"><div class="k">Objekt</div><div class="v" id="kpiType">—</div></div>
+              <div class="box"><div class="k">Größe</div><div class="v" id="kpiSize">—</div></div>
+              <div class="box"><div class="k">Triangles</div><div class="v" id="kpiTri">—</div></div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="sidecard">
+              <h3>Exakte Vorschau (STL laden)</h3>
+              <p>STL aus Online-Tool laden → exakt gleiche 3D-Ansicht hier.</p>
+              <div class="row">
+                <input id="stlFile" type="file" accept=".stl" class="btn filebtn"/>
+                <button class="btn primary" onclick="UI.loadSTLFromFile()">📥 STL anzeigen</button>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="sidecard" id="jsStatus">
+              <h3>Status</h3>
+              <p id="jsStatusText">⏳ JavaScript lädt…</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-presets" class="view hidden">
+        <div class="card">
+          <h2>Presets</h2>
+          <p class="sub">Gespeichert im Browser (localStorage).</p>
+          <div id="presetList" class="list"></div>
+        </div>
+      </section>
+
+      <section id="view-history" class="view hidden">
+        <div class="card">
+          <h2>Verlauf</h2>
+          <p class="sub">Gespeichert im Browser (localStorage).</p>
+          <div id="historyList" class="list"></div>
+        </div>
+      </section>
+
+      <section id="view-about" class="view hidden">
+        <div class="card">
+          <h2>Roadmap</h2>
+          <ul class="sub">
+            <li>Web-OpenSCAD/WASM Integration (exakt Gridfinity ohne Backend)</li>
+            <li>Divider / Scoop echte Geometrie</li>
+            <li>Preset-Sharing per JSON Import</li>
+          </ul>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    window.__JS_BOOT_OK = false;
+    setTimeout(() => {
+      if(!window.__JS_BOOT_OK){
+        const el = document.getElementById("jsStatusText");
+        if(el) el.textContent = "❌ app.js läuft nicht. Prüfe: http://localhost:8000 und Dateipfade.";
+      }
+    }, 1200);
+  </script>
+
+  <script type="module">
+  import "./app.js";
+</script>
+
+<script>
+  window.addEventListener("error", (e) => {
+    const el = document.getElementById("jsStatusText");
+    if (el) el.textContent = "❌ JS Error: " + (e?.message || e);
+  });
+
+  window.addEventListener("unhandledrejection", (e) => {
+    const el = document.getElementById("jsStatusText");
+    if (el) el.textContent = "❌ Promise Error: " + (e?.reason?.message || e?.reason || e);
+  });
+</script>
+</body>
+</html>

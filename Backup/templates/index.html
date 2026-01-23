@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Gridfinity Local Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/STLLoader.js"></script>
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: #0f1b33;
+      --stroke:#1f2b47;
+      --text:#e8eefc;
+      --muted:#9fb0d0;
+      --brand:#3b82f6;
+      --radius: 18px;
+    }
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .app{
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+      padding: 20px;
+    }
+    .sidebar{
+      background: var(--panel);
+      padding: 20px;
+      border-radius: var(--radius);
+    }
+    .main{
+      background: var(--panel);
+      padding: 20px;
+      border-radius: var(--radius);
+    }
+    #preview {
+      width: 100%;
+      height: 400px;
+      background: #1f2b47;
+      border-radius: var(--radius);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <h2>Gridfinity Generator</h2>
+      <p>Erzeuge Boxen und Baseplates lokal.</p>
+    </aside>
+    <main class="main">
+      <h1>Dashboard</h1>
+      <form action="/generate/bin" method="post" onsubmit="showPreview(event)">
+        <label for="x">X:</label>
+        <input type="number" id="x" name="x" value="2" min="1" max="50">
+        <label for="y">Y:</label>
+        <input type="number" id="y" name="y" value="2" min="1" max="50">
+        <label for="z">Z:</label>
+        <input type="number" id="z" name="z" value="6" min="1" max="50">
+        <button type="submit">Box erzeugen</button>
+      </form>
+      <div id="preview"></div>
+    </main>
+  </div>
+
+  <script>
+    function showPreview(event) {
+      event.preventDefault();
+
+      const x = document.getElementById('x').value;
+      const y = document.getElementById('y').value;
+      const z = document.getElementById('z').value;
+
+      const preview = document.getElementById('preview');
+      preview.innerHTML = '';
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, preview.clientWidth / preview.clientHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(preview.clientWidth, preview.clientHeight);
+      preview.appendChild(renderer.domElement);
+
+      const geometry = new THREE.BoxGeometry(x, y, z);
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      const cube = new THREE.Mesh(geometry, material);
+      scene.add(cube);
+
+      camera.position.z = 10;
+
+      function animate() {
+        requestAnimationFrame(animate);
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    }
+  </script>
+</body>
+</html>
