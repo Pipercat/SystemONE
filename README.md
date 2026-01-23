@@ -1,86 +1,165 @@
+<!-- =========================================================
+ SystemONE · README (Web-Style)
+ Hinweis: GitHub rendert HTML in README, aber ohne eigenes CSS/JS.
+ Das Layout unten nutzt HTML + Tabellen + Details-Blöcke, damit es
+ "wie eine Webseite" wirkt – sauber, modern, und gut lesbar.
+========================================================= -->
+
 <p align="right">
-  <img src="Generator_3/logo/logo_schild.png" alt="SystemONE Logo" width="120"/>
+  <img src="Generator_3/logo/logo_groß.png" alt="SystemONE Logo" width="130"/>
 </p>
 
-# SystemONE
+<h1>SystemONE</h1>
 
-**SystemONE** ist ein **lokales Smart-System-Dashboard** im **Digital-Dark Design**:  
-eine zentrale Oberfläche, die **Smart Home (Home Assistant)**, **NAS/Files**, **KI-Agent (PEET)** und Tools wie **3D Creator / Gridfinity Generator** in **einem** System bündelt.
+<p>
+  <b>SystemONE</b> ist ein <b>lokales Smart-System-Dashboard</b> im <b>Digital-Dark Design</b>:
+  eine zentrale Oberfläche, die <b>Smart Home (Home Assistant)</b>, <b>NAS/Files</b>,
+  <b>KI-Agent (PEET)</b> und Tools wie <b>3D Creator / Gridfinity Generator</b> in <b>einem</b> System bündelt.
+</p>
 
----
+<hr/>
 
-## Highlights
+<table width="100%">
+  <tr>
+    <td width="33%" valign="top">
+      <h3>⚙️ Was es ist</h3>
+      <ul>
+        <li>Ein zentrales Dashboard für dein komplettes Smart-System</li>
+        <li>Lokaler Betrieb (privacy-first), modular, Docker-first</li>
+        <li>UI-Standard: <b>Digital-Dark</b> + <b>SystemONE Logo oben rechts</b></li>
+      </ul>
+    </td>
+    <td width="33%" valign="top">
+      <h3>🧠 Kernfunktionen</h3>
+      <ul>
+        <li><b>PEET</b>: Chat, Automationen, Wissenssuche über Dokumente</li>
+        <li><b>Home Assistant</b>: Geräte, Räume, Szenen, Sensoren (auch KI-triggerbar)</li>
+        <li><b>NAS/Files</b>: Zugriff, Suche, Sortierung, Workflows</li>
+      </ul>
+    </td>
+    <td width="33%" valign="top">
+      <h3>🧩 Tools</h3>
+      <ul>
+        <li><b>3D Creator</b>: Objekte live ansehen & verwalten</li>
+        <li><b>Gridfinity Generator</b>: Parameter → Preview → Export → Presets</li>
+        <li>Optional später: Slicer / Direktdruck-Workflow</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-- **Digital-Dark Dashboard UI** (dark, modern, klar strukturiert)
-- **SystemONE Logo oben rechts** (fix im Header integriert)
-- **PEET Agent**: Chat + Automationen + Wissenssuche über Dokumente
-- **Home Assistant Steuerung**: Geräte, Szenen, Sensoren (inkl. KI-triggerbar)
-- **NAS / File Hub**: Zugriff, Suche, Sortierung (SmartSortier-Logik möglich)
-- **3D Bereich**: 3D-Objekte live ansehen & verwalten (Creator-Workflow)
-- **Gridfinity Generator**: Parameter → Vorschau → Export → Presets
-- **Docker-first**: modulare Services, sauber getrennte Komponenten
+<hr/>
 
----
+<h2>✨ Highlights</h2>
 
-## Module
+<ul>
+  <li><b>Digital-Dark Dashboard UI</b> (dark, modern, klar strukturiert)</li>
+  <li><b>SystemONE Logo oben rechts</b> (fix im Header integriert)</li>
+  <li><b>PEET Agent</b>: Chat + Automationen + Wissenssuche</li>
+  <li><b>Home Assistant Steuerung</b>: Geräte, Szenen, Sensoren (inkl. KI-triggerbar)</li>
+  <li><b>NAS / File Hub</b>: Zugriff, Suche, Sortierung (SmartSortier-Logik möglich)</li>
+  <li><b>3D Bereich</b>: 3D-Objekte live ansehen & verwalten</li>
+  <li><b>Gridfinity Generator</b>: Parameter → Vorschau → Export → Presets</li>
+  <li><b>Docker-first</b>: modulare Services, sauber getrennte Komponenten</li>
+</ul>
 
-### 1) Dashboard (Frontend)
-- Startseite mit **Karten / Panels**
-- Navigation zu: **Chat**, **SmartHome**, **NAS**, **3D**, **Generator**, **Settings**
-- Fokus: schnelle Übersicht + klare Interaktion (ohne UI-Overkill)
-- **Top-Header mit SystemONE Logo oben rechts (fix)**
+<hr/>
 
-### 2) PEET (KI-Agent)
-- Chat UI (Kontext + Verlauf)
-- Dokumentenfragen (RAG / Vektorsuche optional)
-- Aktionen ausführen (z. B. Licht schalten, Datei sortieren, Preset speichern)
+<h2>🧱 Module</h2>
 
-### 3) SmartHome (Home Assistant)
-- Geräte-Listen, Räume, Favoriten
-- Sensor-Status, Automations-Trigger
-- API-Anbindung (REST/WebSocket – je nach Setup)
+<details open>
+  <summary><b>1) Dashboard (Frontend)</b></summary>
+  <br/>
+  <ul>
+    <li>Startseite mit <b>Karten / Panels</b></li>
+    <li>Navigation zu: <b>Chat</b>, <b>SmartHome</b>, <b>NAS</b>, <b>3D</b>, <b>Generator</b>, <b>Settings</b></li>
+    <li>Fokus: schnelle Übersicht + klare Interaktion (ohne UI-Overkill)</li>
+    <li><b>Top-Header mit SystemONE Logo oben rechts (fix)</b></li>
+  </ul>
+</details>
 
-### 4) NAS / Files
-- Browse / Search
-- Upload / Download (optional)
-- SmartSortier-Workflows: erkennen → klassifizieren → umbenennen → ablegen
+<details open>
+  <summary><b>2) PEET (KI-Agent)</b></summary>
+  <br/>
+  <ul>
+    <li>Chat UI (Kontext + Verlauf)</li>
+    <li>Dokumentenfragen (RAG / Vektorsuche optional)</li>
+    <li>Aktionen ausführen (z. B. Licht schalten, Datei sortieren, Preset speichern)</li>
+  </ul>
+</details>
 
-### 5) 3D / Creator
-- Live Preview von 3D-Objekten (Browser/Three.js oder Desktop)
-- Bibliothek / Projekte / Export
-- Optional: Slicer-Integration / Direktdruck-Workflow (später)
+<details open>
+  <summary><b>3) SmartHome (Home Assistant)</b></summary>
+  <br/>
+  <ul>
+    <li>Geräte-Listen, Räume, Favoriten</li>
+    <li>Sensor-Status, Automations-Trigger</li>
+    <li>API-Anbindung (REST/WebSocket – je nach Setup)</li>
+  </ul>
+</details>
 
-### 6) Gridfinity Generator
-- Parameter UI (Units, Wall, Raster, etc.)
-- Vorschau/Preview
-- STL Export
-- Presets (localStorage / DB)
+<details open>
+  <summary><b>4) NAS / Files</b></summary>
+  <br/>
+  <ul>
+    <li>Browse / Search</li>
+    <li>Upload / Download (optional)</li>
+    <li>Workflows: erkennen → klassifizieren → umbenennen → ablegen</li>
+  </ul>
+</details>
 
----
+<details open>
+  <summary><b>5) 3D / Creator</b></summary>
+  <br/>
+  <ul>
+    <li>Live Preview von 3D-Objekten (Browser/Three.js oder Desktop)</li>
+    <li>Bibliothek / Projekte / Export</li>
+    <li>Optional: Slicer-Integration / Direktdruck-Workflow (später)</li>
+  </ul>
+</details>
 
-## Architektur (Kurz)
+<details open>
+  <summary><b>6) Gridfinity Generator</b></summary>
+  <br/>
+  <ul>
+    <li>Parameter UI (Units, Wall, Raster, etc.)</li>
+    <li>Vorschau / Preview</li>
+    <li>STL Export</li>
+    <li>Presets (localStorage / DB)</li>
+  </ul>
+</details>
 
-**Frontend** → **API** → (SmartHome / NAS / KI / Generator)
+<hr/>
 
-- Frontend: Angular (oder Web UI)
-- API: FastAPI / Node / Gateway (je nach Build)
-- KI: Ollama / lokale Modelle + optional Vector DB (z. B. Qdrant)
-- Daten: Postgres (optional), Redis (optional), Filesystem/NAS
+<h2>🧠 Architektur (Kurz)</h2>
 
----
+<p>
+  <b>Frontend</b> → <b>API</b> → (SmartHome / NAS / KI / Generator)
+</p>
 
-## Design-Standard (Digital-Dark)
+<ul>
+  <li><b>Frontend</b>: Angular (oder Web UI)</li>
+  <li><b>API</b>: FastAPI / Node / Gateway (je nach Build)</li>
+  <li><b>KI</b>: Ollama / lokale Modelle + optional Vector DB (z. B. Qdrant)</li>
+  <li><b>Daten</b>: Postgres (optional), Redis (optional), Filesystem/NAS</li>
+</ul>
 
-- Dunkler Hintergrund, **runde Cards**, klare Kontraste
-- Wenige Akzentfarben (z. B. Blau/Orange je nach Theme)
-- **Links Navigation**, **Center Content**, optional **Right Panel**
-- Icons sparsam (nur wo funktional notwendig)
-- Fokus auf **Lesbarkeit + klare Hierarchie**
-- **Fixer Header mit SystemONE Logo oben rechts**
+<hr/>
 
----
+<h2>🎨 Design-Standard (Digital-Dark)</h2>
 
-## Repository Struktur (Empfehlung)
+<ul>
+  <li>Dunkler Hintergrund, <b>runde Cards</b>, klare Kontraste</li>
+  <li>Wenige Akzentfarben (z. B. Blau/Orange je nach Theme)</li>
+  <li><b>Links Navigation</b>, <b>Center Content</b>, optional <b>Right Panel</b></li>
+  <li>Icons sparsam (nur wo funktional notwendig)</li>
+  <li>Fokus auf <b>Lesbarkeit</b> + <b>klare Hierarchie</b></li>
+  <li><b>Fixer Header mit SystemONE Logo oben rechts</b></li>
+</ul>
+
+<hr/>
+
+<h2>🗂️ Repository Struktur (Empfehlung)</h2>
 
 ```txt
 SystemONE/
@@ -97,40 +176,57 @@ SystemONE/
     nginx/             # optional Reverse Proxy
   docs/                # Doku, Screens, Entscheidungen
 
+<hr/>
 
-⸻
 
-Getting Started
+<h2>🚀 Getting Started</h2>
 
-Wird ergänzt, sobald docker-compose.yml + erste Module im Repo sind.
 
-	1.	Repository klonen
-	2.	infra/docker-compose.yml starten
-	3.	Frontend öffnen (Nginx/Dev-Server)
-	4.	Home Assistant / NAS / PEET verbinden
+<blockquote>
+  Wird ergänzt, sobald <code>docker-compose.yml</code> + erste Module im Repo sind.
+</blockquote>
 
-⸻
 
-Roadmap
-	•	Basis Dashboard + Navigation (Digital-Dark)
-	•	Header inkl. SystemONE Logo oben rechts
-	•	PEET Chat (lokal) + Tool-Calls
-	•	Home Assistant Anbindung + Geräte-UI
-	•	NAS Hub + Suche
-	•	Gridfinity Generator V1 (Preview + STL Export)
-	•	3D Live Preview + Objektbibliothek
-	•	Presets + Profile Auswahl beim Start
+<ol>
+  <li>Repository klonen</li>
+  <li><code>infra/docker-compose.yml</code> starten</li>
+  <li>Frontend öffnen (Nginx/Dev-Server)</li>
+  <li>Home Assistant / NAS / PEET verbinden</li>
+</ol>
 
-⸻
 
-License
+<hr/>
 
-TBD (z. B. MIT / Private)
 
-⸻
+<h2>🛣️ Roadmap</h2>
 
-Credits
 
-Built by Pipercat.
+<ul>
+  <li>[ ] Basis Dashboard + Navigation (Digital-Dark)</li>
+  <li>[ ] Header inkl. SystemONE Logo oben rechts</li>
+  <li>[ ] PEET Chat (lokal) + Tool-Calls</li>
+  <li>[ ] Home Assistant Anbindung + Geräte-UI</li>
+  <li>[ ] NAS Hub + Suche</li>
+  <li>[ ] Gridfinity Generator V1 (Preview + STL Export)</li>
+  <li>[ ] 3D Live Preview + Objektbibliothek</li>
+  <li>[ ] Presets + Profile Auswahl beim Start</li>
+</ul>
 
----
+
+<hr/>
+
+
+<h2>📄 License</h2>
+
+
+<p>TBD (z. B. MIT / Private)</p>
+
+
+<hr/>
+
+
+<h2>🤝 Credits</h2>
+
+
+<p>Built by <b>Pipercat</b>.</p>
+```
