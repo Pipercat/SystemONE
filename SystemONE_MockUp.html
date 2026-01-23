@@ -1,0 +1,2201 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SystemOne — Mockup (Canvas)</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#0f1722;
+      --panel2:#0c131d;
+      --stroke:rgba(255,255,255,.08);
+      --stroke2:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.86);
+      --muted:rgba(255,255,255,.56);
+      --muted2:rgba(255,255,255,.42);
+      --accent:#4aa3ff;
+      --accent2:#7bdcff;
+      --good:#2ecc71;
+      --warn:#f1c40f;
+      --bad:#ff5b5b;
+      --shadow: 0 16px 40px rgba(0,0,0,.45);
+      --radius:18px;
+      --radius2:22px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      background:
+        radial-gradient(1200px 800px at 18% 8%, rgba(74,163,255,.12), transparent 55%),
+        radial-gradient(900px 600px at 92% 16%, rgba(123,220,255,.10), transparent 55%),
+        radial-gradient(700px 500px at 70% 92%, rgba(74,163,255,.08), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      overflow:hidden;
+    }
+    a{color:inherit}
+    .app{
+      height:100vh;
+      display:grid;
+      grid-template-columns: 280px 1fr;
+      grid-template-rows: 76px 1fr;
+      gap:14px;
+      padding:14px;
+    }
+    .topbar{
+      grid-column:1 / -1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 16px;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--stroke);
+      border-radius:var(--radius2);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+      min-width:280px;
+    }
+    .logo{
+      width:40px;height:40px;border-radius:14px;
+      background:
+        radial-gradient(18px 18px at 30% 30%, rgba(123,220,255,.9), transparent 60%),
+        radial-gradient(22px 22px at 70% 70%, rgba(74,163,255,.85), transparent 62%),
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      border:1px solid var(--stroke2);
+      box-shadow:0 12px 30px rgba(0,0,0,.35);
+      position:relative;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:9px;
+      border-radius:12px;
+      border:1px dashed rgba(255,255,255,.18);
+      opacity:.9;
+    }
+    .brand h1{
+      font-size:16px; margin:0; letter-spacing:.2px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .pill{
+      font-size:12px;
+      padding:4px 10px;
+      border:1px solid var(--stroke);
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+    }
+    .top-actions{
+      display:flex; gap:10px; align-items:center;
+      width:55%;
+      justify-content:flex-end;
+    }
+    .search{
+      width:min(520px, 48vw);
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.04);
+    }
+    .search input{
+      width:100%;
+      background:transparent;
+      border:0;
+      outline:0;
+      color:var(--text);
+      font-size:14px;
+    }
+    .icon{
+      width:18px; height:18px; display:inline-block;
+      opacity:.85;
+    }
+    .btn{
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+      transition:.15s transform ease, .15s background ease, .15s border ease;
+      display:flex; align-items:center; gap:8px;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.16); }
+    .btn.primary{
+      background:linear-gradient(180deg, rgba(74,163,255,.22), rgba(74,163,255,.12));
+      border-color: rgba(74,163,255,.35);
+    }
+    .btn.danger{
+      background:linear-gradient(180deg, rgba(255,91,91,.18), rgba(255,91,91,.10));
+      border-color: rgba(255,91,91,.35);
+    }
+    .sidebar{
+      grid-row:2;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--stroke);
+      border-radius:var(--radius2);
+      box-shadow:var(--shadow);
+      padding:12px;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      backdrop-filter: blur(12px);
+    }
+    .nav{
+      display:flex; flex-direction:column; gap:6px;
+      padding:4px;
+      overflow:auto;
+    }
+    .nav::-webkit-scrollbar{ width:10px }
+    .nav::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.08); border-radius:999px; border:3px solid transparent; background-clip:content-box; }
+    .nav-item{
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid transparent;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      cursor:pointer;
+      user-select:none;
+      background:transparent;
+    }
+    .nav-item:hover{ background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.08); }
+    .nav-item.active{
+      background:linear-gradient(180deg, rgba(74,163,255,.16), rgba(255,255,255,.03));
+      border-color:rgba(74,163,255,.28);
+    }
+    .nav-left{ display:flex; align-items:center; gap:10px; }
+    .nav-title{ font-size:13px; }
+    .badge{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      color:var(--muted);
+      background:rgba(255,255,255,.03);
+      white-space:nowrap;
+    }
+    .sidebar-footer{
+      margin-top:auto;
+      border-top:1px solid var(--stroke);
+      padding-top:10px;
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .mini-row{
+      display:flex; gap:10px;
+    }
+    .mini-card{
+      flex:1;
+      padding:10px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.12);
+    }
+    .mini-card .k{ font-size:11px; color:var(--muted2); }
+    .mini-card .v{ font-size:13px; margin-top:4px; display:flex; align-items:center; gap:8px; }
+    .dot{ width:8px;height:8px;border-radius:999px;background:var(--muted2); display:inline-block; }
+    .dot.good{ background:var(--good) }
+    .dot.warn{ background:var(--warn) }
+    .dot.bad{ background:var(--bad) }
+
+    .main{
+      grid-row:2;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--stroke);
+      border-radius:var(--radius2);
+      box-shadow:var(--shadow);
+      padding:14px;
+      overflow:hidden;
+      backdrop-filter: blur(12px);
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+    .page-head{
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:12px;
+    }
+    .page-title{
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .page-title h2{ margin:0; font-size:18px; letter-spacing:.2px; }
+    .page-title p{ margin:0; font-size:13px; color:var(--muted); }
+    .grid{
+      flex:1;
+      display:grid;
+      grid-template-columns: 1.25fr .95fr;
+      gap:14px;
+      min-height:0;
+    }
+    .card{
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.12);
+      border-radius:var(--radius2);
+      padding:14px;
+      min-height:0;
+      overflow:hidden;
+    }
+    .card h3{
+      margin:0 0 10px 0;
+      font-size:13px;
+      font-weight:650;
+      color:rgba(255,255,255,.78);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+    }
+    .sub{
+      font-size:12px; color:var(--muted); margin:0 0 12px 0;
+    }
+    .split{
+      display:grid; grid-template-columns: 1fr 1fr; gap:12px;
+      min-height:0;
+    }
+    .row{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.03);
+      margin-bottom:8px;
+    }
+    .row .l{ display:flex; flex-direction:column; gap:2px; }
+    .row .t{ font-size:13px; }
+    .row .d{ font-size:11px; color:var(--muted); }
+    .toggle{
+      width:46px; height:26px; border-radius:999px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.04);
+      position:relative;
+      cursor:pointer;
+      flex-shrink:0;
+    }
+    .toggle:after{
+      content:"";
+      position:absolute; top:3px; left:3px;
+      width:20px;height:20px;border-radius:999px;
+      background:rgba(255,255,255,.68);
+      transition:.18s ease;
+    }
+    .toggle.on{
+      background:rgba(74,163,255,.18);
+      border-color:rgba(74,163,255,.35);
+    }
+    .toggle.on:after{ left:22px; background:rgba(123,220,255,.95); }
+    .canvas-wrap{
+      height: 320px;
+      border-radius:18px;
+      border:1px solid var(--stroke);
+      background:
+        radial-gradient(700px 300px at 30% 20%, rgba(74,163,255,.16), transparent 60%),
+        rgba(0,0,0,.18);
+      overflow:hidden;
+      position:relative;
+    }
+    canvas{ width:100%; height:100%; display:block; }
+    .hint{
+      position:absolute; left:12px; bottom:10px;
+      font-size:11px;
+      color:var(--muted);
+      background:rgba(0,0,0,.25);
+      border:1px solid var(--stroke);
+      padding:7px 10px;
+      border-radius:999px;
+      backdrop-filter: blur(10px);
+    }
+    .list{
+      height: calc(100% - 46px);
+      overflow:auto;
+      padding-right:6px;
+    }
+    .list::-webkit-scrollbar{ width:10px }
+    .list::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.08); border-radius:999px; border:3px solid transparent; background-clip:content-box; }
+
+    /* Chat */
+    .chat{
+      display:flex; flex-direction:column; height:100%; min-height:0;
+    }
+    .chat-log{
+      flex:1; overflow:auto; padding-right:6px; display:flex; flex-direction:column; gap:10px;
+    }
+    .chat-msg{
+      max-width: 92%;
+      padding:10px 12px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.03);
+      color:rgba(255,255,255,.82);
+      font-size:13px;
+      line-height:1.35;
+    }
+    .chat-msg.me{
+      align-self:flex-end;
+      background:rgba(74,163,255,.12);
+      border-color:rgba(74,163,255,.22);
+    }
+    .chat-msg.peet{
+      align-self:flex-start;
+      background:rgba(0,0,0,.18);
+    }
+    .chat-bar{
+      margin-top:10px;
+      display:flex; gap:10px;
+    }
+    .chat-bar input{
+      flex:1;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      outline:0;
+    }
+
+    /* Modal (Profile Picker) */
+    .modal-backdrop{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.55);
+      display:flex; align-items:center; justify-content:center;
+      padding:16px;
+      z-index:50;
+    }
+    .modal{
+      width:min(720px, 96vw);
+      border-radius:26px;
+      border:1px solid var(--stroke2);
+      background:
+        radial-gradient(900px 400px at 20% 0%, rgba(74,163,255,.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: 0 30px 90px rgba(0,0,0,.65);
+      padding:18px;
+      backdrop-filter: blur(14px);
+    }
+    .modal-head{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      margin-bottom:10px;
+    }
+    .modal-head h3{ margin:0; font-size:16px; }
+    .profiles{
+      display:grid; grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    .profile{
+      padding:12px;
+      border-radius:18px;
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.12);
+      cursor:pointer;
+      transition:.15s transform ease, .15s border ease, .15s background ease;
+      min-height:86px;
+      display:flex; flex-direction:column; justify-content:space-between;
+      user-select:none;
+    }
+    .profile:hover{ transform: translateY(-1px); border-color:rgba(255,255,255,.16); background:rgba(255,255,255,.04); }
+    .profile .name{ font-size:14px; }
+    .profile .meta{ font-size:11px; color:var(--muted); display:flex; align-items:center; gap:8px; }
+    .kpi{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .kpi .pill{ background:rgba(0,0,0,.12); }
+    @media (max-width: 1080px){
+      body{ overflow:auto; }
+      .app{ height:auto; min-height:100vh; grid-template-columns: 1fr; grid-template-rows: 76px auto auto; }
+      .sidebar{ grid-row:2; }
+      .main{ grid-row:3; }
+      .grid{ grid-template-columns: 1fr; }
+      .top-actions{ width:100%; justify-content:space-between; }
+      .brand{ min-width:auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>
+            SystemOne
+            <span class="pill" id="profilePill">Profil: —</span>
+          </h1>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">
+            SmartHome · NAS · KI (PEET) · SmartSorter · 3D Creator · BaumLab
+          </div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <div class="search" title="Suche (Projekte, Dateien, Geräte, Tasks)">
+          <!-- magnifier icon -->
+          <svg class="icon" viewBox="0 0 24 24" fill="none">
+            <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="rgba(255,255,255,.72)" stroke-width="1.7"/>
+            <path d="M16.5 16.5 21 21" stroke="rgba(255,255,255,.72)" stroke-width="1.7" stroke-linecap="round"/>
+          </svg>
+          <input id="globalSearch" placeholder="Suchen: Geräte · Projekte · Dateien · Automationen · Druck" />
+        </div>
+
+        <button class="btn" id="btnProfile">
+          <!-- user icon -->
+          <svg class="icon" viewBox="0 0 24 24" fill="none">
+            <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="rgba(255,255,255,.72)" stroke-width="1.7"/>
+            <path d="M4 21a8 8 0 0 1 16 0" stroke="rgba(255,255,255,.72)" stroke-width="1.7" stroke-linecap="round"/>
+          </svg>
+          Profil
+        </button>
+
+        <button class="btn primary" id="btnQuickAction">
+          <!-- bolt icon -->
+          <svg class="icon" viewBox="0 0 24 24" fill="none">
+            <path d="M13 2 3 14h8l-1 8 11-14h-8l0-6Z" stroke="rgba(255,255,255,.72)" stroke-width="1.7" stroke-linejoin="round"/>
+          </svg>
+          Quick Action
+        </button>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="nav" id="nav">
+        <div class="nav-item active" data-page="dashboard">
+          <div class="nav-left">
+            <!-- grid icon -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none">
+              <path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6"/>
+            </svg>
+            <div class="nav-title">Dashboard</div>
+          </div>
+          <span class="badge">Overview</span>
+        </div>
+
+        <div class="nav-item" data-page="smarthome">
+          <div class="nav-left">
+            <!-- home icon -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none">
+              <path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linejoin="round"/>
+            </svg>
+            <div class="nav-title">SmartHome</div>
+          </div>
+          <span class="badge">HA Control</span>
+        </div>
+
+        <div class="nav-item" data-page="nas">
+          <div class="nav-left">
+            <!-- server icon -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none">
+              <path d="M4 5h16v6H4V5Zm0 8h16v6H4v-6Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6"/>
+              <path d="M7 8h.01M7 16h.01" stroke="rgba(255,255,255,.72)" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <div class="nav-title">NAS & Dateien</div>
+          </div>
+          <span class="badge">Browse</span>
+        </div>
+
+        <div class="nav-item" data-page="chat">
+          <div class="nav-left">
+            <!-- chat icon -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none">
+              <path d="M4 4h16v12H7l-3 3V4Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="M7 8h10M7 11h7" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            <div class="nav-title">KI-Chat (PEET)</div>
+          </div>
+          <span class="badge">Docs Q&A</span>
+        </div>
+
+        <div class="nav-item" data-page="smartsorter">
+          <div class="nav-left">
+            <!-- arrows icon -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none">
+              <path d="M7 7h11l-3-3M17 17H6l3 3" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="nav-title">SmartSorter</div>
+          </div>
+          <span class="badge">Pipeline</span>
+        </div>
+
+        <div class="nav-item" data-page="creator">
+          <div class="nav-left">
+            <!-- cube icon -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2 21 7v10l-9 5-9-5V7l9-5Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="M12 22V12" stroke="rgba(255,255,255,.72)" stroke-width="1.6"/>
+              <path d="M21 7l-9 5-9-5" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linejoin="round"/>
+            </svg>
+            <div class="nav-title">3D Creator</div>
+          </div>
+          <span class="badge">Gridfinity</span>
+        </div>
+
+        <div class="nav-item" data-page="baumlab">
+          <div class="nav-left">
+            <!-- tree icon -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2c-3 3-6 5-6 9a6 6 0 0 0 12 0c0-4-3-6-6-9Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="M12 13v9" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M8 22h8" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            <div class="nav-title">BaumLab</div>
+          </div>
+          <span class="badge">Analyse</span>
+        </div>
+
+        <div class="nav-item" data-page="settings">
+          <div class="nav-left">
+            <!-- gear icon -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none">
+              <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6"/>
+              <path d="M19 12a7.1 7.1 0 0 0-.1-1l2-1.5-2-3.5-2.4.7a7.3 7.3 0 0 0-1.7-1L14.5 2h-5L9 4.7a7.3 7.3 0 0 0-1.7 1L4.9 5 3 8.5 5 10a7.1 7.1 0 0 0-.1 1c0 .3 0 .7.1 1L3 13.5 4.9 17l2.4-.7a7.3 7.3 0 0 0 1.7 1l.5 2.7h5l.5-2.7a7.3 7.3 0 0 0 1.7-1l2.4.7 2-3.5-2-1.5c.1-.3.1-.7.1-1Z" stroke="rgba(255,255,255,.72)" stroke-width="1.2" stroke-linejoin="round"/>
+            </svg>
+            <div class="nav-title">Einstellungen</div>
+          </div>
+          <span class="badge">System</span>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="mini-row">
+          <div class="mini-card">
+            <div class="k">Stack</div>
+            <div class="v"><span class="dot good"></span><span id="stackStatus">Docker OK · API OK</span></div>
+          </div>
+          <div class="mini-card">
+            <div class="k">Zeit</div>
+            <div class="v"><span class="dot warn"></span><span id="nowText">—</span></div>
+          </div>
+        </div>
+
+        <button class="btn danger" id="btnPanic">
+          <!-- shield icon -->
+          <svg class="icon" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2 20 6v7c0 6-4.5 9-8 9s-8-3-8-9V6l8-4Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M12 7v6" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M12 16h.01" stroke="rgba(255,255,255,.72)" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          Safe Mode
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="page-head">
+        <div class="page-title">
+          <h2 id="pageH2">Dashboard</h2>
+          <p id="pageP">Systemstatus, Übersicht und Schnellzugriffe.</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <span class="pill" id="licensePill">3DEXPERIENCE: erkannt (Mock)</span>
+          <span class="pill" id="securityPill">Security: lokal · kein Cloud-Zwang</span>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- LEFT -->
+        <section class="card" id="leftCard">
+          <!-- content injected by JS -->
+        </section>
+
+        <!-- RIGHT -->
+        <section class="card" id="rightCard">
+          <!-- content injected by JS -->
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- PROFILE MODAL -->
+  <div class="modal-backdrop" id="profileModal" style="display:none">
+    <div class="modal">
+      <div class="modal-head">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="logo" style="width:34px;height:34px;border-radius:14px"></div>
+          <div>
+            <h3>Profil auswählen</h3>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px">
+              Beim Start wählst du ein Profil — Datenzugriff bleibt systemweit identisch (Mock).
+            </div>
+          </div>
+        </div>
+        <button class="btn" id="closeProfile">Schließen</button>
+      </div>
+
+      <div class="profiles" id="profiles"></div>
+
+      <div class="kpi">
+        <span class="pill">PEET aktiv</span>
+        <span class="pill">SmartSorter: Watcher + Worker</span>
+        <span class="pill">NAS: lokal (SMB/NFS)</span>
+        <span class="pill">3D Creator: Live Preview</span>
+        <span class="pill">BaumLab: Klassifikation</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Helpers =====
+    const $ = (sel, el=document) => el.querySelector(sel);
+    const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+
+    const state = {
+      profile: null,
+      page: "dashboard",
+      safeMode: false,
+      search: "",
+      toggles: {
+        haLights: true,
+        haSensors: true,
+        haAutomations: false,
+        nasIndexing: true,
+        sorterWatcher: true,
+        sorterWorker: true,
+        printerEnabled: true
+      },
+      sorterQueue: [
+        {id:"Q-1021", file:"scan_2026-01-23_001.pdf", step:"OCR/Extract", prio:"normal"},
+        {id:"Q-1022", file:"rechnung_teufel_rockster.pdf", step:"Classify", prio:"high"},
+        {id:"Q-1023", file:"vertrag_eventtechnik.docx", step:"Rename/Route", prio:"normal"},
+        {id:"Q-1024", file:"foto_warehouse.png", step:"Vision Tags", prio:"low"},
+      ],
+      files: [
+        {name:"/Inbox/Scans/scan_2026-01-23_001.pdf", type:"PDF", tag:"Scan", status:"new"},
+        {name:"/Dokumente/Rechnungen/2025/rockster_rechnung.pdf", type:"PDF", tag:"Rechnung", status:"sorted"},
+        {name:"/Projekte/SystemOne/spec.md", type:"MD", tag:"Projekt", status:"active"},
+        {name:"/3D/Gridfinity/baseplate_4x3.stl", type:"STL", tag:"3D", status:"ready"},
+        {name:"/SmartHome/automation_backup.yaml", type:"YAML", tag:"HA", status:"active"},
+      ],
+      devices: [
+        {name:"Wohnzimmer Licht", type:"Light", on:true},
+        {name:"Küche Licht", type:"Light", on:false},
+        {name:"Flur Bewegungsmelder", type:"Sensor", on:true},
+        {name:"Server Rack Temp", type:"Sensor", on:true},
+        {name:"Drucker (LAN)", type:"Printer", on:true},
+      ],
+      chat: [
+        {by:"peet", text:"Ich bin PEET. Sag mir, was du prüfen oder steuern willst (Dokumente, NAS, SmartHome, 3D, Druck)."},
+      ],
+      creator: {
+        grid: 42,
+        x: 3,
+        y: 2,
+        z: 6,
+        wall: 1.6
+      }
+    };
+
+    // ===== Icons (tiny inline) =====
+    function iconMini(kind){
+      const map = {
+        ok: `<span class="dot good"></span>`,
+        warn: `<span class="dot warn"></span>`,
+        bad: `<span class="dot bad"></span>`
+      };
+      return map[kind] || `<span class="dot"></span>`;
+    }
+
+    // ===== Profile Modal =====
+    const profiles = [
+      {name:"Pipercat", meta:"Dev · Creator"},
+      {name:"Family", meta:"Home · Light Access"},
+      {name:"Work", meta:"HiL · Projekte"},
+    ];
+
+    function openProfileModal(){
+      $("#profileModal").style.display = "flex";
+    }
+    function closeProfileModal(){
+      $("#profileModal").style.display = "none";
+    }
+    function setProfile(name){
+      state.profile = name;
+      $("#profilePill").textContent = `Profil: ${name}`;
+      closeProfileModal();
+      pushToast(`Profil gesetzt: ${name}`);
+      render();
+    }
+
+    // ===== Toast (minimal) =====
+    let toastTimer = null;
+    function pushToast(text){
+      clearTimeout(toastTimer);
+      let t = $("#toast");
+      if(!t){
+        t = document.createElement("div");
+        t.id = "toast";
+        t.style.position="fixed";
+        t.style.left="16px";
+        t.style.bottom="16px";
+        t.style.zIndex="99";
+        t.style.maxWidth="520px";
+        t.style.padding="10px 12px";
+        t.style.borderRadius="999px";
+        t.style.border="1px solid rgba(255,255,255,.12)";
+        t.style.background="rgba(0,0,0,.38)";
+        t.style.backdropFilter="blur(12px)";
+        t.style.boxShadow="0 18px 60px rgba(0,0,0,.6)";
+        t.style.color="rgba(255,255,255,.86)";
+        t.style.fontSize="13px";
+        document.body.appendChild(t);
+      }
+      t.textContent = text;
+      t.style.opacity="1";
+      toastTimer = setTimeout(()=>{ t.style.opacity="0"; }, 2400);
+    }
+
+    // ===== Navigation =====
+    $$("#nav .nav-item").forEach(item=>{
+      item.addEventListener("click", ()=>{
+        state.page = item.dataset.page;
+        $$("#nav .nav-item").forEach(i=>i.classList.remove("active"));
+        item.classList.add("active");
+        render();
+      });
+    });
+
+    // ===== Top actions =====
+    $("#btnProfile").addEventListener("click", openProfileModal);
+    $("#closeProfile").addEventListener("click", closeProfileModal);
+
+    $("#btnQuickAction").addEventListener("click", ()=>{
+      // Simple demo quick actions
+      if(state.page !== "chat"){
+        state.page = "chat";
+        $$("#nav .nav-item").forEach(i=>i.classList.remove("active"));
+        $(`#nav .nav-item[data-page="chat"]`).classList.add("active");
+        render();
+      }
+      state.chat.push({by:"peet", text:"Quick Action: Ich kann sofort 'Dateien sortieren', 'Gerät schalten' oder '3D Objekt generieren' (Mock). Was davon?"});
+      renderChatOnly();
+    });
+
+    $("#btnPanic").addEventListener("click", ()=>{
+      state.safeMode = !state.safeMode;
+      $("#btnPanic").classList.toggle("primary", state.safeMode);
+      $("#btnPanic").textContent = state.safeMode ? "Safe Mode aktiv" : "Safe Mode";
+      $("#stackStatus").textContent = state.safeMode ? "Safe Mode · Nur Lesen" : "Docker OK · API OK";
+      pushToast(state.safeMode ? "Safe Mode: Schalten/Druck gesperrt (Mock)." : "Safe Mode deaktiviert.");
+      render();
+    });
+
+    $("#globalSearch").addEventListener("input", (e)=>{
+      state.search = e.target.value.trim().toLowerCase();
+      render();
+    });
+
+    // ===== Date/Time =====
+    function tickTime(){
+      const d = new Date();
+      const pad = n => String(n).padStart(2,"0");
+      $("#nowText").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())} · ${d.toLocaleDateString("de-DE")}`;
+    }
+    setInterval(tickTime, 1000);
+    tickTime();
+
+    // ===== Pages =====
+    function render(){
+      // If no profile picked yet, show modal once
+      if(!state.profile){
+        openProfileModal();
+      }
+      $("#licensePill").textContent = "3DEXPERIENCE: erkannt (Mock)";
+      $("#securityPill").textContent = state.safeMode ? "Security: Safe Mode · read-only" : "Security: lokal · kein Cloud-Zwang";
+
+      switch(state.page){
+        case "dashboard": renderDashboard(); break;
+        case "smarthome": renderSmartHome(); break;
+        case "nas": renderNAS(); break;
+        case "chat": renderChat(); break;
+        case "smartsorter": renderSmartSorter(); break;
+        case "creator": renderCreator(); break;
+        case "baumlab": renderBaumLab(); break;
+        case "settings": renderSettings(); break;
+        default: renderDashboard();
+      }
+    }
+
+    // ===== Dashboard (Canvas: System Map) =====
+    function renderDashboard(){
+      $("#pageH2").textContent = "Dashboard";
+      $("#pageP").textContent = "Systemstatus, Überblick und Schnellzugriffe.";
+
+      $("#leftCard").innerHTML = `
+        <h3>
+          System Map
+          <span class="badge">Canvas</span>
+        </h3>
+        <p class="sub">Zentraler Überblick: SmartHome ↔ NAS ↔ KI (PEET) ↔ SmartSorter ↔ 3D Creator ↔ BaumLab ↔ Druck.</p>
+        <div class="canvas-wrap">
+          <canvas id="mapCanvas"></canvas>
+          <div class="hint">Drag: Knoten bewegen · Click: Details (Mock)</div>
+        </div>
+        <div style="margin-top:12px" class="split">
+          <div>
+            <div class="row">
+              <div class="l">
+                <div class="t">Automationen</div>
+                <div class="d">Home Assistant · Szenen · Regeln</div>
+              </div>
+              <div class="toggle ${state.toggles.haAutomations ? "on":""}" data-t="haAutomations"></div>
+            </div>
+            <div class="row">
+              <div class="l">
+                <div class="t">NAS Indexing</div>
+                <div class="d">Dokumente, Medien, Projekte</div>
+              </div>
+              <div class="toggle ${state.toggles.nasIndexing ? "on":""}" data-t="nasIndexing"></div>
+            </div>
+          </div>
+          <div>
+            <div class="row">
+              <div class="l">
+                <div class="t">SmartSorter Watcher</div>
+                <div class="d">Eingang überwachen</div>
+              </div>
+              <div class="toggle ${state.toggles.sorterWatcher ? "on":""}" data-t="sorterWatcher"></div>
+            </div>
+            <div class="row">
+              <div class="l">
+                <div class="t">Worker</div>
+                <div class="d">OCR · Klassifikation · Routing</div>
+              </div>
+              <div class="toggle ${state.toggles.sorterWorker ? "on":""}" data-t="sorterWorker"></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      $("#rightCard").innerHTML = `
+        <h3>
+          Status & Shortcuts
+          <span class="badge">System</span>
+        </h3>
+        <p class="sub">Schnellzugriffe: Geräte, Sortier-Queue, 3D Export, Druck.</p>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">KI Agent: PEET</div>
+            <div class="d">Dokumente fragen · Aktionen auslösen</div>
+          </div>
+          <button class="btn primary" id="goChat">Öffnen</button>
+        </div>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">3D Creator</div>
+            <div class="d">Gridfinity/Objekte · Live Preview</div>
+          </div>
+          <button class="btn" id="goCreator">Öffnen</button>
+        </div>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">Druck</div>
+            <div class="d">Slicing/Send-to-Printer (Mock)</div>
+          </div>
+          <div class="toggle ${state.toggles.printerEnabled ? "on":""}" data-t="printerEnabled"></div>
+        </div>
+
+        <h3 style="margin-top:14px">
+          SmartSorter Queue
+          <span class="badge">${state.sorterQueue.length} jobs</span>
+        </h3>
+        <div class="list" id="queueList"></div>
+      `;
+
+      // bind toggles
+      bindToggles();
+
+      // queue list
+      const q = $("#queueList");
+      q.innerHTML = filterList(state.sorterQueue.map(job => {
+        return `
+          <div class="row" style="margin-bottom:10px">
+            <div class="l">
+              <div class="t">${escapeHtml(job.file)}</div>
+              <div class="d">${job.id} · Step: ${job.step} · Prio: ${job.prio}</div>
+            </div>
+            <span class="badge">Open</span>
+          </div>
+        `;
+      }).join(""));
+
+      $("#goChat").addEventListener("click", ()=>navTo("chat"));
+      $("#goCreator").addEventListener("click", ()=>navTo("creator"));
+
+      // draw system map
+      setupSystemMapCanvas();
+    }
+
+    function navTo(page){
+      state.page = page;
+      $$("#nav .nav-item").forEach(i=>i.classList.remove("active"));
+      $(`#nav .nav-item[data-page="${page}"]`).classList.add("active");
+      render();
+    }
+
+    // ===== SmartHome =====
+    function renderSmartHome(){
+      $("#pageH2").textContent = "SmartHome";
+      $("#pageP").textContent = "Home Assistant Steuerung (Mock): Geräte, Sensoren, Szenen, Regeln.";
+
+      $("#leftCard").innerHTML = `
+        <h3>
+          Geräte
+          <span class="badge">HA</span>
+        </h3>
+        <p class="sub">Schalten/Status anzeigen. Safe Mode sperrt Aktionen.</p>
+        <div class="list" id="deviceList"></div>
+      `;
+
+      $("#rightCard").innerHTML = `
+        <h3>
+          Bereiche & Szenen
+          <span class="badge">Control</span>
+        </h3>
+        <p class="sub">Kompaktsteuerung: Licht, Sensoren, Automationen, Quick Scenes.</p>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">Lichter</div>
+            <div class="d">Gruppensteuerung</div>
+          </div>
+          <div class="toggle ${state.toggles.haLights ? "on":""}" data-t="haLights"></div>
+        </div>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">Sensoren</div>
+            <div class="d">Status live (Mock)</div>
+          </div>
+          <div class="toggle ${state.toggles.haSensors ? "on":""}" data-t="haSensors"></div>
+        </div>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">Automationen</div>
+            <div class="d">Regeln aktiv</div>
+          </div>
+          <div class="toggle ${state.toggles.haAutomations ? "on":""}" data-t="haAutomations"></div>
+        </div>
+
+        <div style="margin-top:12px" class="split">
+          <button class="btn primary" id="sceneAway">Szene: Away</button>
+          <button class="btn" id="sceneHome">Szene: Home</button>
+        </div>
+
+        <div style="margin-top:12px" class="row">
+          <div class="l">
+            <div class="t">Event Log</div>
+            <div class="d">Letzte Aktionen / Trigger</div>
+          </div>
+          <span class="badge">Live</span>
+        </div>
+        <div class="list" id="haLog"></div>
+      `;
+
+      bindToggles();
+
+      // devices
+      const list = $("#deviceList");
+      list.innerHTML = filterList(state.devices.map((d, idx)=>{
+        const locked = state.safeMode || (d.type==="Printer" && !state.toggles.printerEnabled);
+        return `
+          <div class="row" style="margin-bottom:10px">
+            <div class="l">
+              <div class="t">${escapeHtml(d.name)}</div>
+              <div class="d">${d.type} · Status: ${d.on ? "On" : "Off"}</div>
+            </div>
+            <button class="btn ${d.on ? "" : "primary"}" data-dev="${idx}" ${locked ? "disabled" : ""} style="${locked ? "opacity:.55;cursor:not-allowed" : ""}">
+              ${locked ? "Gesperrt" : (d.on ? "Ausschalten" : "Einschalten")}
+            </button>
+          </div>
+        `;
+      }).join(""));
+
+      list.querySelectorAll("button[data-dev]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const i = Number(btn.dataset.dev);
+          state.devices[i].on = !state.devices[i].on;
+          pushToast(`${state.devices[i].name}: ${state.devices[i].on ? "On" : "Off"} (Mock)`);
+          renderSmartHome(); // local rerender
+        });
+      });
+
+      // log
+      $("#haLog").innerHTML = filterList([
+        `${iconMini("ok")} Motion Flur · 10:12`,
+        `${iconMini("ok")} Temp Rack · 10:08`,
+        `${iconMini("warn")} Batterie Sensor · 09:44`,
+        `${iconMini("ok")} Szene Home · 09:02`,
+      ].map(x=>`<div class="row" style="margin-bottom:10px"><div class="l"><div class="t">${x}</div><div class="d">Mock Event</div></div><span class="badge">Info</span></div>`).join(""));
+
+      $("#sceneAway").addEventListener("click", ()=>{
+        if(state.safeMode) return pushToast("Safe Mode: Szene gesperrt.");
+        pushToast("Szene Away ausgelöst (Mock).");
+      });
+      $("#sceneHome").addEventListener("click", ()=>{
+        if(state.safeMode) return pushToast("Safe Mode: Szene gesperrt.");
+        pushToast("Szene Home ausgelöst (Mock).");
+      });
+    }
+
+    // ===== NAS =====
+    function renderNAS(){
+      $("#pageH2").textContent = "NAS & Dateien";
+      $("#pageP").textContent = "Lokale Ablage, Zugriff, Indexing und Dateisichten (Mock).";
+
+      $("#leftCard").innerHTML = `
+        <h3>
+          Dateien
+          <span class="badge">Browse</span>
+        </h3>
+        <p class="sub">Suchen, öffnen (Mock), markieren, zur Pipeline schicken.</p>
+        <div class="list" id="fileList"></div>
+      `;
+
+      $("#rightCard").innerHTML = `
+        <h3>
+          Aktionen
+          <span class="badge">Tools</span>
+        </h3>
+        <p class="sub">Indexing, SmartSorter Trigger, Backup, Rechte.</p>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">Indexing</div>
+            <div class="d">Metadata + Volltext (Mock)</div>
+          </div>
+          <div class="toggle ${state.toggles.nasIndexing ? "on":""}" data-t="nasIndexing"></div>
+        </div>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">SmartSorter Trigger</div>
+            <div class="d">Inbox sofort verarbeiten</div>
+          </div>
+          <button class="btn primary" id="triggerSort" ${state.safeMode ? "disabled" : ""} style="${state.safeMode?"opacity:.55;cursor:not-allowed":""}">Start</button>
+        </div>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">Backup Snapshot</div>
+            <div class="d">Projekte · Docs · Config</div>
+          </div>
+          <button class="btn" id="backup" ${state.safeMode ? "disabled" : ""} style="${state.safeMode?"opacity:.55;cursor:not-allowed":""}">Erstellen</button>
+        </div>
+
+        <h3 style="margin-top:14px">Sicht</h3>
+        <div class="split">
+          <button class="btn" id="viewDocs">Dokumente</button>
+          <button class="btn" id="view3d">3D</button>
+        </div>
+
+        <div style="margin-top:12px" class="row">
+          <div class="l">
+            <div class="t">Hinweis</div>
+            <div class="d">Alles lokal — keine Pflicht-Cloud (Mock)</div>
+          </div>
+          <span class="badge">Privacy</span>
+        </div>
+      `;
+
+      bindToggles();
+
+      const fileList = $("#fileList");
+      fileList.innerHTML = filterList(state.files.map((f, idx)=>`
+        <div class="row" style="margin-bottom:10px">
+          <div class="l">
+            <div class="t">${escapeHtml(f.name)}</div>
+            <div class="d">${f.type} · ${f.tag} · ${f.status}</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn" data-open="${idx}">Öffnen</button>
+            <button class="btn primary" data-pipe="${idx}" ${state.safeMode ? "disabled" : ""} style="${state.safeMode?"opacity:.55;cursor:not-allowed":""}">Pipeline</button>
+          </div>
+        </div>
+      `).join(""));
+
+      fileList.querySelectorAll("button[data-open]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const i = Number(btn.dataset.open);
+          pushToast(`Öffnen: ${state.files[i].name} (Mock)`);
+        });
+      });
+      fileList.querySelectorAll("button[data-pipe]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const i = Number(btn.dataset.pipe);
+          const base = state.files[i].name.split("/").pop();
+          state.sorterQueue.unshift({id:"Q-"+(1000+Math.floor(Math.random()*900)), file:base, step:"Ingest", prio:"normal"});
+          pushToast(`An SmartSorter übergeben: ${base}`);
+          renderNAS();
+        });
+      });
+
+      $("#triggerSort").addEventListener("click", ()=>{
+        if(state.safeMode) return;
+        pushToast("SmartSorter: Inbox Scan gestartet (Mock).");
+      });
+      $("#backup").addEventListener("click", ()=>{
+        if(state.safeMode) return;
+        pushToast("Backup Snapshot erstellt (Mock).");
+      });
+      $("#viewDocs").addEventListener("click", ()=>{ pushToast("Filter: Dokumente (Mock)"); });
+      $("#view3d").addEventListener("click", ()=>{ pushToast("Filter: 3D Dateien (Mock)"); });
+    }
+
+    // ===== Chat (PEET) =====
+    function renderChat(){
+      $("#pageH2").textContent = "KI-Chat (PEET)";
+      $("#pageP").textContent = "Fragen zu Dokumenten, Aktionen auslösen, SmartHome/NAS/3D steuern (Mock).";
+
+      $("#leftCard").innerHTML = `
+        <h3>
+          Gespräch
+          <span class="badge">PEET</span>
+        </h3>
+        <p class="sub">PEET ist lokal gedacht: fragt Inhalte, steuert Systemaktionen, macht Vorschläge.</p>
+        <div class="chat" id="chatBox">
+          <div class="chat-log" id="chatLog"></div>
+          <div class="chat-bar">
+            <input id="chatInput" placeholder="z. B. 'Sortiere die Inbox' · 'Licht Wohnzimmer aus' · 'Gridfinity 3x2 baseplate'"/>
+            <button class="btn primary" id="chatSend">Senden</button>
+          </div>
+        </div>
+      `;
+
+      $("#rightCard").innerHTML = `
+        <h3>
+          Kontext
+          <span class="badge">Docs · Tools</span>
+        </h3>
+        <p class="sub">Was PEET “sieht” (Mock): Files, Queue, Geräte, Creator-Parameter.</p>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">Dokumente indiziert</div>
+            <div class="d">${state.toggles.nasIndexing ? "Ja" : "Nein"} · ${state.files.length} Einträge</div>
+          </div>
+          <span class="badge">NAS</span>
+        </div>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">Queue</div>
+            <div class="d">${state.sorterQueue.length} Jobs</div>
+          </div>
+          <span class="badge">SmartSorter</span>
+        </div>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">Geräte</div>
+            <div class="d">${state.devices.length} Entities</div>
+          </div>
+          <span class="badge">HA</span>
+        </div>
+
+        <h3 style="margin-top:14px">Aktionen</h3>
+        <div class="split">
+          <button class="btn" id="chatInject1">Beispiel: Sortieren</button>
+          <button class="btn" id="chatInject2">Beispiel: Druck</button>
+        </div>
+
+        <div style="margin-top:12px" class="row">
+          <div class="l">
+            <div class="t">Safe Mode</div>
+            <div class="d">${state.safeMode ? "Aktiv (Read-only)" : "Aus"}</div>
+          </div>
+          <span class="badge">Security</span>
+        </div>
+      `;
+
+      $("#chatInject1").addEventListener("click", ()=>{ $("#chatInput").value="Sortiere die Inbox und gib mir eine Zusammenfassung."; });
+      $("#chatInject2").addEventListener("click", ()=>{ $("#chatInput").value="Sende baseplate_4x3.stl an den Drucker."; });
+
+      bindChat();
+      renderChatOnly();
+    }
+
+    function renderChatOnly(){
+      const log = $("#chatLog");
+      if(!log) return;
+      log.innerHTML = state.chat
+        .filter(m => !state.search || m.text.toLowerCase().includes(state.search))
+        .map(m => `<div class="chat-msg ${m.by==="me"?"me":"peet"}">${escapeHtml(m.text)}</div>`)
+        .join("");
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function bindChat(){
+      const send = ()=>{
+        const input = $("#chatInput");
+        const txt = (input.value || "").trim();
+        if(!txt) return;
+        state.chat.push({by:"me", text: txt});
+        input.value = "";
+        // very light "intent" mock
+        const lower = txt.toLowerCase();
+        let reply = "Verstanden (Mock).";
+        if(lower.includes("sortier") || lower.includes("inbox")){
+          if(state.safeMode) reply = "Safe Mode ist aktiv — ich kann nur berichten, nicht ausführen. Soll ich dir die Queue anzeigen?";
+          else{
+            state.sorterQueue.unshift({id:"Q-"+(1000+Math.floor(Math.random()*900)), file:"inbox_batch.zip", step:"Ingest", prio:"high"});
+            reply = "Inbox-Scan gestartet. Ich habe einen Batch-Job in die Queue gelegt und werde OCR → Klassifikation → Routing durchführen (Mock).";
+          }
+        } else if(lower.includes("licht") || lower.includes("lamp")){
+          if(state.safeMode) reply = "Safe Mode aktiv — Schalten ist gesperrt.";
+          else{
+            // toggle a device if name matches
+            const dev = state.devices.find(d => d.type==="Light" && lower.includes(d.name.split(" ")[0].toLowerCase()));
+            if(dev){ dev.on = !dev.on; reply = `${dev.name}: ${dev.on ? "On" : "Off"} (Mock).`; }
+            else reply = "Welche Lampe genau? (Mock: Wohnzimmer/Küche)";
+          }
+        } else if(lower.includes("druck") || lower.includes("printer") || lower.includes("sende")){
+          if(state.safeMode) reply = "Safe Mode aktiv — Druck ist gesperrt.";
+          else if(!state.toggles.printerEnabled) reply = "Druck ist deaktiviert. Aktiviere ihn auf dem Dashboard.";
+          else reply = "Ich würde jetzt slicen/übertragen: 'Send-to-Printer' ausgelöst (Mock).";
+        } else if(lower.includes("gridfinity") || lower.includes("baseplate")){
+          reply = `3D Creator Vorschlag: grid=${state.creator.grid}mm, X=${state.creator.x}, Y=${state.creator.y}, Z=${state.creator.z}. Soll ich den Export vorbereiten? (Mock)`;
+        } else if(lower.includes("baumlab")){
+          reply = "BaumLab: Ich kann Dateien clustern, labeln und eine Struktur vorschlagen (Mock). Nenne mir Zielkategorien.";
+        } else if(lower.includes("3d experience") || lower.includes("3dexperience")){
+          reply = "3DEXPERIENCE Lizenz ist erkannt (Mock). Potenziell nützlich für CAD/PLM Workflows — im Mock ist es als Connector vorgesehen.";
+        }
+        state.chat.push({by:"peet", text: reply});
+        renderChatOnly();
+      };
+
+      $("#chatSend").addEventListener("click", send);
+      $("#chatInput").addEventListener("keydown", (e)=>{
+        if(e.key==="Enter") send();
+      });
+    }
+
+    // ===== SmartSorter =====
+    function renderSmartSorter(){
+      $("#pageH2").textContent = "SmartSorter";
+      $("#pageP").textContent = "Pipeline: Watcher → Extract → Classify → Rename → Route → Verify (Mock).";
+
+      $("#leftCard").innerHTML = `
+        <h3>
+          Pipeline Visual
+          <span class="badge">Canvas</span>
+        </h3>
+        <p class="sub">Status je Stage. Klick auf Stage zeigt Details (Mock).</p>
+        <div class="canvas-wrap" style="height:360px">
+          <canvas id="pipeCanvas"></canvas>
+          <div class="hint">Klick: Stage · Safe Mode sperrt Execute</div>
+        </div>
+        <div style="margin-top:12px" class="split">
+          <button class="btn primary" id="pipeRun" ${state.safeMode ? "disabled" : ""} style="${state.safeMode?"opacity:.55;cursor:not-allowed":""}">Run Pipeline</button>
+          <button class="btn" id="pipeSim">Simulate</button>
+        </div>
+      `;
+
+      $("#rightCard").innerHTML = `
+        <h3>
+          Queue & Jobs
+          <span class="badge">${state.sorterQueue.length}</span>
+        </h3>
+        <p class="sub">Jobs sortieren (Drag & Drop) — hier als Mock über Buttons.</p>
+        <div class="list" id="jobs"></div>
+      `;
+
+      // Jobs list + reorder (simple)
+      const jobs = $("#jobs");
+      jobs.innerHTML = filterList(state.sorterQueue.map((j, idx)=>`
+        <div class="row" style="margin-bottom:10px">
+          <div class="l">
+            <div class="t">${escapeHtml(j.file)}</div>
+            <div class="d">${j.id} · ${j.step} · ${j.prio}</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="btn" data-up="${idx}">↑</button>
+            <button class="btn" data-down="${idx}">↓</button>
+            <button class="btn primary" data-done="${idx}" ${state.safeMode ? "disabled":""} style="${state.safeMode?"opacity:.55;cursor:not-allowed":""}">Done</button>
+          </div>
+        </div>
+      `).join(""));
+
+      jobs.querySelectorAll("button[data-up]").forEach(b=>{
+        b.addEventListener("click", ()=>{
+          const i = Number(b.dataset.up);
+          if(i<=0) return;
+          [state.sorterQueue[i-1], state.sorterQueue[i]] = [state.sorterQueue[i], state.sorterQueue[i-1]];
+          renderSmartSorter();
+        });
+      });
+      jobs.querySelectorAll("button[data-down]").forEach(b=>{
+        b.addEventListener("click", ()=>{
+          const i = Number(b.dataset.down);
+          if(i>=state.sorterQueue.length-1) return;
+          [state.sorterQueue[i+1], state.sorterQueue[i]] = [state.sorterQueue[i], state.sorterQueue[i+1]];
+          renderSmartSorter();
+        });
+      });
+      jobs.querySelectorAll("button[data-done]").forEach(b=>{
+        b.addEventListener("click", ()=>{
+          if(state.safeMode) return;
+          const i = Number(b.dataset.done);
+          const removed = state.sorterQueue.splice(i,1)[0];
+          pushToast(`Job abgeschlossen: ${removed.id} (Mock)`);
+          renderSmartSorter();
+        });
+      });
+
+      $("#pipeRun").addEventListener("click", ()=>{
+        if(state.safeMode) return;
+        pushToast("Pipeline Run gestartet (Mock).");
+        if(state.sorterQueue.length){
+          state.sorterQueue[0].step = "Verify";
+          renderSmartSorter();
+        }
+      });
+      $("#pipeSim").addEventListener("click", ()=>{
+        pushToast("Simulation: Stage Status animiert (Mock).");
+        animatePipeline();
+      });
+
+      setupPipelineCanvas();
+    }
+
+    // ===== 3D Creator (Canvas: rotating pseudo 3D) =====
+    function renderCreator(){
+      $("#pageH2").textContent = "3D Creator";
+      $("#pageP").textContent = "Gridfinity Generator + Live Preview + Export + Send-to-Printer (Mock).";
+
+      $("#leftCard").innerHTML = `
+        <h3>
+          Live Preview
+          <span class="badge">Canvas</span>
+        </h3>
+        <p class="sub">Vorschau (Mock) — gedacht für STL/Parametric Generator + BaumLab + Druck.</p>
+        <div class="canvas-wrap" style="height:380px">
+          <canvas id="creatorCanvas"></canvas>
+          <div class="hint">Sliders ändern Geometrie (Mock)</div>
+        </div>
+      `;
+
+      $("#rightCard").innerHTML = `
+        <h3>
+          Parameter
+          <span class="badge">Gridfinity</span>
+        </h3>
+        <p class="sub">Basisparameter (mm/units). Export & Druck sind Platzhalter.</p>
+
+        ${sliderRow("Grid (mm pro Einheit)", "grid", 30, 60, state.creator.grid, "mm")}
+        ${sliderRow("X Raster", "x", 1, 8, state.creator.x, "u")}
+        ${sliderRow("Y Raster", "y", 1, 8, state.creator.y, "u")}
+        ${sliderRow("Z Units", "z", 1, 12, state.creator.z, "u")}
+        ${sliderRow("Wandstärke", "wall", 1.2, 3.2, state.creator.wall, "mm", 0.1)}
+
+        <div style="margin-top:12px" class="split">
+          <button class="btn primary" id="btnExport">STL Export</button>
+          <button class="btn" id="btnPreset">Preset speichern</button>
+        </div>
+
+        <div style="margin-top:12px" class="row">
+          <div class="l">
+            <div class="t">Send-to-Printer</div>
+            <div class="d">Direkt an Drucker senden (Mock)</div>
+          </div>
+          <button class="btn ${state.toggles.printerEnabled ? "primary":""}" id="btnPrint" ${(!state.toggles.printerEnabled || state.safeMode) ? "disabled":""} style="${(!state.toggles.printerEnabled || state.safeMode) ? "opacity:.55;cursor:not-allowed":""}">
+            Senden
+          </button>
+        </div>
+
+        <div style="margin-top:12px" class="row">
+          <div class="l">
+            <div class="t">BaumLab</div>
+            <div class="d">Auto-Tags + Ablage vorschlagen</div>
+          </div>
+          <button class="btn" id="btnBaum">Analyse</button>
+        </div>
+      `;
+
+      // bind sliders
+      $$("input[data-s]").forEach(inp=>{
+        inp.addEventListener("input", ()=>{
+          const key = inp.dataset.s;
+          const val = Number(inp.value);
+          state.creator[key] = val;
+          $(`#val_${key}`).textContent = formatVal(key, val);
+          drawCreatorFrame(); // update
+        });
+      });
+
+      $("#btnExport").addEventListener("click", ()=>{
+        pushToast("STL Export erzeugt (Mock).");
+        // push a file entry
+        const name = `/3D/Gridfinity/base_${state.creator.x}x${state.creator.y}_z${state.creator.z}.stl`;
+        if(!state.files.some(f=>f.name===name)){
+          state.files.unshift({name, type:"STL", tag:"3D", status:"ready"});
+        }
+      });
+      $("#btnPreset").addEventListener("click", ()=> pushToast("Preset gespeichert (Mock)."));
+      $("#btnPrint").addEventListener("click", ()=>{
+        if(state.safeMode) return;
+        pushToast("Send-to-Printer ausgelöst (Mock).");
+      });
+      $("#btnBaum").addEventListener("click", ()=> pushToast("BaumLab Analyse gestartet (Mock)."));
+
+      setupCreatorCanvas();
+    }
+
+    function sliderRow(label, key, min, max, value, unit, step=null){
+      const st = step ? `step="${step}"` : "";
+      const isFloat = (step && step < 1) || key==="wall";
+      const v = isFloat ? value.toFixed(1) : value;
+      return `
+        <div class="row" style="margin-bottom:10px">
+          <div class="l" style="min-width:160px">
+            <div class="t">${label}</div>
+            <div class="d"><span id="val_${key}">${v}${unit}</span></div>
+          </div>
+          <input data-s="${key}" type="range" min="${min}" max="${max}" value="${value}" ${st} style="width:100%">
+        </div>
+      `;
+    }
+    function formatVal(key,val){
+      if(key==="wall") return val.toFixed(1)+"mm";
+      if(key==="grid") return val+"mm";
+      return val+"u";
+    }
+
+    // ===== BaumLab =====
+    function renderBaumLab(){
+      $("#pageH2").textContent = "BaumLab";
+      $("#pageP").textContent = "Klassifikation, Strukturvorschläge und Smart-Ablage (Mock).";
+
+      $("#leftCard").innerHTML = `
+        <h3>
+          Kategorien & Cluster
+          <span class="badge">Analyse</span>
+        </h3>
+        <p class="sub">BaumLab gruppiert Inhalte und schlägt Ordnerstruktur vor (Mock).</p>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">Vorschlag</div>
+            <div class="d">Rechnungen · Projekte · SmartHome · 3D · Verträge</div>
+          </div>
+          <button class="btn primary" id="applyStructure" ${state.safeMode ? "disabled":""} style="${state.safeMode?"opacity:.55;cursor:not-allowed":""}">Anwenden</button>
+        </div>
+
+        <div class="canvas-wrap" style="height:360px;margin-top:12px">
+          <canvas id="baumCanvas"></canvas>
+          <div class="hint">Cluster Map (Mock)</div>
+        </div>
+      `;
+
+      $("#rightCard").innerHTML = `
+        <h3>
+          Vorschläge
+          <span class="badge">List</span>
+        </h3>
+        <p class="sub">Beispiele: Umbenennen, Tags, Zielpfade.</p>
+
+        <div class="list" id="baumList"></div>
+      `;
+
+      $("#applyStructure").addEventListener("click", ()=>{
+        if(state.safeMode) return;
+        pushToast("Struktur angewendet (Mock).");
+      });
+
+      const items = [
+        {a:"scan_2026-01-23_001.pdf", b:"Rechnung? → /Dokumente/Rechnungen/2026/", tag:"Rechnung", conf:"0.71"},
+        {a:"vertrag_eventtechnik.docx", b:"→ /Dokumente/Verträge/", tag:"Vertrag", conf:"0.92"},
+        {a:"base_4x3_z6.stl", b:"→ /3D/Gridfinity/", tag:"3D", conf:"0.98"},
+        {a:"automation_backup.yaml", b:"→ /SmartHome/Backups/", tag:"HA", conf:"0.88"},
+      ];
+
+      $("#baumList").innerHTML = filterList(items.map(x=>`
+        <div class="row" style="margin-bottom:10px">
+          <div class="l">
+            <div class="t">${escapeHtml(x.a)}</div>
+            <div class="d">${escapeHtml(x.b)} · Tag: ${x.tag} · Conf: ${x.conf}</div>
+          </div>
+          <span class="badge">Preview</span>
+        </div>
+      `).join(""));
+
+      setupBaumCanvas();
+    }
+
+    // ===== Settings =====
+    function renderSettings(){
+      $("#pageH2").textContent = "Einstellungen";
+      $("#pageP").textContent = "Systemkonfiguration (Mock): Sicherheit, Connectoren, Rechte, Logging.";
+
+      $("#leftCard").innerHTML = `
+        <h3>
+          Sicherheit
+          <span class="badge">Local-First</span>
+        </h3>
+        <p class="sub">Schutz: Safe Mode, lokale Datenhaltung, Rollen (Mock).</p>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">Safe Mode</div>
+            <div class="d">Read-only für Aktionen</div>
+          </div>
+          <button class="btn ${state.safeMode ? "primary":""}" id="toggleSafe">${state.safeMode ? "Aktiv" : "Aus"}</button>
+        </div>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">Logging</div>
+            <div class="d">Audit für Schalten/Druck/Sort</div>
+          </div>
+          <span class="badge">Enabled</span>
+        </div>
+
+        <div class="row">
+          <div class="l">
+            <div class="t">3DEXPERIENCE Connector</div>
+            <div class="d">Connector Platzhalter</div>
+          </div>
+          <span class="badge">Mock</span>
+        </div>
+      `;
+
+      $("#rightCard").innerHTML = `
+        <h3>
+          Services
+          <span class="badge">Docker</span>
+        </h3>
+        <p class="sub">Status (Mock): API, Worker, DB, Vector Store, Ollama.</p>
+
+        ${serviceRow("API", "ok", "FastAPI · /api")}
+        ${serviceRow("Worker", "ok", "Queue · Jobs")}
+        ${serviceRow("DB", "ok", "Postgres")}
+        ${serviceRow("Vector", "warn", "Qdrant (Mock)")}
+        ${serviceRow("LLM", "ok", "Ollama (Mock)")}
+
+        <div style="margin-top:12px" class="split">
+          <button class="btn" id="restart">Restart Services</button>
+          <button class="btn primary" id="health">Health Check</button>
+        </div>
+      `;
+
+      $("#toggleSafe").addEventListener("click", ()=>{
+        state.safeMode = !state.safeMode;
+        pushToast(state.safeMode ? "Safe Mode aktiv." : "Safe Mode aus.");
+        render();
+      });
+      $("#restart").addEventListener("click", ()=>{
+        if(state.safeMode) return pushToast("Safe Mode: Restart gesperrt.");
+        pushToast("Services restart (Mock).");
+      });
+      $("#health").addEventListener("click", ()=> pushToast("Health OK (Mock)."));
+    }
+
+    function serviceRow(name, status, desc){
+      return `
+        <div class="row">
+          <div class="l">
+            <div class="t">${escapeHtml(name)}</div>
+            <div class="d">${escapeHtml(desc)}</div>
+          </div>
+          <span class="badge">${iconMini(status)} ${status.toUpperCase()}</span>
+        </div>
+      `;
+    }
+
+    // ===== Toggle binder =====
+    function bindToggles(){
+      $$("[data-t]").forEach(t=>{
+        t.addEventListener("click", ()=>{
+          const key = t.dataset.t;
+          state.toggles[key] = !state.toggles[key];
+          pushToast(`${key}: ${state.toggles[key] ? "On" : "Off"}`);
+          render();
+        });
+      });
+    }
+
+    // ===== Search filter helper =====
+    function filterList(html){
+      if(!state.search) return html;
+      // crude filter: if container is already filtered (we do earlier) -> pass through.
+      // Here: just return html; pages already filter by source. Kept for future expansion.
+      return html;
+    }
+
+    // ===== Escape =====
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // ===== Canvas: System Map =====
+    let map = null;
+    function setupSystemMapCanvas(){
+      const canvas = $("#mapCanvas");
+      if(!canvas) return;
+
+      const ctx = canvas.getContext("2d");
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+      const nodes = [
+        {id:"SmartHome", x:120, y:160},
+        {id:"NAS", x:300, y:80},
+        {id:"PEET", x:460, y:160},
+        {id:"SmartSorter", x:300, y:250},
+        {id:"3D Creator", x:540, y:80},
+        {id:"BaumLab", x:640, y:210},
+        {id:"Druck", x:520, y:300},
+      ];
+      const links = [
+        ["SmartHome","PEET"], ["NAS","PEET"], ["NAS","SmartSorter"], ["SmartSorter","BaumLab"],
+        ["3D Creator","BaumLab"], ["3D Creator","Druck"], ["PEET","SmartSorter"], ["PEET","3D Creator"],
+        ["SmartHome","NAS"],
+      ];
+
+      const hit = (mx,my,n)=> {
+        const dx=mx-n.x, dy=my-n.y;
+        return Math.sqrt(dx*dx+dy*dy) < 28;
+      };
+
+      map = {canvas, ctx, dpr, nodes, links, dragId:null, offX:0, offY:0};
+
+      function resize(){
+        const r = canvas.getBoundingClientRect();
+        canvas.width = Math.floor(r.width * dpr);
+        canvas.height = Math.floor(r.height * dpr);
+        draw();
+      }
+      window.addEventListener("resize", resize);
+
+      canvas.addEventListener("mousedown", (e)=>{
+        const p = toLocal(e);
+        for(const n of nodes){
+          if(hit(p.x,p.y,n)){
+            map.dragId = n.id;
+            map.offX = p.x - n.x;
+            map.offY = p.y - n.y;
+            return;
+          }
+        }
+      });
+      window.addEventListener("mouseup", ()=> map.dragId=null);
+      window.addEventListener("mousemove", (e)=>{
+        if(!map.dragId) return;
+        const p = toLocal(e);
+        const n = nodes.find(x=>x.id===map.dragId);
+        if(!n) return;
+        n.x = p.x - map.offX;
+        n.y = p.y - map.offY;
+        draw();
+      });
+      canvas.addEventListener("click", (e)=>{
+        const p = toLocal(e);
+        const n = nodes.find(n=>hit(p.x,p.y,n));
+        if(n) pushToast(`Knoten: ${n.id} (Mock Details)`);
+      });
+
+      function toLocal(e){
+        const r = canvas.getBoundingClientRect();
+        const x = (e.clientX - r.left) * dpr;
+        const y = (e.clientY - r.top) * dpr;
+        return {x,y};
+      }
+
+      function draw(){
+        const {ctx, canvas} = map;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // background grid
+        ctx.save();
+        ctx.globalAlpha = .35;
+        ctx.strokeStyle = "rgba(255,255,255,.06)";
+        ctx.lineWidth = 1;
+        const step = 28 * map.dpr;
+        for(let x=0; x<canvas.width; x+=step){
+          ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke();
+        }
+        for(let y=0; y<canvas.height; y+=step){
+          ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke();
+        }
+        ctx.restore();
+
+        // links
+        ctx.save();
+        ctx.lineWidth = 2;
+        for(const [a,b] of map.links){
+          const na = nodes.find(n=>n.id===a);
+          const nb = nodes.find(n=>n.id===b);
+          if(!na||!nb) continue;
+          const grad = ctx.createLinearGradient(na.x,na.y,nb.x,nb.y);
+          grad.addColorStop(0,"rgba(74,163,255,.55)");
+          grad.addColorStop(1,"rgba(255,255,255,.12)");
+          ctx.strokeStyle = grad;
+          ctx.beginPath();
+          ctx.moveTo(na.x,na.y);
+          ctx.lineTo(nb.x,nb.y);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        // nodes
+        for(const n of nodes){
+          const active = (n.id==="PEET");
+          // glow
+          ctx.save();
+          ctx.beginPath();
+          ctx.fillStyle = active ? "rgba(123,220,255,.22)" : "rgba(74,163,255,.14)";
+          ctx.arc(n.x,n.y,34,0,Math.PI*2);
+          ctx.fill();
+          ctx.restore();
+
+          // body
+          ctx.save();
+          ctx.beginPath();
+          ctx.fillStyle = "rgba(0,0,0,.35)";
+          ctx.strokeStyle = active ? "rgba(123,220,255,.55)" : "rgba(255,255,255,.14)";
+          ctx.lineWidth = 2;
+          roundRect(ctx, n.x-60, n.y-20, 120, 40, 16);
+          ctx.fill(); ctx.stroke();
+
+          // label
+          ctx.fillStyle = "rgba(255,255,255,.85)";
+          ctx.font = `${14*map.dpr}px ${getComputedStyle(document.body).fontFamily}`;
+          ctx.textAlign="center"; ctx.textBaseline="middle";
+          ctx.fillText(n.id, n.x, n.y);
+          ctx.restore();
+        }
+      }
+
+      function roundRect(ctx, x, y, w, h, r){
+        ctx.moveTo(x+r,y);
+        ctx.arcTo(x+w,y,x+w,y+h,r);
+        ctx.arcTo(x+w,y+h,x,y+h,r);
+        ctx.arcTo(x,y+h,x,y,r);
+        ctx.arcTo(x,y,x+w,y,r);
+        ctx.closePath();
+      }
+
+      resize();
+    }
+
+    // ===== Canvas: Pipeline =====
+    let pipeAnim = null;
+    function setupPipelineCanvas(){
+      const canvas = $("#pipeCanvas");
+      if(!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+      const stages = [
+        {id:"Watcher", x:90, y:180},
+        {id:"Extract", x:220, y:180},
+        {id:"Classify", x:350, y:180},
+        {id:"Rename", x:480, y:180},
+        {id:"Route", x:610, y:180},
+        {id:"Verify", x:740, y:180},
+      ];
+
+      function resize(){
+        const r = canvas.getBoundingClientRect();
+        canvas.width = Math.floor(r.width*dpr);
+        canvas.height = Math.floor(r.height*dpr);
+        draw(0);
+      }
+      window.addEventListener("resize", resize);
+
+      canvas.addEventListener("click", (e)=>{
+        const r = canvas.getBoundingClientRect();
+        const mx = (e.clientX-r.left)*dpr;
+        const my = (e.clientY-r.top)*dpr;
+        const s = stages.find(s=> Math.abs(mx-s.x*dpr)<70*dpr && Math.abs(my-s.y*dpr)<28*dpr );
+        if(s) pushToast(`Stage: ${s.id} (Mock Details)`);
+      });
+
+      function draw(t){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // title line
+        ctx.save();
+        ctx.fillStyle="rgba(255,255,255,.70)";
+        ctx.font = `${13*dpr}px ${getComputedStyle(document.body).fontFamily}`;
+        ctx.fillText("Watcher → Extract → Classify → Rename → Route → Verify", 18*dpr, 28*dpr);
+        ctx.restore();
+
+        // links
+        ctx.save();
+        ctx.strokeStyle="rgba(255,255,255,.10)";
+        ctx.lineWidth=2*dpr;
+        for(let i=0;i<stages.length-1;i++){
+          const a=stages[i], b=stages[i+1];
+          ctx.beginPath();
+          ctx.moveTo(a.x*dpr+60*dpr, a.y*dpr);
+          ctx.lineTo(b.x*dpr-60*dpr, b.y*dpr);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        // stage boxes
+        for(let i=0;i<stages.length;i++){
+          const s = stages[i];
+          const x = s.x*dpr, y=s.y*dpr;
+
+          const pulse = 0.06*Math.sin(t/280 + i);
+          const w = (124 + 18*pulse)*dpr;
+          const h = (44 + 10*pulse)*dpr;
+
+          const activeIdx = state.sorterQueue.length ? stageIndexFromStep(state.sorterQueue[0].step) : 0;
+          const isActive = i===activeIdx;
+
+          ctx.save();
+          // glow
+          ctx.beginPath();
+          ctx.fillStyle = isActive ? "rgba(74,163,255,.18)" : "rgba(255,255,255,.06)";
+          ctx.roundRect(x-w/2-8*dpr, y-h/2-8*dpr, w+16*dpr, h+16*dpr, 18*dpr);
+          ctx.fill();
+
+          // body
+          ctx.beginPath();
+          ctx.fillStyle = "rgba(0,0,0,.35)";
+          ctx.strokeStyle = isActive ? "rgba(74,163,255,.50)" : "rgba(255,255,255,.12)";
+          ctx.lineWidth = 2*dpr;
+          ctx.roundRect(x-w/2, y-h/2, w, h, 16*dpr);
+          ctx.fill(); ctx.stroke();
+
+          // text
+          ctx.fillStyle="rgba(255,255,255,.86)";
+          ctx.font = `${13*dpr}px ${getComputedStyle(document.body).fontFamily}`;
+          ctx.textAlign="center"; ctx.textBaseline="middle";
+          ctx.fillText(s.id, x, y);
+          ctx.restore();
+        }
+      }
+
+      function stageIndexFromStep(step){
+        const map = {
+          "Ingest": 0,
+          "OCR/Extract": 1,
+          "Extract": 1,
+          "Vision Tags": 2,
+          "Classify": 2,
+          "Rename/Route": 4,
+          "Route": 4,
+          "Verify": 5
+        };
+        return map[step] ?? 0;
+      }
+
+      function animate(){
+        let t=0;
+        cancelAnimationFrame(pipeAnim);
+        const loop = ()=>{
+          t+=16;
+          draw(t);
+          pipeAnim = requestAnimationFrame(loop);
+        };
+        loop();
+      }
+
+      resize();
+      animate();
+    }
+
+    function animatePipeline(){
+      // just a little fake progression
+      const steps = ["Ingest","OCR/Extract","Classify","Rename","Route","Verify"];
+      let i=0;
+      const timer = setInterval(()=>{
+        if(!state.sorterQueue.length){ clearInterval(timer); return; }
+        state.sorterQueue[0].step = steps[i] || "Verify";
+        i++;
+        if(i>=steps.length) clearInterval(timer);
+      }, 450);
+    }
+
+    // ===== Canvas: Creator (pseudo 3D box) =====
+    let creatorRAF = null;
+    function setupCreatorCanvas(){
+      const canvas = $("#creatorCanvas");
+      if(!canvas) return;
+
+      const ctx = canvas.getContext("2d");
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      let t=0;
+
+      function resize(){
+        const r = canvas.getBoundingClientRect();
+        canvas.width = Math.floor(r.width*dpr);
+        canvas.height = Math.floor(r.height*dpr);
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      function loop(){
+        t += 0.016;
+        drawCreator(ctx, canvas, dpr, t);
+        creatorRAF = requestAnimationFrame(loop);
+      }
+      cancelAnimationFrame(creatorRAF);
+      loop();
+    }
+
+    function drawCreatorFrame(){
+      const canvas = $("#creatorCanvas");
+      if(!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      drawCreator(ctx, canvas, dpr, performance.now()/1000);
+    }
+
+    function drawCreator(ctx, canvas, dpr, t){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      // grid
+      ctx.save();
+      ctx.globalAlpha=.5;
+      ctx.strokeStyle="rgba(255,255,255,.07)";
+      ctx.lineWidth=1*dpr;
+      const step = 28*dpr;
+      for(let x=0;x<canvas.width;x+=step){
+        ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke();
+      }
+      for(let y=0;y<canvas.height;y+=step){
+        ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke();
+      }
+      ctx.restore();
+
+      // pseudo-3d box params based on creator
+      const cx = canvas.width*0.50;
+      const cy = canvas.height*0.54;
+      const sx = state.creator.x;
+      const sy = state.creator.y;
+      const sz = state.creator.z;
+
+      const base = 18*dpr;
+      const w = (base * sx) * 1.2;
+      const h = (base * sy) * 0.95;
+      const z = (base * (sz/2)) * 0.9;
+
+      const ang = t*0.9;
+      const tilt = 0.6 + 0.12*Math.sin(t*0.8);
+
+      // corners in iso-like projection
+      const rot = (px,py)=>{
+        const rx = px*Math.cos(ang) - py*Math.sin(ang);
+        const ry = px*Math.sin(ang) + py*Math.cos(ang);
+        return [rx, ry];
+      };
+
+      const A = rot(-w, -h);
+      const B = rot( w, -h);
+      const C = rot( w,  h);
+      const D = rot(-w,  h);
+
+      // project
+      const proj = (p, elev=0)=>{
+        const x = cx + p[0];
+        const y = cy + p[1]*tilt - elev;
+        return [x,y];
+      };
+
+      const topA = proj(A, z);
+      const topB = proj(B, z);
+      const topC = proj(C, z);
+      const topD = proj(D, z);
+
+      const botA = proj(A, 0);
+      const botB = proj(B, 0);
+      const botC = proj(C, 0);
+      const botD = proj(D, 0);
+
+      // draw
+      ctx.save();
+      ctx.lineWidth = 2*dpr;
+
+      // shadow
+      ctx.fillStyle="rgba(0,0,0,.28)";
+      ctx.beginPath();
+      ctx.moveTo(botA[0],botA[1]);
+      ctx.lineTo(botB[0],botB[1]);
+      ctx.lineTo(botC[0],botC[1]);
+      ctx.lineTo(botD[0],botD[1]);
+      ctx.closePath();
+      ctx.fill();
+
+      // sides
+      ctx.strokeStyle="rgba(255,255,255,.14)";
+      ctx.fillStyle="rgba(74,163,255,.08)";
+
+      // left face
+      ctx.beginPath();
+      ctx.moveTo(topA[0],topA[1]);
+      ctx.lineTo(topD[0],topD[1]);
+      ctx.lineTo(botD[0],botD[1]);
+      ctx.lineTo(botA[0],botA[1]);
+      ctx.closePath();
+      ctx.fill(); ctx.stroke();
+
+      // right face
+      ctx.beginPath();
+      ctx.moveTo(topB[0],topB[1]);
+      ctx.lineTo(topC[0],topC[1]);
+      ctx.lineTo(botC[0],botC[1]);
+      ctx.lineTo(botB[0],botB[1]);
+      ctx.closePath();
+      ctx.fill(); ctx.stroke();
+
+      // top face
+      ctx.fillStyle="rgba(123,220,255,.10)";
+      ctx.strokeStyle="rgba(74,163,255,.45)";
+      ctx.beginPath();
+      ctx.moveTo(topA[0],topA[1]);
+      ctx.lineTo(topB[0],topB[1]);
+      ctx.lineTo(topC[0],topC[1]);
+      ctx.lineTo(topD[0],topD[1]);
+      ctx.closePath();
+      ctx.fill(); ctx.stroke();
+
+      // vertical edges
+      ctx.strokeStyle="rgba(255,255,255,.16)";
+      for(const [tP,bP] of [[topA,botA],[topB,botB],[topC,botC],[topD,botD]]){
+        ctx.beginPath();
+        ctx.moveTo(tP[0],tP[1]);
+        ctx.lineTo(bP[0],bP[1]);
+        ctx.stroke();
+      }
+
+      // label
+      ctx.fillStyle="rgba(255,255,255,.86)";
+      ctx.font = `${13*dpr}px ${getComputedStyle(document.body).fontFamily}`;
+      ctx.textAlign="center"; ctx.textBaseline="middle";
+      ctx.fillText(`Gridfinity Mock · ${sx}×${sy} · Z${sz} · wall ${state.creator.wall.toFixed(1)}mm`, cx, canvas.height*0.16);
+
+      ctx.restore();
+    }
+
+    // ===== Canvas: BaumLab Cluster Map =====
+    let baumRAF=null;
+    function setupBaumCanvas(){
+      const canvas = $("#baumCanvas");
+      if(!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      let t=0;
+
+      const clusters = [
+        {name:"Rechnungen", x:0.28, y:0.35, r:0.12},
+        {name:"Verträge", x:0.62, y:0.32, r:0.10},
+        {name:"3D", x:0.58, y:0.66, r:0.14},
+        {name:"SmartHome", x:0.32, y:0.68, r:0.11},
+      ];
+
+      function resize(){
+        const r = canvas.getBoundingClientRect();
+        canvas.width = Math.floor(r.width*dpr);
+        canvas.height = Math.floor(r.height*dpr);
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      function loop(){
+        t+=0.016;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // background noise dots
+        ctx.save();
+        ctx.globalAlpha=.6;
+        for(let i=0;i<80;i++){
+          const x = (Math.sin(i*34.2+t)*0.5+0.5)*canvas.width;
+          const y = (Math.cos(i*21.7+t*0.7)*0.5+0.5)*canvas.height;
+          ctx.fillStyle="rgba(255,255,255,.05)";
+          ctx.beginPath(); ctx.arc(x,y,2*dpr,0,Math.PI*2); ctx.fill();
+        }
+        ctx.restore();
+
+        // clusters
+        clusters.forEach((c,idx)=>{
+          const cx = c.x*canvas.width;
+          const cy = c.y*canvas.height;
+          const rr = c.r*Math.min(canvas.width,canvas.height);
+          const pulse = 0.08*Math.sin(t*1.2+idx);
+
+          // glow
+          ctx.save();
+          ctx.fillStyle = "rgba(74,163,255,.10)";
+          ctx.beginPath(); ctx.arc(cx,cy,rr*(1.15+pulse),0,Math.PI*2); ctx.fill();
+          ctx.restore();
+
+          // body
+          ctx.save();
+          ctx.fillStyle = "rgba(0,0,0,.35)";
+          ctx.strokeStyle = "rgba(74,163,255,.35)";
+          ctx.lineWidth = 2*dpr;
+          ctx.beginPath(); ctx.arc(cx,cy,rr*(0.78+pulse),0,Math.PI*2); ctx.fill(); ctx.stroke();
+          ctx.restore();
+
+          // label
+          ctx.save();
+          ctx.fillStyle="rgba(255,255,255,.84)";
+          ctx.font = `${13*dpr}px ${getComputedStyle(document.body).fontFamily}`;
+          ctx.textAlign="center"; ctx.textBaseline="middle";
+          ctx.fillText(c.name, cx, cy);
+          ctx.restore();
+        });
+
+        baumRAF = requestAnimationFrame(loop);
+      }
+      cancelAnimationFrame(baumRAF);
+      loop();
+    }
+
+    // ===== Profiles render =====
+    function renderProfiles(){
+      const box = $("#profiles");
+      box.innerHTML = profiles.map(p=>`
+        <div class="profile" data-prof="${escapeHtml(p.name)}">
+          <div class="name">${escapeHtml(p.name)}</div>
+          <div class="meta"><span class="dot good"></span>${escapeHtml(p.meta)}</div>
+        </div>
+      `).join("");
+      box.querySelectorAll(".profile").forEach(p=>{
+        p.addEventListener("click", ()=> setProfile(p.dataset.prof));
+      });
+    }
+
+    // ===== Polyfill: roundRect for older browsers =====
+    if(!CanvasRenderingContext2D.prototype.roundRect){
+      CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
+        const ctx=this;
+        if(typeof r==="number") r = {tl:r,tr:r,br:r,bl:r};
+        ctx.beginPath();
+        ctx.moveTo(x+r.tl,y);
+        ctx.lineTo(x+w-r.tr,y);
+        ctx.quadraticCurveTo(x+w,y,x+w,y+r.tr);
+        ctx.lineTo(x+w,y+h-r.br);
+        ctx.quadraticCurveTo(x+w,y+h,x+w-r.br,y+h);
+        ctx.lineTo(x+r.bl,y+h);
+        ctx.quadraticCurveTo(x,y+h,x,y+h-r.bl);
+        ctx.lineTo(x,y+r.tl);
+        ctx.quadraticCurveTo(x,y,x+r.tl,y);
+        ctx.closePath();
+        return ctx;
+      }
+    }
+
+    // ===== Init =====
+    renderProfiles();
+    render();
+  </script>
+</body>
+</html>
