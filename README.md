@@ -1,9 +1,8 @@
 
-<p align="right">
-  <img src="Generator_3/logo/logo_groß.png" alt="SystemONE Logo" width="120"/>
+<p align="center">
+  <img src="Generator_3/logo/logo_groß.png" alt="SystemONE Logo" width="250"/>
 </p>
 
-# SystemONE
 
 SystemONE ist ein **lokales Smart-System-Dashboard** im **Digital-Dark Design**.  
 Es vereint **Smart Home**, **NAS**, **KI (PEET)** und **3D-Tools** in einer zentralen Plattform.
