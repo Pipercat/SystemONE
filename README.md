@@ -1,5 +1,5 @@
 <p align="right">
-  <img src="Generator_3/logo/logo_groß.png" alt="SystemONE Logo" width="120"/>
+  <img src="Generator_3/logo/logo_schild.png" alt="SystemONE Logo" width="120"/>
 </p>
 
 # SystemONE
