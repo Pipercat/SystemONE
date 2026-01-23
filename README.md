@@ -1,7 +1,7 @@
 
 # SystemONE
 
-**SystemONE** ist ein **lokales Smart-System-Dashboard** im **SmartSorter Dark Design**:  
+**SystemONE** ist ein **lokales Smart-System-Dashboard** im **Digital-Dark Design**:  
 eine zentrale Oberfläche, die **Smart Home (Home Assistant)**, **NAS/Files**, **KI-Agent (PEET)** und Tools wie **3D Creator / Gridfinity Generator** in **einem** System bündelt.
 
 ---
