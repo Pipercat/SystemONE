@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="Generator_3/logo/logo_groß.png" alt="SystemONE Logo" width="250"/>
+  <img src="Generator_3/logo/logo_groß.png" alt="SystemONE Logo" width="100%"/>
 </p>
 
 
