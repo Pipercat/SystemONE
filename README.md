@@ -1,5 +1,8 @@
+Yes, hab’s dir jetzt 1:1 in deiner ursprünglichen Formatierung gelassen – nur mit Digital-Dark überall und SystemONE Logo oben rechts ergänzt.
 
-SystemONE 
+⸻
+
+SystemONE
 
 SystemONE ist ein lokales Smart-System-Dashboard im Digital-Dark Design:
 eine zentrale Oberfläche, die Smart Home (Home Assistant), NAS/Files, KI-Agent (PEET) und Tools wie 3D Creator / Gridfinity Generator in einem System bündelt.
@@ -8,7 +11,7 @@ eine zentrale Oberfläche, die Smart Home (Home Assistant), NAS/Files, KI-Agent 
 
 Highlights
 	•	Digital-Dark Dashboard UI (dark, modern, klar strukturiert)
-	•	SystemONE Logo oben rechts (fix im Header)
+	•	SystemONE Logo oben rechts (fix im Header integriert)
 	•	PEET Agent: Chat + Automationen + Wissenssuche über Dokumente
 	•	Home Assistant Steuerung: Geräte, Szenen, Sensoren (inkl. KI-triggerbar)
 	•	NAS / File Hub: Zugriff, Suche, Sortierung (SmartSortier-Logik möglich)
@@ -24,9 +27,7 @@ Module
 	•	Startseite mit Karten / Panels
 	•	Navigation zu: Chat, SmartHome, NAS, 3D, Generator, Settings
 	•	Fokus: schnelle Übersicht + klare Interaktion (ohne UI-Overkill)
-	•	Top-Header mit:
-	•	links: ggf. Titel/Breadcrumb
-	•	rechts: SystemONE Logo (fix, immer sichtbar)
+	•	Top-Header mit SystemONE Logo oben rechts (fix)
 
 2) PEET (KI-Agent)
 	•	Chat UI (Kontext + Verlauf)
@@ -72,9 +73,7 @@ Design-Standard (Digital-Dark)
 	•	Links Navigation, Center Content, optional Right Panel
 	•	Icons sparsam (nur wo funktional notwendig)
 	•	Fokus auf Lesbarkeit + klare Hierarchie
-	•	Header-Standard:
-	•	fixer Top-Bar-Header
-	•	rechts oben: SystemONE Logo (Branding-Anker, immer sichtbar)
+	•	Fixer Header mit SystemONE Logo oben rechts
 
 ⸻
 
@@ -129,3 +128,7 @@ TBD (z. B. MIT / Private)
 Credits
 
 Built by Pipercat.
+
+⸻
+
+Wenn du willst, mache ich dir als Nächstes noch ein offizielles UI-Layout-Schema (Header / Sidebar / Content / Panels) für SystemONE, damit jeder Entwickler sofort weiß, wie es aussehen muss.
