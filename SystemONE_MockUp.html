@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SystemOne — Mockup (Canvas)</title>
+  <title>SystemOne — Mockup (Canvas) · Updated</title>
   <style>
     :root{
       --bg:#0b0f14;
@@ -57,6 +57,7 @@
       border-radius:var(--radius2);
       box-shadow:var(--shadow);
       backdrop-filter: blur(12px);
+      min-width:0;
     }
     .brand{
       display:flex; gap:12px; align-items:center;
@@ -81,7 +82,7 @@
     }
     .brand h1{
       font-size:16px; margin:0; letter-spacing:.2px;
-      display:flex; align-items:center; gap:8px;
+      display:flex; align-items:center; gap:8px; flex-wrap:wrap;
     }
     .pill{
       font-size:12px;
@@ -90,11 +91,17 @@
       border-radius:999px;
       background:rgba(255,255,255,.04);
       color:var(--muted);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
     }
+    .pill .dot{ margin-right:0 }
     .top-actions{
       display:flex; gap:10px; align-items:center;
       width:55%;
       justify-content:flex-end;
+      min-width:0;
     }
     .search{
       width:min(520px, 48vw);
@@ -103,6 +110,7 @@
       border-radius:999px;
       border:1px solid var(--stroke);
       background:rgba(255,255,255,.04);
+      min-width:0;
     }
     .search input{
       width:100%;
@@ -111,10 +119,12 @@
       outline:0;
       color:var(--text);
       font-size:14px;
+      min-width:0;
     }
     .icon{
       width:18px; height:18px; display:inline-block;
       opacity:.85;
+      flex-shrink:0;
     }
     .btn{
       padding:10px 12px;
@@ -126,6 +136,7 @@
       transition:.15s transform ease, .15s background ease, .15s border ease;
       display:flex; align-items:center; gap:8px;
       user-select:none;
+      white-space:nowrap;
     }
     .btn:hover{ transform: translateY(-1px); background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.16); }
     .btn.primary{
@@ -136,6 +147,12 @@
       background:linear-gradient(180deg, rgba(255,91,91,.18), rgba(255,91,91,.10));
       border-color: rgba(255,91,91,.35);
     }
+    .btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      transform:none !important;
+    }
+
     .sidebar{
       grid-row:2;
       background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
@@ -148,6 +165,7 @@
       flex-direction:column;
       gap:10px;
       backdrop-filter: blur(12px);
+      min-height:0;
     }
     .nav{
       display:flex; flex-direction:column; gap:6px;
@@ -181,6 +199,7 @@
       color:var(--muted);
       background:rgba(255,255,255,.03);
       white-space:nowrap;
+      display:inline-flex; align-items:center; gap:8px;
     }
     .sidebar-footer{
       margin-top:auto;
@@ -197,10 +216,12 @@
       border-radius:16px;
       border:1px solid var(--stroke);
       background:rgba(0,0,0,.12);
+      min-width:0;
     }
     .mini-card .k{ font-size:11px; color:var(--muted2); }
-    .mini-card .v{ font-size:13px; margin-top:4px; display:flex; align-items:center; gap:8px; }
-    .dot{ width:8px;height:8px;border-radius:999px;background:var(--muted2); display:inline-block; }
+    .mini-card .v{ font-size:13px; margin-top:4px; display:flex; align-items:center; gap:8px; min-width:0; }
+    .mini-card .v span{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .dot{ width:8px;height:8px;border-radius:999px;background:var(--muted2); display:inline-block; flex-shrink:0; }
     .dot.good{ background:var(--good) }
     .dot.warn{ background:var(--warn) }
     .dot.bad{ background:var(--bad) }
@@ -217,6 +238,8 @@
       display:flex;
       flex-direction:column;
       gap:14px;
+      min-height:0;
+      min-width:0;
     }
     .page-head{
       display:flex; align-items:flex-start; justify-content:space-between;
@@ -224,15 +247,17 @@
     }
     .page-title{
       display:flex; flex-direction:column; gap:4px;
+      min-width:0;
     }
     .page-title h2{ margin:0; font-size:18px; letter-spacing:.2px; }
     .page-title p{ margin:0; font-size:13px; color:var(--muted); }
     .grid{
       flex:1;
       display:grid;
-      grid-template-columns: 1.25fr .95fr;
+      grid-template-columns: 1.25fr .95fr .85fr; /* UPDATED: + PEET-Folder */
       gap:14px;
       min-height:0;
+      min-width:0;
     }
     .card{
       border:1px solid var(--stroke);
@@ -241,6 +266,8 @@
       padding:14px;
       min-height:0;
       overflow:hidden;
+      min-width:0;
+      position:relative;
     }
     .card h3{
       margin:0 0 10px 0;
@@ -264,10 +291,11 @@
       border:1px solid var(--stroke);
       background:rgba(255,255,255,.03);
       margin-bottom:8px;
+      min-width:0;
     }
-    .row .l{ display:flex; flex-direction:column; gap:2px; }
-    .row .t{ font-size:13px; }
-    .row .d{ font-size:11px; color:var(--muted); }
+    .row .l{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+    .row .t{ font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .row .d{ font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .toggle{
       width:46px; height:26px; border-radius:999px;
       border:1px solid var(--stroke);
@@ -333,6 +361,7 @@
       color:rgba(255,255,255,.82);
       font-size:13px;
       line-height:1.35;
+      white-space:pre-wrap;
     }
     .chat-msg.me{
       align-self:flex-end;
@@ -355,6 +384,93 @@
       background:rgba(255,255,255,.03);
       color:var(--text);
       outline:0;
+      min-width:0;
+    }
+
+    /* PEET Folder */
+    .peet-head{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:10px;
+    }
+    .peet-title{
+      display:flex; align-items:center; gap:10px; min-width:0;
+    }
+    .peet-title .bubble{
+      width:32px;height:32px;border-radius:14px;
+      border:1px solid rgba(123,220,255,.28);
+      background:
+        radial-gradient(18px 18px at 30% 30%, rgba(123,220,255,.65), transparent 60%),
+        radial-gradient(18px 18px at 70% 70%, rgba(74,163,255,.55), transparent 60%),
+        rgba(0,0,0,.18);
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    .peet-title .txt{
+      min-width:0;
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .peet-title .txt .h{
+      font-size:13px; font-weight:700; color:rgba(255,255,255,.82);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .peet-title .txt .s{
+      font-size:11px; color:var(--muted);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .peet-section{
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.02);
+      border-radius:18px;
+      padding:10px;
+      margin-bottom:10px;
+    }
+    .peet-section h4{
+      margin:0 0 8px 0;
+      font-size:12px;
+      color:rgba(255,255,255,.78);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+    }
+    .peet-kv{
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .chip{
+      font-size:11px;
+      padding:5px 9px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.20);
+      color:rgba(255,255,255,.78);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .chip:hover{ border-color:rgba(255,255,255,.16); background:rgba(255,255,255,.04); }
+    .todo-item{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      padding:10px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.16);
+      margin-bottom:8px;
+    }
+    .todo-item .meta{
+      display:flex; flex-direction:column; gap:4px; min-width:0;
+    }
+    .todo-item .meta .t{
+      font-size:12px; color:rgba(255,255,255,.84);
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .todo-item .meta .d{
+      font-size:11px; color:var(--muted);
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .todo-item.done{
+      opacity:.55;
+    }
+    .todo-item.done .meta .t{
+      text-decoration:line-through;
     }
 
     /* Modal (Profile Picker) */
@@ -404,7 +520,8 @@
       margin-top:10px;
     }
     .kpi .pill{ background:rgba(0,0,0,.12); }
-    @media (max-width: 1080px){
+
+    @media (max-width: 1200px){
       body{ overflow:auto; }
       .app{ height:auto; min-height:100vh; grid-template-columns: 1fr; grid-template-rows: 76px auto auto; }
       .sidebar{ grid-row:2; }
@@ -425,6 +542,7 @@
           <h1>
             SystemOne
             <span class="pill" id="profilePill">Profil: —</span>
+            <span class="pill" id="datePill"><span class="dot warn"></span><span id="dateText">—</span></span>
           </h1>
           <div style="font-size:12px;color:var(--muted);margin-top:2px">
             SmartHome · NAS · KI (PEET) · SmartSorter · 3D Creator · BaumLab
@@ -433,17 +551,15 @@
       </div>
 
       <div class="top-actions">
-        <div class="search" title="Suche (Projekte, Dateien, Geräte, Tasks)">
-          <!-- magnifier icon -->
+        <div class="search" title="Suche (Projekte, Dateien, Geräte, Tasks). Shortcut: /">
           <svg class="icon" viewBox="0 0 24 24" fill="none">
             <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="rgba(255,255,255,.72)" stroke-width="1.7"/>
             <path d="M16.5 16.5 21 21" stroke="rgba(255,255,255,.72)" stroke-width="1.7" stroke-linecap="round"/>
           </svg>
-          <input id="globalSearch" placeholder="Suchen: Geräte · Projekte · Dateien · Automationen · Druck" />
+          <input id="globalSearch" placeholder="Suchen: Geräte · Projekte · Dateien · Automationen · Tasks" />
         </div>
 
         <button class="btn" id="btnProfile">
-          <!-- user icon -->
           <svg class="icon" viewBox="0 0 24 24" fill="none">
             <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="rgba(255,255,255,.72)" stroke-width="1.7"/>
             <path d="M4 21a8 8 0 0 1 16 0" stroke="rgba(255,255,255,.72)" stroke-width="1.7" stroke-linecap="round"/>
@@ -452,7 +568,6 @@
         </button>
 
         <button class="btn primary" id="btnQuickAction">
-          <!-- bolt icon -->
           <svg class="icon" viewBox="0 0 24 24" fill="none">
             <path d="M13 2 3 14h8l-1 8 11-14h-8l0-6Z" stroke="rgba(255,255,255,.72)" stroke-width="1.7" stroke-linejoin="round"/>
           </svg>
@@ -466,7 +581,6 @@
       <div class="nav" id="nav">
         <div class="nav-item active" data-page="dashboard">
           <div class="nav-left">
-            <!-- grid icon -->
             <svg class="icon" viewBox="0 0 24 24" fill="none">
               <path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6"/>
             </svg>
@@ -477,7 +591,6 @@
 
         <div class="nav-item" data-page="smarthome">
           <div class="nav-left">
-            <!-- home icon -->
             <svg class="icon" viewBox="0 0 24 24" fill="none">
               <path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linejoin="round"/>
             </svg>
@@ -488,7 +601,6 @@
 
         <div class="nav-item" data-page="nas">
           <div class="nav-left">
-            <!-- server icon -->
             <svg class="icon" viewBox="0 0 24 24" fill="none">
               <path d="M4 5h16v6H4V5Zm0 8h16v6H4v-6Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6"/>
               <path d="M7 8h.01M7 16h.01" stroke="rgba(255,255,255,.72)" stroke-width="3" stroke-linecap="round"/>
@@ -500,7 +612,6 @@
 
         <div class="nav-item" data-page="chat">
           <div class="nav-left">
-            <!-- chat icon -->
             <svg class="icon" viewBox="0 0 24 24" fill="none">
               <path d="M4 4h16v12H7l-3 3V4Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linejoin="round"/>
               <path d="M7 8h10M7 11h7" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linecap="round"/>
@@ -512,7 +623,6 @@
 
         <div class="nav-item" data-page="smartsorter">
           <div class="nav-left">
-            <!-- arrows icon -->
             <svg class="icon" viewBox="0 0 24 24" fill="none">
               <path d="M7 7h11l-3-3M17 17H6l3 3" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -523,7 +633,6 @@
 
         <div class="nav-item" data-page="creator">
           <div class="nav-left">
-            <!-- cube icon -->
             <svg class="icon" viewBox="0 0 24 24" fill="none">
               <path d="M12 2 21 7v10l-9 5-9-5V7l9-5Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linejoin="round"/>
               <path d="M12 22V12" stroke="rgba(255,255,255,.72)" stroke-width="1.6"/>
@@ -536,7 +645,6 @@
 
         <div class="nav-item" data-page="baumlab">
           <div class="nav-left">
-            <!-- tree icon -->
             <svg class="icon" viewBox="0 0 24 24" fill="none">
               <path d="M12 2c-3 3-6 5-6 9a6 6 0 0 0 12 0c0-4-3-6-6-9Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linejoin="round"/>
               <path d="M12 13v9" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linecap="round"/>
@@ -549,7 +657,6 @@
 
         <div class="nav-item" data-page="settings">
           <div class="nav-left">
-            <!-- gear icon -->
             <svg class="icon" viewBox="0 0 24 24" fill="none">
               <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6"/>
               <path d="M19 12a7.1 7.1 0 0 0-.1-1l2-1.5-2-3.5-2.4.7a7.3 7.3 0 0 0-1.7-1L14.5 2h-5L9 4.7a7.3 7.3 0 0 0-1.7 1L4.9 5 3 8.5 5 10a7.1 7.1 0 0 0-.1 1c0 .3 0 .7.1 1L3 13.5 4.9 17l2.4-.7a7.3 7.3 0 0 0 1.7 1l.5 2.7h5l.5-2.7a7.3 7.3 0 0 0 1.7-1l2.4.7 2-3.5-2-1.5c.1-.3.1-.7.1-1Z" stroke="rgba(255,255,255,.72)" stroke-width="1.2" stroke-linejoin="round"/>
@@ -573,13 +680,12 @@
         </div>
 
         <button class="btn danger" id="btnPanic">
-          <!-- shield icon -->
           <svg class="icon" viewBox="0 0 24 24" fill="none">
             <path d="M12 2 20 6v7c0 6-4.5 9-8 9s-8-3-8-9V6l8-4Z" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linejoin="round"/>
             <path d="M12 7v6" stroke="rgba(255,255,255,.72)" stroke-width="1.6" stroke-linecap="round"/>
             <path d="M12 16h.01" stroke="rgba(255,255,255,.72)" stroke-width="3" stroke-linecap="round"/>
           </svg>
-          Safe Mode
+          <span id="panicLabel">Safe Mode</span>
         </button>
       </div>
     </aside>
@@ -599,14 +705,13 @@
 
       <div class="grid">
         <!-- LEFT -->
-        <section class="card" id="leftCard">
-          <!-- content injected by JS -->
-        </section>
+        <section class="card" id="leftCard"></section>
 
         <!-- RIGHT -->
-        <section class="card" id="rightCard">
-          <!-- content injected by JS -->
-        </section>
+        <section class="card" id="rightCard"></section>
+
+        <!-- PEET FOLDER (NEW) -->
+        <aside class="card" id="peetCard"></aside>
       </div>
     </main>
   </div>
@@ -643,6 +748,7 @@
     // ===== Helpers =====
     const $ = (sel, el=document) => el.querySelector(sel);
     const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+    const uid = () => Math.random().toString(16).slice(2,10);
 
     const state = {
       profile: null,
@@ -658,6 +764,10 @@
         sorterWorker: true,
         printerEnabled: true
       },
+      todos: [
+        {id:uid(), title:"Health-Check: Services prüfen", detail:"Settings → Health Check", status:"open", created:Date.now()},
+        {id:uid(), title:"SmartSorter Regeln verfeinern", detail:"Queue → Klassifikation/Route", status:"open", created:Date.now()},
+      ],
       sorterQueue: [
         {id:"Q-1021", file:"scan_2026-01-23_001.pdf", step:"OCR/Extract", prio:"normal"},
         {id:"Q-1022", file:"rechnung_teufel_rockster.pdf", step:"Classify", prio:"high"},
@@ -707,12 +817,8 @@
       {name:"Work", meta:"HiL · Projekte"},
     ];
 
-    function openProfileModal(){
-      $("#profileModal").style.display = "flex";
-    }
-    function closeProfileModal(){
-      $("#profileModal").style.display = "none";
-    }
+    function openProfileModal(){ $("#profileModal").style.display = "flex"; }
+    function closeProfileModal(){ $("#profileModal").style.display = "none"; }
     function setProfile(name){
       state.profile = name;
       $("#profilePill").textContent = `Profil: ${name}`;
@@ -749,6 +855,20 @@
       toastTimer = setTimeout(()=>{ t.style.opacity="0"; }, 2400);
     }
 
+    // ===== Task / Todo capture (NEW) =====
+    function addTodo(title, detail){
+      const item = {id:uid(), title, detail, status:"open", created:Date.now()};
+      state.todos.unshift(item);
+      pushToast(`Todo hinzugefügt: ${title}`);
+      renderPeetFolder(); // update side panel
+    }
+    function toggleTodo(id){
+      const t = state.todos.find(x=>x.id===id);
+      if(!t) return;
+      t.status = t.status==="open" ? "done" : "open";
+      renderPeetFolder();
+    }
+
     // ===== Navigation =====
     $$("#nav .nav-item").forEach(item=>{
       item.addEventListener("click", ()=>{
@@ -759,29 +879,33 @@
       });
     });
 
+    function navTo(page){
+      state.page = page;
+      $$("#nav .nav-item").forEach(i=>i.classList.remove("active"));
+      const it = $(`#nav .nav-item[data-page="${page}"]`);
+      if(it) it.classList.add("active");
+      render();
+    }
+
     // ===== Top actions =====
     $("#btnProfile").addEventListener("click", openProfileModal);
     $("#closeProfile").addEventListener("click", closeProfileModal);
 
     $("#btnQuickAction").addEventListener("click", ()=>{
-      // Simple demo quick actions
-      if(state.page !== "chat"){
-        state.page = "chat";
-        $$("#nav .nav-item").forEach(i=>i.classList.remove("active"));
-        $(`#nav .nav-item[data-page="chat"]`).classList.add("active");
-        render();
-      }
+      if(state.page !== "chat") navTo("chat");
       state.chat.push({by:"peet", text:"Quick Action: Ich kann sofort 'Dateien sortieren', 'Gerät schalten' oder '3D Objekt generieren' (Mock). Was davon?"});
       renderChatOnly();
+      addTodo("Quick Action auswerten", "Chat → passende Aktion ausführen");
     });
 
     $("#btnPanic").addEventListener("click", ()=>{
       state.safeMode = !state.safeMode;
       $("#btnPanic").classList.toggle("primary", state.safeMode);
-      $("#btnPanic").textContent = state.safeMode ? "Safe Mode aktiv" : "Safe Mode";
+      $("#panicLabel").textContent = state.safeMode ? "Safe Mode aktiv" : "Safe Mode";
       $("#stackStatus").textContent = state.safeMode ? "Safe Mode · Nur Lesen" : "Docker OK · API OK";
       pushToast(state.safeMode ? "Safe Mode: Schalten/Druck gesperrt (Mock)." : "Safe Mode deaktiviert.");
       render();
+      addTodo(state.safeMode ? "Safe Mode prüfen" : "Aktionen wieder freigeben", "Settings → Sicherheit");
     });
 
     $("#globalSearch").addEventListener("input", (e)=>{
@@ -789,21 +913,40 @@
       render();
     });
 
+    // Shortcut "/" focus search
+    window.addEventListener("keydown", (e)=>{
+      if(e.key === "/" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA"){
+        e.preventDefault();
+        $("#globalSearch").focus();
+      }
+      if(e.key === "Escape"){
+        const pm = $("#profileModal");
+        if(pm && pm.style.display === "flex") closeProfileModal();
+      }
+    });
+
     // ===== Date/Time =====
     function tickTime(){
       const d = new Date();
       const pad = n => String(n).padStart(2,"0");
       $("#nowText").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())} · ${d.toLocaleDateString("de-DE")}`;
+      $("#dateText").textContent = d.toLocaleDateString("de-DE", {weekday:"short", year:"numeric", month:"2-digit", day:"2-digit"});
     }
     setInterval(tickTime, 1000);
     tickTime();
 
+    // ===== Search helpers (UPDATED: actually filters) =====
+    const matches = (...vals) => {
+      if(!state.search) return true;
+      const s = state.search;
+      return vals.some(v => String(v ?? "").toLowerCase().includes(s));
+    };
+    const filterArr = (arr, fn) => state.search ? arr.filter(fn) : arr;
+
     // ===== Pages =====
     function render(){
-      // If no profile picked yet, show modal once
-      if(!state.profile){
-        openProfileModal();
-      }
+      if(!state.profile) openProfileModal();
+
       $("#licensePill").textContent = "3DEXPERIENCE: erkannt (Mock)";
       $("#securityPill").textContent = state.safeMode ? "Security: Safe Mode · read-only" : "Security: lokal · kein Cloud-Zwang";
 
@@ -818,6 +961,127 @@
         case "settings": renderSettings(); break;
         default: renderDashboard();
       }
+
+      renderPeetFolder(); // NEW: always keep in sync
+    }
+
+    // ===== PEET Folder (NEW) =====
+    function pageTip(){
+      const tip = {
+        dashboard:"Klick auf die Map-Knoten → Details. Toggle für Watcher/Worker & Druck.",
+        smarthome:"Safe Mode sperrt Schalten. Nutze Szenen für schnelle Zustände.",
+        nas:"Dateien können direkt in die SmartSorter-Queue geschoben werden.",
+        chat:"Du kannst Aktionen im Chat anstoßen. '/': Suche fokussieren.",
+        smartsorter:"Queue priorisieren, Pipeline simulieren, Jobs schließen.",
+        creator:"Parameter anpassen → STL Export → optional Send-to-Printer.",
+        baumlab:"Cluster zeigen Strukturvorschläge; anwenden erstellt Zielpfade.",
+        settings:"Health-Check + Restart (im Mock). Safe Mode ist dein Not-Aus."
+      };
+      return tip[state.page] || "—";
+    }
+
+    function renderPeetFolder(){
+      const openTodos = state.todos.filter(t=>t.status==="open");
+      const doneTodos = state.todos.filter(t=>t.status==="done");
+
+      const qHigh = state.sorterQueue.filter(j=>j.prio==="high").length;
+      const lightsOn = state.devices.filter(d=>d.type==="Light" && d.on).length;
+
+      $("#peetCard").innerHTML = `
+        <div class="peet-head">
+          <div class="peet-title">
+            <div class="bubble" aria-hidden="true"></div>
+            <div class="txt">
+              <div class="h">PEET-Folder</div>
+              <div class="s">Kontext · Vorschläge · Todo · Quick Actions</div>
+            </div>
+          </div>
+          <span class="badge">${openTodos.length} todo</span>
+        </div>
+
+        <div class="peet-section">
+          <h4>Jetzt relevant <span class="badge">${state.page}</span></h4>
+          <div class="row" style="margin-bottom:0">
+            <div class="l">
+              <div class="t">Hinweis</div>
+              <div class="d">${escapeHtml(pageTip())}</div>
+            </div>
+            <span class="badge">${state.safeMode ? `${iconMini("warn")} Safe` : `${iconMini("ok")} Live`}</span>
+          </div>
+        </div>
+
+        <div class="peet-section">
+          <h4>Quick Chips <span class="badge">1-Klick</span></h4>
+          <div class="peet-kv">
+            <div class="chip" data-chip="go:chat">${iconMini("ok")} Chat</div>
+            <div class="chip" data-chip="go:smartsorter">${iconMini("ok")} Queue</div>
+            <div class="chip" data-chip="go:creator">${iconMini("ok")} 3D</div>
+            <div class="chip" data-chip="todo:add:Health-Check">${iconMini("warn")} Health</div>
+            <div class="chip" data-chip="todo:add:Backup">${iconMini("warn")} Backup</div>
+            <div class="chip" data-chip="todo:add:SmartHome">${iconMini("warn")} Szene</div>
+          </div>
+        </div>
+
+        <div class="peet-section">
+          <h4>Status Snapshot <span class="badge">Live</span></h4>
+          <div class="row">
+            <div class="l">
+              <div class="t">SmartHome</div>
+              <div class="d">Lichter an: ${lightsOn} · Devices: ${state.devices.length}</div>
+            </div>
+            <span class="badge">${lightsOn ? `${iconMini("warn")} Busy` : `${iconMini("ok")} Calm`}</span>
+          </div>
+          <div class="row">
+            <div class="l">
+              <div class="t">SmartSorter</div>
+              <div class="d">Queue: ${state.sorterQueue.length} · High: ${qHigh}</div>
+            </div>
+            <span class="badge">${qHigh ? `${iconMini("warn")} Prio` : `${iconMini("ok")} OK`}</span>
+          </div>
+          <div class="row" style="margin-bottom:0">
+            <div class="l">
+              <div class="t">NAS</div>
+              <div class="d">Indexing: ${state.toggles.nasIndexing ? "On" : "Off"} · Files: ${state.files.length}</div>
+            </div>
+            <span class="badge">${state.toggles.nasIndexing ? `${iconMini("ok")} Indexed` : `${iconMini("warn")} Off`}</span>
+          </div>
+        </div>
+
+        <div class="peet-section" style="margin-bottom:0">
+          <h4>Todo-Liste <span class="badge">${openTodos.length} offen</span></h4>
+
+          <div class="list" style="height:240px" id="todoList">
+            ${renderTodos()}
+          </div>
+
+          <div class="split" style="margin-top:10px">
+            <button class="btn primary" data-todo-new>+ Todo</button>
+            <button class="btn" data-todo-clear>Clear Done</button>
+          </div>
+
+          <div style="margin-top:10px" class="sub">
+            Tipp: Jede Aktion (Start/Export/Szene) kann automatisch als Todo landen (Mock).
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTodos(){
+      const list = filterArr(state.todos, t => matches(t.title, t.detail, t.status));
+      if(!list.length){
+        return `<div class="sub" style="padding:8px 4px">Keine Todos gefunden.</div>`;
+      }
+      return list.map(t=>`
+        <div class="todo-item ${t.status==="done" ? "done":""}">
+          <div class="meta">
+            <div class="t">${escapeHtml(t.title)}</div>
+            <div class="d">${escapeHtml(t.detail || "")}</div>
+          </div>
+          <button class="btn ${t.status==="done" ? "" : "primary"}" data-todo-id="${t.id}">
+            ${t.status==="done" ? "Undo" : "Done"}
+          </button>
+        </div>
+      `).join("");
     }
 
     // ===== Dashboard (Canvas: System Map) =====
@@ -826,10 +1090,7 @@
       $("#pageP").textContent = "Systemstatus, Überblick und Schnellzugriffe.";
 
       $("#leftCard").innerHTML = `
-        <h3>
-          System Map
-          <span class="badge">Canvas</span>
-        </h3>
+        <h3>System Map <span class="badge">Canvas</span></h3>
         <p class="sub">Zentraler Überblick: SmartHome ↔ NAS ↔ KI (PEET) ↔ SmartSorter ↔ 3D Creator ↔ BaumLab ↔ Druck.</p>
         <div class="canvas-wrap">
           <canvas id="mapCanvas"></canvas>
@@ -872,10 +1133,7 @@
       `;
 
       $("#rightCard").innerHTML = `
-        <h3>
-          Status & Shortcuts
-          <span class="badge">System</span>
-        </h3>
+        <h3>Status & Shortcuts <span class="badge">System</span></h3>
         <p class="sub">Schnellzugriffe: Geräte, Sortier-Queue, 3D Export, Druck.</p>
 
         <div class="row">
@@ -883,7 +1141,7 @@
             <div class="t">KI Agent: PEET</div>
             <div class="d">Dokumente fragen · Aktionen auslösen</div>
           </div>
-          <button class="btn primary" id="goChat">Öffnen</button>
+          <button class="btn primary" data-nav="chat">Öffnen</button>
         </div>
 
         <div class="row">
@@ -891,7 +1149,7 @@
             <div class="t">3D Creator</div>
             <div class="d">Gridfinity/Objekte · Live Preview</div>
           </div>
-          <button class="btn" id="goCreator">Öffnen</button>
+          <button class="btn" data-nav="creator">Öffnen</button>
         </div>
 
         <div class="row">
@@ -902,42 +1160,22 @@
           <div class="toggle ${state.toggles.printerEnabled ? "on":""}" data-t="printerEnabled"></div>
         </div>
 
-        <h3 style="margin-top:14px">
-          SmartSorter Queue
-          <span class="badge">${state.sorterQueue.length} jobs</span>
-        </h3>
+        <h3 style="margin-top:14px">SmartSorter Queue <span class="badge">${state.sorterQueue.length} jobs</span></h3>
         <div class="list" id="queueList"></div>
       `;
 
-      // bind toggles
-      bindToggles();
-
-      // queue list
-      const q = $("#queueList");
-      q.innerHTML = filterList(state.sorterQueue.map(job => {
-        return `
-          <div class="row" style="margin-bottom:10px">
-            <div class="l">
-              <div class="t">${escapeHtml(job.file)}</div>
-              <div class="d">${job.id} · Step: ${job.step} · Prio: ${job.prio}</div>
-            </div>
-            <span class="badge">Open</span>
+      const list = filterArr(state.sorterQueue, j => matches(j.file, j.id, j.step, j.prio));
+      $("#queueList").innerHTML = list.map(job => `
+        <div class="row" style="margin-bottom:10px">
+          <div class="l">
+            <div class="t">${escapeHtml(job.file)}</div>
+            <div class="d">${job.id} · Step: ${job.step} · Prio: ${job.prio}</div>
           </div>
-        `;
-      }).join(""));
+          <span class="badge">Open</span>
+        </div>
+      `).join("") || `<div class="sub" style="padding:6px 4px">Keine Queue-Einträge gefunden.</div>`;
 
-      $("#goChat").addEventListener("click", ()=>navTo("chat"));
-      $("#goCreator").addEventListener("click", ()=>navTo("creator"));
-
-      // draw system map
       setupSystemMapCanvas();
-    }
-
-    function navTo(page){
-      state.page = page;
-      $$("#nav .nav-item").forEach(i=>i.classList.remove("active"));
-      $(`#nav .nav-item[data-page="${page}"]`).classList.add("active");
-      render();
     }
 
     // ===== SmartHome =====
@@ -946,65 +1184,43 @@
       $("#pageP").textContent = "Home Assistant Steuerung (Mock): Geräte, Sensoren, Szenen, Regeln.";
 
       $("#leftCard").innerHTML = `
-        <h3>
-          Geräte
-          <span class="badge">HA</span>
-        </h3>
+        <h3>Geräte <span class="badge">HA</span></h3>
         <p class="sub">Schalten/Status anzeigen. Safe Mode sperrt Aktionen.</p>
         <div class="list" id="deviceList"></div>
       `;
 
       $("#rightCard").innerHTML = `
-        <h3>
-          Bereiche & Szenen
-          <span class="badge">Control</span>
-        </h3>
+        <h3>Bereiche & Szenen <span class="badge">Control</span></h3>
         <p class="sub">Kompaktsteuerung: Licht, Sensoren, Automationen, Quick Scenes.</p>
 
         <div class="row">
-          <div class="l">
-            <div class="t">Lichter</div>
-            <div class="d">Gruppensteuerung</div>
-          </div>
+          <div class="l"><div class="t">Lichter</div><div class="d">Gruppensteuerung</div></div>
           <div class="toggle ${state.toggles.haLights ? "on":""}" data-t="haLights"></div>
         </div>
-
         <div class="row">
-          <div class="l">
-            <div class="t">Sensoren</div>
-            <div class="d">Status live (Mock)</div>
-          </div>
+          <div class="l"><div class="t">Sensoren</div><div class="d">Status live (Mock)</div></div>
           <div class="toggle ${state.toggles.haSensors ? "on":""}" data-t="haSensors"></div>
         </div>
-
         <div class="row">
-          <div class="l">
-            <div class="t">Automationen</div>
-            <div class="d">Regeln aktiv</div>
-          </div>
+          <div class="l"><div class="t">Automationen</div><div class="d">Regeln aktiv</div></div>
           <div class="toggle ${state.toggles.haAutomations ? "on":""}" data-t="haAutomations"></div>
         </div>
 
         <div style="margin-top:12px" class="split">
-          <button class="btn primary" id="sceneAway">Szene: Away</button>
-          <button class="btn" id="sceneHome">Szene: Home</button>
+          <button class="btn primary" data-scene="Away" ${state.safeMode ? "disabled" : ""}>Szene: Away</button>
+          <button class="btn" data-scene="Home" ${state.safeMode ? "disabled" : ""}>Szene: Home</button>
         </div>
 
         <div style="margin-top:12px" class="row">
-          <div class="l">
-            <div class="t">Event Log</div>
-            <div class="d">Letzte Aktionen / Trigger</div>
-          </div>
+          <div class="l"><div class="t">Event Log</div><div class="d">Letzte Aktionen / Trigger</div></div>
           <span class="badge">Live</span>
         </div>
         <div class="list" id="haLog"></div>
       `;
 
-      bindToggles();
-
-      // devices
-      const list = $("#deviceList");
-      list.innerHTML = filterList(state.devices.map((d, idx)=>{
+      const deviceList = filterArr(state.devices, d => matches(d.name, d.type, d.on ? "on" : "off"));
+      $("#deviceList").innerHTML = deviceList.map((d)=>{
+        const idx = state.devices.indexOf(d);
         const locked = state.safeMode || (d.type==="Printer" && !state.toggles.printerEnabled);
         return `
           <div class="row" style="margin-bottom:10px">
@@ -1012,38 +1228,28 @@
               <div class="t">${escapeHtml(d.name)}</div>
               <div class="d">${d.type} · Status: ${d.on ? "On" : "Off"}</div>
             </div>
-            <button class="btn ${d.on ? "" : "primary"}" data-dev="${idx}" ${locked ? "disabled" : ""} style="${locked ? "opacity:.55;cursor:not-allowed" : ""}">
+            <button class="btn ${d.on ? "" : "primary"}" data-dev="${idx}" ${locked ? "disabled" : ""}>
               ${locked ? "Gesperrt" : (d.on ? "Ausschalten" : "Einschalten")}
             </button>
           </div>
         `;
-      }).join(""));
+      }).join("") || `<div class="sub" style="padding:6px 4px">Keine Geräte gefunden.</div>`;
 
-      list.querySelectorAll("button[data-dev]").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          const i = Number(btn.dataset.dev);
-          state.devices[i].on = !state.devices[i].on;
-          pushToast(`${state.devices[i].name}: ${state.devices[i].on ? "On" : "Off"} (Mock)`);
-          renderSmartHome(); // local rerender
-        });
-      });
-
-      // log
-      $("#haLog").innerHTML = filterList([
-        `${iconMini("ok")} Motion Flur · 10:12`,
-        `${iconMini("ok")} Temp Rack · 10:08`,
-        `${iconMini("warn")} Batterie Sensor · 09:44`,
-        `${iconMini("ok")} Szene Home · 09:02`,
-      ].map(x=>`<div class="row" style="margin-bottom:10px"><div class="l"><div class="t">${x}</div><div class="d">Mock Event</div></div><span class="badge">Info</span></div>`).join(""));
-
-      $("#sceneAway").addEventListener("click", ()=>{
-        if(state.safeMode) return pushToast("Safe Mode: Szene gesperrt.");
-        pushToast("Szene Away ausgelöst (Mock).");
-      });
-      $("#sceneHome").addEventListener("click", ()=>{
-        if(state.safeMode) return pushToast("Safe Mode: Szene gesperrt.");
-        pushToast("Szene Home ausgelöst (Mock).");
-      });
+      $("#haLog").innerHTML = filterArr([
+        {s:"ok", t:"Motion Flur", time:"10:12"},
+        {s:"ok", t:"Temp Rack", time:"10:08"},
+        {s:"warn", t:"Batterie Sensor", time:"09:44"},
+        {s:"ok", t:"Szene Home", time:"09:02"},
+      ], x => matches(x.t, x.time, x.s))
+      .map(x=>`
+        <div class="row" style="margin-bottom:10px">
+          <div class="l">
+            <div class="t">${iconMini(x.s)} ${escapeHtml(x.t)} · ${escapeHtml(x.time)}</div>
+            <div class="d">Mock Event</div>
+          </div>
+          <span class="badge">Info</span>
+        </div>
+      `).join("") || `<div class="sub" style="padding:6px 4px">Keine Events gefunden.</div>`;
     }
 
     // ===== NAS =====
@@ -1052,102 +1258,58 @@
       $("#pageP").textContent = "Lokale Ablage, Zugriff, Indexing und Dateisichten (Mock).";
 
       $("#leftCard").innerHTML = `
-        <h3>
-          Dateien
-          <span class="badge">Browse</span>
-        </h3>
+        <h3>Dateien <span class="badge">Browse</span></h3>
         <p class="sub">Suchen, öffnen (Mock), markieren, zur Pipeline schicken.</p>
         <div class="list" id="fileList"></div>
       `;
 
       $("#rightCard").innerHTML = `
-        <h3>
-          Aktionen
-          <span class="badge">Tools</span>
-        </h3>
+        <h3>Aktionen <span class="badge">Tools</span></h3>
         <p class="sub">Indexing, SmartSorter Trigger, Backup, Rechte.</p>
 
         <div class="row">
-          <div class="l">
-            <div class="t">Indexing</div>
-            <div class="d">Metadata + Volltext (Mock)</div>
-          </div>
+          <div class="l"><div class="t">Indexing</div><div class="d">Metadata + Volltext (Mock)</div></div>
           <div class="toggle ${state.toggles.nasIndexing ? "on":""}" data-t="nasIndexing"></div>
         </div>
 
         <div class="row">
-          <div class="l">
-            <div class="t">SmartSorter Trigger</div>
-            <div class="d">Inbox sofort verarbeiten</div>
-          </div>
-          <button class="btn primary" id="triggerSort" ${state.safeMode ? "disabled" : ""} style="${state.safeMode?"opacity:.55;cursor:not-allowed":""}">Start</button>
+          <div class="l"><div class="t">SmartSorter Trigger</div><div class="d">Inbox sofort verarbeiten</div></div>
+          <button class="btn primary" data-nas="trigger" ${state.safeMode ? "disabled" : ""}>Start</button>
         </div>
 
         <div class="row">
-          <div class="l">
-            <div class="t">Backup Snapshot</div>
-            <div class="d">Projekte · Docs · Config</div>
-          </div>
-          <button class="btn" id="backup" ${state.safeMode ? "disabled" : ""} style="${state.safeMode?"opacity:.55;cursor:not-allowed":""}">Erstellen</button>
+          <div class="l"><div class="t">Backup Snapshot</div><div class="d">Projekte · Docs · Config</div></div>
+          <button class="btn" data-nas="backup" ${state.safeMode ? "disabled" : ""}>Erstellen</button>
         </div>
 
         <h3 style="margin-top:14px">Sicht</h3>
         <div class="split">
-          <button class="btn" id="viewDocs">Dokumente</button>
-          <button class="btn" id="view3d">3D</button>
+          <button class="btn" data-view="docs">Dokumente</button>
+          <button class="btn" data-view="3d">3D</button>
         </div>
 
         <div style="margin-top:12px" class="row">
-          <div class="l">
-            <div class="t">Hinweis</div>
-            <div class="d">Alles lokal — keine Pflicht-Cloud (Mock)</div>
-          </div>
+          <div class="l"><div class="t">Hinweis</div><div class="d">Alles lokal — keine Pflicht-Cloud (Mock)</div></div>
           <span class="badge">Privacy</span>
         </div>
       `;
 
-      bindToggles();
-
-      const fileList = $("#fileList");
-      fileList.innerHTML = filterList(state.files.map((f, idx)=>`
-        <div class="row" style="margin-bottom:10px">
-          <div class="l">
-            <div class="t">${escapeHtml(f.name)}</div>
-            <div class="d">${f.type} · ${f.tag} · ${f.status}</div>
+      const files = filterArr(state.files, f => matches(f.name, f.type, f.tag, f.status));
+      $("#fileList").innerHTML = files.map((f)=>{
+        const idx = state.files.indexOf(f);
+        return `
+          <div class="row" style="margin-bottom:10px">
+            <div class="l">
+              <div class="t">${escapeHtml(f.name)}</div>
+              <div class="d">${f.type} · ${f.tag} · ${f.status}</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="btn" data-open="${idx}">Öffnen</button>
+              <button class="btn primary" data-pipe="${idx}" ${state.safeMode ? "disabled" : ""}>Pipeline</button>
+            </div>
           </div>
-          <div style="display:flex;gap:8px">
-            <button class="btn" data-open="${idx}">Öffnen</button>
-            <button class="btn primary" data-pipe="${idx}" ${state.safeMode ? "disabled" : ""} style="${state.safeMode?"opacity:.55;cursor:not-allowed":""}">Pipeline</button>
-          </div>
-        </div>
-      `).join(""));
-
-      fileList.querySelectorAll("button[data-open]").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          const i = Number(btn.dataset.open);
-          pushToast(`Öffnen: ${state.files[i].name} (Mock)`);
-        });
-      });
-      fileList.querySelectorAll("button[data-pipe]").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          const i = Number(btn.dataset.pipe);
-          const base = state.files[i].name.split("/").pop();
-          state.sorterQueue.unshift({id:"Q-"+(1000+Math.floor(Math.random()*900)), file:base, step:"Ingest", prio:"normal"});
-          pushToast(`An SmartSorter übergeben: ${base}`);
-          renderNAS();
-        });
-      });
-
-      $("#triggerSort").addEventListener("click", ()=>{
-        if(state.safeMode) return;
-        pushToast("SmartSorter: Inbox Scan gestartet (Mock).");
-      });
-      $("#backup").addEventListener("click", ()=>{
-        if(state.safeMode) return;
-        pushToast("Backup Snapshot erstellt (Mock).");
-      });
-      $("#viewDocs").addEventListener("click", ()=>{ pushToast("Filter: Dokumente (Mock)"); });
-      $("#view3d").addEventListener("click", ()=>{ pushToast("Filter: 3D Dateien (Mock)"); });
+        `;
+      }).join("") || `<div class="sub" style="padding:6px 4px">Keine Dateien gefunden.</div>`;
     }
 
     // ===== Chat (PEET) =====
@@ -1156,10 +1318,7 @@
       $("#pageP").textContent = "Fragen zu Dokumenten, Aktionen auslösen, SmartHome/NAS/3D steuern (Mock).";
 
       $("#leftCard").innerHTML = `
-        <h3>
-          Gespräch
-          <span class="badge">PEET</span>
-        </h3>
+        <h3>Gespräch <span class="badge">PEET</span></h3>
         <p class="sub">PEET ist lokal gedacht: fragt Inhalte, steuert Systemaktionen, macht Vorschläge.</p>
         <div class="chat" id="chatBox">
           <div class="chat-log" id="chatLog"></div>
@@ -1171,33 +1330,21 @@
       `;
 
       $("#rightCard").innerHTML = `
-        <h3>
-          Kontext
-          <span class="badge">Docs · Tools</span>
-        </h3>
+        <h3>Kontext <span class="badge">Docs · Tools</span></h3>
         <p class="sub">Was PEET “sieht” (Mock): Files, Queue, Geräte, Creator-Parameter.</p>
 
         <div class="row">
-          <div class="l">
-            <div class="t">Dokumente indiziert</div>
-            <div class="d">${state.toggles.nasIndexing ? "Ja" : "Nein"} · ${state.files.length} Einträge</div>
-          </div>
+          <div class="l"><div class="t">Dokumente indiziert</div><div class="d">${state.toggles.nasIndexing ? "Ja" : "Nein"} · ${state.files.length} Einträge</div></div>
           <span class="badge">NAS</span>
         </div>
 
         <div class="row">
-          <div class="l">
-            <div class="t">Queue</div>
-            <div class="d">${state.sorterQueue.length} Jobs</div>
-          </div>
+          <div class="l"><div class="t">Queue</div><div class="d">${state.sorterQueue.length} Jobs</div></div>
           <span class="badge">SmartSorter</span>
         </div>
 
         <div class="row">
-          <div class="l">
-            <div class="t">Geräte</div>
-            <div class="d">${state.devices.length} Entities</div>
-          </div>
+          <div class="l"><div class="t">Geräte</div><div class="d">${state.devices.length} Entities</div></div>
           <span class="badge">HA</span>
         </div>
 
@@ -1208,10 +1355,7 @@
         </div>
 
         <div style="margin-top:12px" class="row">
-          <div class="l">
-            <div class="t">Safe Mode</div>
-            <div class="d">${state.safeMode ? "Aktiv (Read-only)" : "Aus"}</div>
-          </div>
+          <div class="l"><div class="t">Safe Mode</div><div class="d">${state.safeMode ? "Aktiv (Read-only)" : "Aus"}</div></div>
           <span class="badge">Security</span>
         </div>
       `;
@@ -1226,10 +1370,10 @@
     function renderChatOnly(){
       const log = $("#chatLog");
       if(!log) return;
-      log.innerHTML = state.chat
-        .filter(m => !state.search || m.text.toLowerCase().includes(state.search))
+      const list = filterArr(state.chat, m => matches(m.text, m.by));
+      log.innerHTML = list
         .map(m => `<div class="chat-msg ${m.by==="me"?"me":"peet"}">${escapeHtml(m.text)}</div>`)
-        .join("");
+        .join("") || `<div class="sub" style="padding:6px 4px">Keine Nachrichten gefunden.</div>`;
       log.scrollTop = log.scrollHeight;
     }
 
@@ -1240,42 +1384,48 @@
         if(!txt) return;
         state.chat.push({by:"me", text: txt});
         input.value = "";
-        // very light "intent" mock
+
         const lower = txt.toLowerCase();
         let reply = "Verstanden (Mock).";
+
         if(lower.includes("sortier") || lower.includes("inbox")){
+          addTodo("Inbox sortieren", "SmartSorter → Queue prüfen");
           if(state.safeMode) reply = "Safe Mode ist aktiv — ich kann nur berichten, nicht ausführen. Soll ich dir die Queue anzeigen?";
           else{
             state.sorterQueue.unshift({id:"Q-"+(1000+Math.floor(Math.random()*900)), file:"inbox_batch.zip", step:"Ingest", prio:"high"});
             reply = "Inbox-Scan gestartet. Ich habe einen Batch-Job in die Queue gelegt und werde OCR → Klassifikation → Routing durchführen (Mock).";
           }
         } else if(lower.includes("licht") || lower.includes("lamp")){
+          addTodo("Licht-Aktion prüfen", "SmartHome → Geräte");
           if(state.safeMode) reply = "Safe Mode aktiv — Schalten ist gesperrt.";
           else{
-            // toggle a device if name matches
             const dev = state.devices.find(d => d.type==="Light" && lower.includes(d.name.split(" ")[0].toLowerCase()));
             if(dev){ dev.on = !dev.on; reply = `${dev.name}: ${dev.on ? "On" : "Off"} (Mock).`; }
             else reply = "Welche Lampe genau? (Mock: Wohnzimmer/Küche)";
           }
         } else if(lower.includes("druck") || lower.includes("printer") || lower.includes("sende")){
+          addTodo("Druck vorbereiten", "3D Creator → Send-to-Printer");
           if(state.safeMode) reply = "Safe Mode aktiv — Druck ist gesperrt.";
           else if(!state.toggles.printerEnabled) reply = "Druck ist deaktiviert. Aktiviere ihn auf dem Dashboard.";
           else reply = "Ich würde jetzt slicen/übertragen: 'Send-to-Printer' ausgelöst (Mock).";
         } else if(lower.includes("gridfinity") || lower.includes("baseplate")){
+          addTodo("Gridfinity Export", "3D Creator → STL Export");
           reply = `3D Creator Vorschlag: grid=${state.creator.grid}mm, X=${state.creator.x}, Y=${state.creator.y}, Z=${state.creator.z}. Soll ich den Export vorbereiten? (Mock)`;
         } else if(lower.includes("baumlab")){
+          addTodo("BaumLab Struktur", "BaumLab → Vorschläge prüfen");
           reply = "BaumLab: Ich kann Dateien clustern, labeln und eine Struktur vorschlagen (Mock). Nenne mir Zielkategorien.";
-        } else if(lower.includes("3d experience") || lower.includes("3dexperience")){
-          reply = "3DEXPERIENCE Lizenz ist erkannt (Mock). Potenziell nützlich für CAD/PLM Workflows — im Mock ist es als Connector vorgesehen.";
+        } else if(lower.includes("health") || lower.includes("check")){
+          addTodo("System Health-Check", "Settings → Health Check");
+          reply = "Health-Check ist geplant (Mock). Öffne Settings → Health Check.";
         }
+
         state.chat.push({by:"peet", text: reply});
         renderChatOnly();
+        renderPeetFolder();
       };
 
-      $("#chatSend").addEventListener("click", send);
-      $("#chatInput").addEventListener("keydown", (e)=>{
-        if(e.key==="Enter") send();
-      });
+      $("#chatSend").onclick = send;
+      $("#chatInput").onkeydown = (e)=>{ if(e.key==="Enter") send(); };
     }
 
     // ===== SmartSorter =====
@@ -1284,98 +1434,53 @@
       $("#pageP").textContent = "Pipeline: Watcher → Extract → Classify → Rename → Route → Verify (Mock).";
 
       $("#leftCard").innerHTML = `
-        <h3>
-          Pipeline Visual
-          <span class="badge">Canvas</span>
-        </h3>
+        <h3>Pipeline Visual <span class="badge">Canvas</span></h3>
         <p class="sub">Status je Stage. Klick auf Stage zeigt Details (Mock).</p>
         <div class="canvas-wrap" style="height:360px">
           <canvas id="pipeCanvas"></canvas>
           <div class="hint">Klick: Stage · Safe Mode sperrt Execute</div>
         </div>
         <div style="margin-top:12px" class="split">
-          <button class="btn primary" id="pipeRun" ${state.safeMode ? "disabled" : ""} style="${state.safeMode?"opacity:.55;cursor:not-allowed":""}">Run Pipeline</button>
-          <button class="btn" id="pipeSim">Simulate</button>
+          <button class="btn primary" data-pipe-run ${state.safeMode ? "disabled" : ""}>Run Pipeline</button>
+          <button class="btn" data-pipe-sim>Simulate</button>
         </div>
       `;
 
       $("#rightCard").innerHTML = `
-        <h3>
-          Queue & Jobs
-          <span class="badge">${state.sorterQueue.length}</span>
-        </h3>
+        <h3>Queue & Jobs <span class="badge">${state.sorterQueue.length}</span></h3>
         <p class="sub">Jobs sortieren (Drag & Drop) — hier als Mock über Buttons.</p>
         <div class="list" id="jobs"></div>
       `;
 
-      // Jobs list + reorder (simple)
+      const list = filterArr(state.sorterQueue, j => matches(j.file, j.id, j.step, j.prio));
       const jobs = $("#jobs");
-      jobs.innerHTML = filterList(state.sorterQueue.map((j, idx)=>`
-        <div class="row" style="margin-bottom:10px">
-          <div class="l">
-            <div class="t">${escapeHtml(j.file)}</div>
-            <div class="d">${j.id} · ${j.step} · ${j.prio}</div>
+      jobs.innerHTML = list.map((j)=>{
+        const idx = state.sorterQueue.indexOf(j);
+        return `
+          <div class="row" style="margin-bottom:10px">
+            <div class="l">
+              <div class="t">${escapeHtml(j.file)}</div>
+              <div class="d">${j.id} · ${j.step} · ${j.prio}</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="btn" data-up="${idx}">↑</button>
+              <button class="btn" data-down="${idx}">↓</button>
+              <button class="btn primary" data-done="${idx}" ${state.safeMode ? "disabled":""}>Done</button>
+            </div>
           </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <button class="btn" data-up="${idx}">↑</button>
-            <button class="btn" data-down="${idx}">↓</button>
-            <button class="btn primary" data-done="${idx}" ${state.safeMode ? "disabled":""} style="${state.safeMode?"opacity:.55;cursor:not-allowed":""}">Done</button>
-          </div>
-        </div>
-      `).join(""));
-
-      jobs.querySelectorAll("button[data-up]").forEach(b=>{
-        b.addEventListener("click", ()=>{
-          const i = Number(b.dataset.up);
-          if(i<=0) return;
-          [state.sorterQueue[i-1], state.sorterQueue[i]] = [state.sorterQueue[i], state.sorterQueue[i-1]];
-          renderSmartSorter();
-        });
-      });
-      jobs.querySelectorAll("button[data-down]").forEach(b=>{
-        b.addEventListener("click", ()=>{
-          const i = Number(b.dataset.down);
-          if(i>=state.sorterQueue.length-1) return;
-          [state.sorterQueue[i+1], state.sorterQueue[i]] = [state.sorterQueue[i], state.sorterQueue[i+1]];
-          renderSmartSorter();
-        });
-      });
-      jobs.querySelectorAll("button[data-done]").forEach(b=>{
-        b.addEventListener("click", ()=>{
-          if(state.safeMode) return;
-          const i = Number(b.dataset.done);
-          const removed = state.sorterQueue.splice(i,1)[0];
-          pushToast(`Job abgeschlossen: ${removed.id} (Mock)`);
-          renderSmartSorter();
-        });
-      });
-
-      $("#pipeRun").addEventListener("click", ()=>{
-        if(state.safeMode) return;
-        pushToast("Pipeline Run gestartet (Mock).");
-        if(state.sorterQueue.length){
-          state.sorterQueue[0].step = "Verify";
-          renderSmartSorter();
-        }
-      });
-      $("#pipeSim").addEventListener("click", ()=>{
-        pushToast("Simulation: Stage Status animiert (Mock).");
-        animatePipeline();
-      });
+        `;
+      }).join("") || `<div class="sub" style="padding:6px 4px">Keine Jobs gefunden.</div>`;
 
       setupPipelineCanvas();
     }
 
-    // ===== 3D Creator (Canvas: rotating pseudo 3D) =====
+    // ===== 3D Creator =====
     function renderCreator(){
       $("#pageH2").textContent = "3D Creator";
       $("#pageP").textContent = "Gridfinity Generator + Live Preview + Export + Send-to-Printer (Mock).";
 
       $("#leftCard").innerHTML = `
-        <h3>
-          Live Preview
-          <span class="badge">Canvas</span>
-        </h3>
+        <h3>Live Preview <span class="badge">Canvas</span></h3>
         <p class="sub">Vorschau (Mock) — gedacht für STL/Parametric Generator + BaumLab + Druck.</p>
         <div class="canvas-wrap" style="height:380px">
           <canvas id="creatorCanvas"></canvas>
@@ -1384,10 +1489,7 @@
       `;
 
       $("#rightCard").innerHTML = `
-        <h3>
-          Parameter
-          <span class="badge">Gridfinity</span>
-        </h3>
+        <h3>Parameter <span class="badge">Gridfinity</span></h3>
         <p class="sub">Basisparameter (mm/units). Export & Druck sind Platzhalter.</p>
 
         ${sliderRow("Grid (mm pro Einheit)", "grid", 30, 60, state.creator.grid, "mm")}
@@ -1397,54 +1499,33 @@
         ${sliderRow("Wandstärke", "wall", 1.2, 3.2, state.creator.wall, "mm", 0.1)}
 
         <div style="margin-top:12px" class="split">
-          <button class="btn primary" id="btnExport">STL Export</button>
-          <button class="btn" id="btnPreset">Preset speichern</button>
+          <button class="btn primary" data-export ${state.safeMode ? "disabled" : ""}>STL Export</button>
+          <button class="btn" data-preset>Preset speichern</button>
         </div>
 
         <div style="margin-top:12px" class="row">
-          <div class="l">
-            <div class="t">Send-to-Printer</div>
-            <div class="d">Direkt an Drucker senden (Mock)</div>
-          </div>
-          <button class="btn ${state.toggles.printerEnabled ? "primary":""}" id="btnPrint" ${(!state.toggles.printerEnabled || state.safeMode) ? "disabled":""} style="${(!state.toggles.printerEnabled || state.safeMode) ? "opacity:.55;cursor:not-allowed":""}">
+          <div class="l"><div class="t">Send-to-Printer</div><div class="d">Direkt an Drucker senden (Mock)</div></div>
+          <button class="btn ${state.toggles.printerEnabled ? "primary":""}" data-print
+            ${(!state.toggles.printerEnabled || state.safeMode) ? "disabled":""}>
             Senden
           </button>
         </div>
 
         <div style="margin-top:12px" class="row">
-          <div class="l">
-            <div class="t">BaumLab</div>
-            <div class="d">Auto-Tags + Ablage vorschlagen</div>
-          </div>
-          <button class="btn" id="btnBaum">Analyse</button>
+          <div class="l"><div class="t">BaumLab</div><div class="d">Auto-Tags + Ablage vorschlagen</div></div>
+          <button class="btn" data-baum>Analyse</button>
         </div>
       `;
 
-      // bind sliders
       $$("input[data-s]").forEach(inp=>{
-        inp.addEventListener("input", ()=>{
+        inp.oninput = ()=>{
           const key = inp.dataset.s;
           const val = Number(inp.value);
           state.creator[key] = val;
           $(`#val_${key}`).textContent = formatVal(key, val);
-          drawCreatorFrame(); // update
-        });
+          drawCreatorFrame();
+        };
       });
-
-      $("#btnExport").addEventListener("click", ()=>{
-        pushToast("STL Export erzeugt (Mock).");
-        // push a file entry
-        const name = `/3D/Gridfinity/base_${state.creator.x}x${state.creator.y}_z${state.creator.z}.stl`;
-        if(!state.files.some(f=>f.name===name)){
-          state.files.unshift({name, type:"STL", tag:"3D", status:"ready"});
-        }
-      });
-      $("#btnPreset").addEventListener("click", ()=> pushToast("Preset gespeichert (Mock)."));
-      $("#btnPrint").addEventListener("click", ()=>{
-        if(state.safeMode) return;
-        pushToast("Send-to-Printer ausgelöst (Mock).");
-      });
-      $("#btnBaum").addEventListener("click", ()=> pushToast("BaumLab Analyse gestartet (Mock)."));
 
       setupCreatorCanvas();
     }
@@ -1475,18 +1556,12 @@
       $("#pageP").textContent = "Klassifikation, Strukturvorschläge und Smart-Ablage (Mock).";
 
       $("#leftCard").innerHTML = `
-        <h3>
-          Kategorien & Cluster
-          <span class="badge">Analyse</span>
-        </h3>
+        <h3>Kategorien & Cluster <span class="badge">Analyse</span></h3>
         <p class="sub">BaumLab gruppiert Inhalte und schlägt Ordnerstruktur vor (Mock).</p>
 
         <div class="row">
-          <div class="l">
-            <div class="t">Vorschlag</div>
-            <div class="d">Rechnungen · Projekte · SmartHome · 3D · Verträge</div>
-          </div>
-          <button class="btn primary" id="applyStructure" ${state.safeMode ? "disabled":""} style="${state.safeMode?"opacity:.55;cursor:not-allowed":""}">Anwenden</button>
+          <div class="l"><div class="t">Vorschlag</div><div class="d">Rechnungen · Projekte · SmartHome · 3D · Verträge</div></div>
+          <button class="btn primary" data-apply-structure ${state.safeMode ? "disabled":""}>Anwenden</button>
         </div>
 
         <div class="canvas-wrap" style="height:360px;margin-top:12px">
@@ -1496,19 +1571,10 @@
       `;
 
       $("#rightCard").innerHTML = `
-        <h3>
-          Vorschläge
-          <span class="badge">List</span>
-        </h3>
+        <h3>Vorschläge <span class="badge">List</span></h3>
         <p class="sub">Beispiele: Umbenennen, Tags, Zielpfade.</p>
-
         <div class="list" id="baumList"></div>
       `;
-
-      $("#applyStructure").addEventListener("click", ()=>{
-        if(state.safeMode) return;
-        pushToast("Struktur angewendet (Mock).");
-      });
 
       const items = [
         {a:"scan_2026-01-23_001.pdf", b:"Rechnung? → /Dokumente/Rechnungen/2026/", tag:"Rechnung", conf:"0.71"},
@@ -1517,7 +1583,8 @@
         {a:"automation_backup.yaml", b:"→ /SmartHome/Backups/", tag:"HA", conf:"0.88"},
       ];
 
-      $("#baumList").innerHTML = filterList(items.map(x=>`
+      const list = filterArr(items, x => matches(x.a, x.b, x.tag, x.conf));
+      $("#baumList").innerHTML = list.map(x=>`
         <div class="row" style="margin-bottom:10px">
           <div class="l">
             <div class="t">${escapeHtml(x.a)}</div>
@@ -1525,7 +1592,7 @@
           </div>
           <span class="badge">Preview</span>
         </div>
-      `).join(""));
+      `).join("") || `<div class="sub" style="padding:6px 4px">Keine Vorschläge gefunden.</div>`;
 
       setupBaumCanvas();
     }
@@ -1536,42 +1603,27 @@
       $("#pageP").textContent = "Systemkonfiguration (Mock): Sicherheit, Connectoren, Rechte, Logging.";
 
       $("#leftCard").innerHTML = `
-        <h3>
-          Sicherheit
-          <span class="badge">Local-First</span>
-        </h3>
+        <h3>Sicherheit <span class="badge">Local-First</span></h3>
         <p class="sub">Schutz: Safe Mode, lokale Datenhaltung, Rollen (Mock).</p>
 
         <div class="row">
-          <div class="l">
-            <div class="t">Safe Mode</div>
-            <div class="d">Read-only für Aktionen</div>
-          </div>
-          <button class="btn ${state.safeMode ? "primary":""}" id="toggleSafe">${state.safeMode ? "Aktiv" : "Aus"}</button>
+          <div class="l"><div class="t">Safe Mode</div><div class="d">Read-only für Aktionen</div></div>
+          <button class="btn ${state.safeMode ? "primary":""}" data-toggle-safe>${state.safeMode ? "Aktiv" : "Aus"}</button>
         </div>
 
         <div class="row">
-          <div class="l">
-            <div class="t">Logging</div>
-            <div class="d">Audit für Schalten/Druck/Sort</div>
-          </div>
+          <div class="l"><div class="t">Logging</div><div class="d">Audit für Schalten/Druck/Sort</div></div>
           <span class="badge">Enabled</span>
         </div>
 
-        <div class="row">
-          <div class="l">
-            <div class="t">3DEXPERIENCE Connector</div>
-            <div class="d">Connector Platzhalter</div>
-          </div>
+        <div class="row" style="margin-bottom:0">
+          <div class="l"><div class="t">3DEXPERIENCE Connector</div><div class="d">Connector Platzhalter</div></div>
           <span class="badge">Mock</span>
         </div>
       `;
 
       $("#rightCard").innerHTML = `
-        <h3>
-          Services
-          <span class="badge">Docker</span>
-        </h3>
+        <h3>Services <span class="badge">Docker</span></h3>
         <p class="sub">Status (Mock): API, Worker, DB, Vector Store, Ollama.</p>
 
         ${serviceRow("API", "ok", "FastAPI · /api")}
@@ -1581,21 +1633,10 @@
         ${serviceRow("LLM", "ok", "Ollama (Mock)")}
 
         <div style="margin-top:12px" class="split">
-          <button class="btn" id="restart">Restart Services</button>
-          <button class="btn primary" id="health">Health Check</button>
+          <button class="btn" data-restart ${state.safeMode ? "disabled" : ""}>Restart Services</button>
+          <button class="btn primary" data-health>Health Check</button>
         </div>
       `;
-
-      $("#toggleSafe").addEventListener("click", ()=>{
-        state.safeMode = !state.safeMode;
-        pushToast(state.safeMode ? "Safe Mode aktiv." : "Safe Mode aus.");
-        render();
-      });
-      $("#restart").addEventListener("click", ()=>{
-        if(state.safeMode) return pushToast("Safe Mode: Restart gesperrt.");
-        pushToast("Services restart (Mock).");
-      });
-      $("#health").addEventListener("click", ()=> pushToast("Health OK (Mock)."));
     }
 
     function serviceRow(name, status, desc){
@@ -1610,25 +1651,224 @@
       `;
     }
 
-    // ===== Toggle binder =====
-    function bindToggles(){
-      $$("[data-t]").forEach(t=>{
-        t.addEventListener("click", ()=>{
-          const key = t.dataset.t;
-          state.toggles[key] = !state.toggles[key];
-          pushToast(`${key}: ${state.toggles[key] ? "On" : "Off"}`);
-          render();
-        });
-      });
-    }
+    // ===== Global click delegation (UPDATED: avoids multi-bind) =====
+    document.addEventListener("click", (e)=>{
+      const tgl = e.target.closest("[data-t]");
+      if(tgl){
+        const key = tgl.dataset.t;
+        state.toggles[key] = !state.toggles[key];
+        pushToast(`${key}: ${state.toggles[key] ? "On" : "Off"}`);
+        // automatically capture as todo for meaningful toggles
+        if(["nasIndexing","sorterWatcher","sorterWorker","printerEnabled"].includes(key)){
+          addTodo(`Toggle geändert: ${key}`, `Neuer Status: ${state.toggles[key] ? "On" : "Off"}`);
+        }
+        render();
+        return;
+      }
 
-    // ===== Search filter helper =====
-    function filterList(html){
-      if(!state.search) return html;
-      // crude filter: if container is already filtered (we do earlier) -> pass through.
-      // Here: just return html; pages already filter by source. Kept for future expansion.
-      return html;
-    }
+      const navBtn = e.target.closest("[data-nav]");
+      if(navBtn){ navTo(navBtn.dataset.nav); return; }
+
+      const devBtn = e.target.closest("button[data-dev]");
+      if(devBtn){
+        const i = Number(devBtn.dataset.dev);
+        if(Number.isFinite(i)){
+          state.devices[i].on = !state.devices[i].on;
+          pushToast(`${state.devices[i].name}: ${state.devices[i].on ? "On" : "Off"} (Mock)`);
+          addTodo(`Device geändert: ${state.devices[i].name}`, `Status: ${state.devices[i].on ? "On" : "Off"}`);
+          renderSmartHome();
+          renderPeetFolder();
+        }
+        return;
+      }
+
+      const openBtn = e.target.closest("button[data-open]");
+      if(openBtn){
+        const i = Number(openBtn.dataset.open);
+        pushToast(`Öffnen: ${state.files[i].name} (Mock)`);
+        addTodo("Datei öffnen", state.files[i].name);
+        return;
+      }
+
+      const pipeBtn = e.target.closest("button[data-pipe]");
+      if(pipeBtn){
+        if(state.safeMode) return;
+        const i = Number(pipeBtn.dataset.pipe);
+        const base = state.files[i].name.split("/").pop();
+        state.sorterQueue.unshift({id:"Q-"+(1000+Math.floor(Math.random()*900)), file:base, step:"Ingest", prio:"normal"});
+        pushToast(`An SmartSorter übergeben: ${base}`);
+        addTodo("Datei in Pipeline", base);
+        renderNAS();
+        renderPeetFolder();
+        return;
+      }
+
+      const nasAction = e.target.closest("button[data-nas]");
+      if(nasAction){
+        if(state.safeMode) return;
+        const k = nasAction.dataset.nas;
+        if(k==="trigger"){ pushToast("SmartSorter: Inbox Scan gestartet (Mock)."); addTodo("Inbox Scan", "NAS → Trigger"); }
+        if(k==="backup"){ pushToast("Backup Snapshot erstellt (Mock)."); addTodo("Backup Snapshot", "NAS → Backup"); }
+        return;
+      }
+
+      const viewBtn = e.target.closest("button[data-view]");
+      if(viewBtn){
+        pushToast(`Filter: ${viewBtn.dataset.view} (Mock)`);
+        return;
+      }
+
+      const sceneBtn = e.target.closest("button[data-scene]");
+      if(sceneBtn){
+        if(state.safeMode) return pushToast("Safe Mode: Szene gesperrt.");
+        pushToast(`Szene ${sceneBtn.dataset.scene} ausgelöst (Mock).`);
+        addTodo(`Szene auslösen: ${sceneBtn.dataset.scene}`, "SmartHome → Szenen");
+        return;
+      }
+
+      const upBtn = e.target.closest("button[data-up]");
+      if(upBtn){
+        const i = Number(upBtn.dataset.up);
+        if(i>0){
+          [state.sorterQueue[i-1], state.sorterQueue[i]] = [state.sorterQueue[i], state.sorterQueue[i-1]];
+          renderSmartSorter();
+          renderPeetFolder();
+        }
+        return;
+      }
+      const downBtn = e.target.closest("button[data-down]");
+      if(downBtn){
+        const i = Number(downBtn.dataset.down);
+        if(i<state.sorterQueue.length-1){
+          [state.sorterQueue[i+1], state.sorterQueue[i]] = [state.sorterQueue[i], state.sorterQueue[i+1]];
+          renderSmartSorter();
+          renderPeetFolder();
+        }
+        return;
+      }
+      const doneBtn = e.target.closest("button[data-done]");
+      if(doneBtn){
+        if(state.safeMode) return;
+        const i = Number(doneBtn.dataset.done);
+        const removed = state.sorterQueue.splice(i,1)[0];
+        pushToast(`Job abgeschlossen: ${removed.id} (Mock)`);
+        addTodo("Job abgeschlossen", `${removed.id} · ${removed.file}`);
+        renderSmartSorter();
+        renderPeetFolder();
+        return;
+      }
+
+      const pipeRun = e.target.closest("[data-pipe-run]");
+      if(pipeRun){
+        if(state.safeMode) return;
+        pushToast("Pipeline Run gestartet (Mock).");
+        addTodo("Pipeline Run", "SmartSorter → Run");
+        if(state.sorterQueue.length){
+          state.sorterQueue[0].step = "Verify";
+          renderSmartSorter();
+        }
+        return;
+      }
+      const pipeSim = e.target.closest("[data-pipe-sim]");
+      if(pipeSim){
+        pushToast("Simulation: Stage Status animiert (Mock).");
+        addTodo("Pipeline Simulation", "SmartSorter → Simulate");
+        animatePipeline();
+        return;
+      }
+
+      const exp = e.target.closest("[data-export]");
+      if(exp){
+        if(state.safeMode) return;
+        pushToast("STL Export erzeugt (Mock).");
+        const name = `/3D/Gridfinity/base_${state.creator.x}x${state.creator.y}_z${state.creator.z}.stl`;
+        if(!state.files.some(f=>f.name===name)){
+          state.files.unshift({name, type:"STL", tag:"3D", status:"ready"});
+        }
+        addTodo("STL Export", name);
+        renderPeetFolder();
+        return;
+      }
+
+      const preset = e.target.closest("[data-preset]");
+      if(preset){ pushToast("Preset gespeichert (Mock)."); addTodo("Preset speichern", "3D Creator"); return; }
+
+      const pr = e.target.closest("[data-print]");
+      if(pr){
+        if(state.safeMode) return;
+        if(!state.toggles.printerEnabled) return pushToast("Druck ist deaktiviert.");
+        pushToast("Send-to-Printer ausgelöst (Mock).");
+        addTodo("Send-to-Printer", "3D Creator → Druck");
+        return;
+      }
+
+      const ba = e.target.closest("[data-baum]");
+      if(ba){ pushToast("BaumLab Analyse gestartet (Mock)."); addTodo("BaumLab Analyse", "3D Creator → BaumLab"); return; }
+
+      const apply = e.target.closest("[data-apply-structure]");
+      if(apply){
+        if(state.safeMode) return;
+        pushToast("Struktur angewendet (Mock).");
+        addTodo("Struktur anwenden", "BaumLab → Apply");
+        return;
+      }
+
+      const tSafe = e.target.closest("[data-toggle-safe]");
+      if(tSafe){
+        state.safeMode = !state.safeMode;
+        pushToast(state.safeMode ? "Safe Mode aktiv." : "Safe Mode aus.");
+        addTodo("Safe Mode umschalten", state.safeMode ? "Aktiv" : "Aus");
+        render();
+        return;
+      }
+
+      const restart = e.target.closest("[data-restart]");
+      if(restart){
+        if(state.safeMode) return pushToast("Safe Mode: Restart gesperrt.");
+        pushToast("Services restart (Mock).");
+        addTodo("Services Restart", "Settings → Restart");
+        return;
+      }
+
+      const health = e.target.closest("[data-health]");
+      if(health){
+        pushToast("Health OK (Mock).");
+        addTodo("Health Check", "Settings → Health");
+        return;
+      }
+
+      const chip = e.target.closest("[data-chip]");
+      if(chip){
+        const v = chip.dataset.chip;
+        if(v.startsWith("go:")) return navTo(v.split(":")[1]);
+        if(v.startsWith("todo:add:")){
+          const what = v.split(":").slice(2).join(":");
+          if(what==="Health-Check") addTodo("System Health-Check", "Settings → Health Check");
+          if(what==="Backup") addTodo("Backup Snapshot", "NAS → Backup");
+          if(what==="SmartHome") addTodo("Szene planen", "SmartHome → Szenen");
+        }
+        return;
+      }
+
+      const todoBtn = e.target.closest("[data-todo-id]");
+      if(todoBtn){ toggleTodo(todoBtn.dataset.todoId); return; }
+
+      const todoNew = e.target.closest("[data-todo-new]");
+      if(todoNew){
+        const title = prompt("Neues Todo (Titel):", "Neue Aufgabe");
+        if(title && title.trim()) addTodo(title.trim(), `Page: ${state.page}`);
+        return;
+      }
+
+      const todoClear = e.target.closest("[data-todo-clear]");
+      if(todoClear){
+        const before = state.todos.length;
+        state.todos = state.todos.filter(t=>t.status!=="done");
+        pushToast(`Done-Todos gelöscht: ${before - state.todos.length}`);
+        renderPeetFolder();
+        return;
+      }
+    });
 
     // ===== Escape =====
     function escapeHtml(str){
@@ -1679,7 +1919,7 @@
       }
       window.addEventListener("resize", resize);
 
-      canvas.addEventListener("mousedown", (e)=>{
+      canvas.onmousedown = (e)=>{
         const p = toLocal(e);
         for(const n of nodes){
           if(hit(p.x,p.y,n)){
@@ -1689,9 +1929,9 @@
             return;
           }
         }
-      });
-      window.addEventListener("mouseup", ()=> map.dragId=null);
-      window.addEventListener("mousemove", (e)=>{
+      };
+      window.onmouseup = ()=> map.dragId=null;
+      window.onmousemove = (e)=>{
         if(!map.dragId) return;
         const p = toLocal(e);
         const n = nodes.find(x=>x.id===map.dragId);
@@ -1699,12 +1939,16 @@
         n.x = p.x - map.offX;
         n.y = p.y - map.offY;
         draw();
-      });
-      canvas.addEventListener("click", (e)=>{
+      };
+      canvas.onclick = (e)=>{
         const p = toLocal(e);
         const n = nodes.find(n=>hit(p.x,p.y,n));
-        if(n) pushToast(`Knoten: ${n.id} (Mock Details)`);
-      });
+        if(n){
+          pushToast(`Knoten: ${n.id} (Mock Details)`);
+          addTodo(`Details prüfen: ${n.id}`, "Dashboard → System Map");
+          renderPeetFolder();
+        }
+      };
 
       function toLocal(e){
         const r = canvas.getBoundingClientRect();
@@ -1752,7 +1996,6 @@
         // nodes
         for(const n of nodes){
           const active = (n.id==="PEET");
-          // glow
           ctx.save();
           ctx.beginPath();
           ctx.fillStyle = active ? "rgba(123,220,255,.22)" : "rgba(74,163,255,.14)";
@@ -1760,7 +2003,6 @@
           ctx.fill();
           ctx.restore();
 
-          // body
           ctx.save();
           ctx.beginPath();
           ctx.fillStyle = "rgba(0,0,0,.35)";
@@ -1769,7 +2011,6 @@
           roundRect(ctx, n.x-60, n.y-20, 120, 40, 16);
           ctx.fill(); ctx.stroke();
 
-          // label
           ctx.fillStyle = "rgba(255,255,255,.85)";
           ctx.font = `${14*map.dpr}px ${getComputedStyle(document.body).fontFamily}`;
           ctx.textAlign="center"; ctx.textBaseline="middle";
@@ -1815,25 +2056,27 @@
       }
       window.addEventListener("resize", resize);
 
-      canvas.addEventListener("click", (e)=>{
+      canvas.onclick = (e)=>{
         const r = canvas.getBoundingClientRect();
         const mx = (e.clientX-r.left)*dpr;
         const my = (e.clientY-r.top)*dpr;
         const s = stages.find(s=> Math.abs(mx-s.x*dpr)<70*dpr && Math.abs(my-s.y*dpr)<28*dpr );
-        if(s) pushToast(`Stage: ${s.id} (Mock Details)`);
-      });
+        if(s){
+          pushToast(`Stage: ${s.id} (Mock Details)`);
+          addTodo(`Stage prüfen: ${s.id}`, "SmartSorter → Pipeline");
+          renderPeetFolder();
+        }
+      };
 
       function draw(t){
         ctx.clearRect(0,0,canvas.width,canvas.height);
 
-        // title line
         ctx.save();
         ctx.fillStyle="rgba(255,255,255,.70)";
         ctx.font = `${13*dpr}px ${getComputedStyle(document.body).fontFamily}`;
         ctx.fillText("Watcher → Extract → Classify → Rename → Route → Verify", 18*dpr, 28*dpr);
         ctx.restore();
 
-        // links
         ctx.save();
         ctx.strokeStyle="rgba(255,255,255,.10)";
         ctx.lineWidth=2*dpr;
@@ -1846,7 +2089,6 @@
         }
         ctx.restore();
 
-        // stage boxes
         for(let i=0;i<stages.length;i++){
           const s = stages[i];
           const x = s.x*dpr, y=s.y*dpr;
@@ -1859,13 +2101,11 @@
           const isActive = i===activeIdx;
 
           ctx.save();
-          // glow
           ctx.beginPath();
           ctx.fillStyle = isActive ? "rgba(74,163,255,.18)" : "rgba(255,255,255,.06)";
           ctx.roundRect(x-w/2-8*dpr, y-h/2-8*dpr, w+16*dpr, h+16*dpr, 18*dpr);
           ctx.fill();
 
-          // body
           ctx.beginPath();
           ctx.fillStyle = "rgba(0,0,0,.35)";
           ctx.strokeStyle = isActive ? "rgba(74,163,255,.50)" : "rgba(255,255,255,.12)";
@@ -1873,7 +2113,6 @@
           ctx.roundRect(x-w/2, y-h/2, w, h, 16*dpr);
           ctx.fill(); ctx.stroke();
 
-          // text
           ctx.fillStyle="rgba(255,255,255,.86)";
           ctx.font = `${13*dpr}px ${getComputedStyle(document.body).fontFamily}`;
           ctx.textAlign="center"; ctx.textBaseline="middle";
@@ -1912,7 +2151,6 @@
     }
 
     function animatePipeline(){
-      // just a little fake progression
       const steps = ["Ingest","OCR/Extract","Classify","Rename","Route","Verify"];
       let i=0;
       const timer = setInterval(()=>{
@@ -1923,7 +2161,7 @@
       }, 450);
     }
 
-    // ===== Canvas: Creator (pseudo 3D box) =====
+    // ===== Canvas: Creator =====
     let creatorRAF = null;
     function setupCreatorCanvas(){
       const canvas = $("#creatorCanvas");
@@ -1961,7 +2199,6 @@
     function drawCreator(ctx, canvas, dpr, t){
       ctx.clearRect(0,0,canvas.width,canvas.height);
 
-      // grid
       ctx.save();
       ctx.globalAlpha=.5;
       ctx.strokeStyle="rgba(255,255,255,.07)";
@@ -1975,7 +2212,6 @@
       }
       ctx.restore();
 
-      // pseudo-3d box params based on creator
       const cx = canvas.width*0.50;
       const cy = canvas.height*0.54;
       const sx = state.creator.x;
@@ -1990,7 +2226,6 @@
       const ang = t*0.9;
       const tilt = 0.6 + 0.12*Math.sin(t*0.8);
 
-      // corners in iso-like projection
       const rot = (px,py)=>{
         const rx = px*Math.cos(ang) - py*Math.sin(ang);
         const ry = px*Math.sin(ang) + py*Math.cos(ang);
@@ -2002,80 +2237,45 @@
       const C = rot( w,  h);
       const D = rot(-w,  h);
 
-      // project
       const proj = (p, elev=0)=>{
         const x = cx + p[0];
         const y = cy + p[1]*tilt - elev;
         return [x,y];
       };
 
-      const topA = proj(A, z);
-      const topB = proj(B, z);
-      const topC = proj(C, z);
-      const topD = proj(D, z);
+      const topA = proj(A, z), topB = proj(B, z), topC = proj(C, z), topD = proj(D, z);
+      const botA = proj(A, 0), botB = proj(B, 0), botC = proj(C, 0), botD = proj(D, 0);
 
-      const botA = proj(A, 0);
-      const botB = proj(B, 0);
-      const botC = proj(C, 0);
-      const botD = proj(D, 0);
-
-      // draw
       ctx.save();
       ctx.lineWidth = 2*dpr;
 
-      // shadow
       ctx.fillStyle="rgba(0,0,0,.28)";
       ctx.beginPath();
-      ctx.moveTo(botA[0],botA[1]);
-      ctx.lineTo(botB[0],botB[1]);
-      ctx.lineTo(botC[0],botC[1]);
-      ctx.lineTo(botD[0],botD[1]);
-      ctx.closePath();
-      ctx.fill();
+      ctx.moveTo(botA[0],botA[1]); ctx.lineTo(botB[0],botB[1]); ctx.lineTo(botC[0],botC[1]); ctx.lineTo(botD[0],botD[1]);
+      ctx.closePath(); ctx.fill();
 
-      // sides
       ctx.strokeStyle="rgba(255,255,255,.14)";
       ctx.fillStyle="rgba(74,163,255,.08)";
 
-      // left face
       ctx.beginPath();
-      ctx.moveTo(topA[0],topA[1]);
-      ctx.lineTo(topD[0],topD[1]);
-      ctx.lineTo(botD[0],botD[1]);
-      ctx.lineTo(botA[0],botA[1]);
-      ctx.closePath();
-      ctx.fill(); ctx.stroke();
+      ctx.moveTo(topA[0],topA[1]); ctx.lineTo(topD[0],topD[1]); ctx.lineTo(botD[0],botD[1]); ctx.lineTo(botA[0],botA[1]);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
 
-      // right face
       ctx.beginPath();
-      ctx.moveTo(topB[0],topB[1]);
-      ctx.lineTo(topC[0],topC[1]);
-      ctx.lineTo(botC[0],botC[1]);
-      ctx.lineTo(botB[0],botB[1]);
-      ctx.closePath();
-      ctx.fill(); ctx.stroke();
+      ctx.moveTo(topB[0],topB[1]); ctx.lineTo(topC[0],topC[1]); ctx.lineTo(botC[0],botC[1]); ctx.lineTo(botB[0],botB[1]);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
 
-      // top face
       ctx.fillStyle="rgba(123,220,255,.10)";
       ctx.strokeStyle="rgba(74,163,255,.45)";
       ctx.beginPath();
-      ctx.moveTo(topA[0],topA[1]);
-      ctx.lineTo(topB[0],topB[1]);
-      ctx.lineTo(topC[0],topC[1]);
-      ctx.lineTo(topD[0],topD[1]);
-      ctx.closePath();
-      ctx.fill(); ctx.stroke();
+      ctx.moveTo(topA[0],topA[1]); ctx.lineTo(topB[0],topB[1]); ctx.lineTo(topC[0],topC[1]); ctx.lineTo(topD[0],topD[1]);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
 
-      // vertical edges
       ctx.strokeStyle="rgba(255,255,255,.16)";
       for(const [tP,bP] of [[topA,botA],[topB,botB],[topC,botC],[topD,botD]]){
-        ctx.beginPath();
-        ctx.moveTo(tP[0],tP[1]);
-        ctx.lineTo(bP[0],bP[1]);
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(tP[0],tP[1]); ctx.lineTo(bP[0],bP[1]); ctx.stroke();
       }
 
-      // label
       ctx.fillStyle="rgba(255,255,255,.86)";
       ctx.font = `${13*dpr}px ${getComputedStyle(document.body).fontFamily}`;
       ctx.textAlign="center"; ctx.textBaseline="middle";
@@ -2084,7 +2284,7 @@
       ctx.restore();
     }
 
-    // ===== Canvas: BaumLab Cluster Map =====
+    // ===== Canvas: BaumLab =====
     let baumRAF=null;
     function setupBaumCanvas(){
       const canvas = $("#baumCanvas");
@@ -2112,7 +2312,6 @@
         t+=0.016;
         ctx.clearRect(0,0,canvas.width,canvas.height);
 
-        // background noise dots
         ctx.save();
         ctx.globalAlpha=.6;
         for(let i=0;i<80;i++){
@@ -2123,20 +2322,17 @@
         }
         ctx.restore();
 
-        // clusters
         clusters.forEach((c,idx)=>{
           const cx = c.x*canvas.width;
           const cy = c.y*canvas.height;
           const rr = c.r*Math.min(canvas.width,canvas.height);
           const pulse = 0.08*Math.sin(t*1.2+idx);
 
-          // glow
           ctx.save();
           ctx.fillStyle = "rgba(74,163,255,.10)";
           ctx.beginPath(); ctx.arc(cx,cy,rr*(1.15+pulse),0,Math.PI*2); ctx.fill();
           ctx.restore();
 
-          // body
           ctx.save();
           ctx.fillStyle = "rgba(0,0,0,.35)";
           ctx.strokeStyle = "rgba(74,163,255,.35)";
@@ -2144,7 +2340,6 @@
           ctx.beginPath(); ctx.arc(cx,cy,rr*(0.78+pulse),0,Math.PI*2); ctx.fill(); ctx.stroke();
           ctx.restore();
 
-          // label
           ctx.save();
           ctx.fillStyle="rgba(255,255,255,.84)";
           ctx.font = `${13*dpr}px ${getComputedStyle(document.body).fontFamily}`;
@@ -2169,11 +2364,11 @@
         </div>
       `).join("");
       box.querySelectorAll(".profile").forEach(p=>{
-        p.addEventListener("click", ()=> setProfile(p.dataset.prof));
+        p.onclick = ()=> setProfile(p.dataset.prof);
       });
     }
 
-    // ===== Polyfill: roundRect for older browsers =====
+    // ===== Polyfill: roundRect =====
     if(!CanvasRenderingContext2D.prototype.roundRect){
       CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
         const ctx=this;
