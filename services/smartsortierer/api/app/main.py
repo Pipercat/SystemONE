@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import check_db_connection
 from app.core.security import APIKeyMiddleware
-from app.api import files, docs
+from app.api import files, docs, peet
 
 app = FastAPI(
     title="SmartSortierer Pro API",
@@ -42,6 +42,7 @@ app.add_middleware(APIKeyMiddleware)
 # Include routers
 app.include_router(files.router)
 app.include_router(docs.router)
+app.include_router(peet.router)
 
 @app.get("/api/health")
 async def health_check():

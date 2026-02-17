@@ -118,6 +118,17 @@ SystemONE/
 
 ---
 
+
+## 🧭 Architektur-Dokumentation
+
+- [SystemONE Architektur](docs/architecture.md)
+- [Netzwerk](docs/network.md)
+- [Services](docs/services.md)
+- [Security](docs/security.md)
+- [Roadmap](docs/roadmap.md)
+
+---
+
 ## 🚀 Installation
 
 ### Voraussetzungen
