@@ -25,6 +25,8 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
         "/api/docs",
         "/api/redoc",
         "/api/openapi.json",
+        "/api/peet/chat",
+        "/api/peet/system/healthcard",
     }
     
     async def dispatch(self, request: Request, call_next):
