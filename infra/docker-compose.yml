@@ -64,7 +64,7 @@ services:
       - LOG_LEVEL=${LOG_LEVEL}
       - ENVIRONMENT=${ENVIRONMENT}
     volumes:
-      - /mnt/nas/smartsortierer:${SS_STORAGE_ROOT}
+      - ${SS_STORAGE_HOST_PATH:-./data/storage}:${SS_STORAGE_ROOT:-/data/smartsortierer}
     depends_on:
       postgres:
         condition: service_healthy
@@ -106,7 +106,7 @@ services:
       - OLLAMA_MODEL_EMBED=${OLLAMA_MODEL_EMBED}
       - LOG_LEVEL=${LOG_LEVEL}
     volumes:
-      - /mnt/nas/smartsortierer:${SS_STORAGE_ROOT}
+      - ${SS_STORAGE_HOST_PATH:-./data/storage}:${SS_STORAGE_ROOT:-/data/smartsortierer}
     depends_on:
       postgres:
         condition: service_healthy
