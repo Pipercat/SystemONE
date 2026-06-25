@@ -11,7 +11,7 @@ SystemONE ist ein local-first Dashboard für Smart Home, Dokumentenautomatisieru
 git clone https://github.com/Pipercat/SystemONE.git
 cd SystemONE
 cp .env.example .env
-cd infra && docker compose up -d --build
+cd infra && docker compose --env-file ../.env up -d --build
 ```
 Danach erreichbar unter:
 - Dashboard / Reverse Proxy: `http://localhost`
@@ -21,7 +21,7 @@ Danach erreichbar unter:
 
 | Komponente | Zweck | Status | Doku |
 |---|---|---|---|
-| Dashboard (Frontend) | Zentrale Oberfläche für Status, Navigation und PEET-Panel | In progress | [Architektur](docs/ARCHITECTURE.md) |
+| Dashboard (Frontend) | Zentrale Oberfläche für Status, Navigation und PEET-Panel | In progress | [MVP](docs/MVP.md) |
 | SmartSortierer API | Upload, Metadaten, Security, Dokumenten-Endpunkte | Done | [Services](docs/services.md) |
 | SmartSortierer Worker | Background-Jobs (Extract, Chunk, Embed, Klassifikation) | Done | [Architektur](docs/ARCHITECTURE.md) |
 | PostgreSQL | Strukturierte Fachdaten und Job-Status | Done | [INSTALL](INSTALL.md) |
@@ -56,6 +56,9 @@ SystemONE/
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── docs/
+│   ├── MVP.md
+│   ├── MODULE_STECKBRIEFE.md
+│   ├── ISSUES.md
 │   ├── ARCHITECTURE.md
 │   ├── ROADMAP.md
 │   ├── GLOSSARY.md
@@ -78,8 +81,11 @@ SystemONE/
 - Technische Entscheidungen nachvollziehbar zu begründen (Trade-offs und Abhängigkeiten).
 
 ## Weiterführende Links
+- [MVP](docs/MVP.md)
 - [INSTALL](INSTALL.md)
 - [ROADMAP](docs/ROADMAP.md)
+- [Modul-Steckbriefe](docs/MODULE_STECKBRIEFE.md)
+- [Issue Backlog](docs/ISSUES.md)
 - [SECURITY](docs/SECURITY.md)
 - [ARCHITECTURE](docs/ARCHITECTURE.md)
 - [CONTRIBUTING](CONTRIBUTING.md)

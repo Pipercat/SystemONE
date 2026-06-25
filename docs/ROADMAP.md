@@ -26,15 +26,18 @@ Diese Roadmap ist die **bewertungsreife Planungsansicht** (Status + Nutzen + Auf
 | P3 | LED-Matrix / Physical Dashboard | Physische Statusanzeige (optional) | Lern- und Demoeffekt | M | API/Events, Hardware-Schnittstelle | Vision |
 
 ## Nächste 5 Schritte (Mini-Backlog)
-1. End-to-End Testpfad für SmartSortierer dokumentieren und stabilisieren.
-2. PEET Chat-Panel als MVP im Dashboard sichtbar machen.
-3. Security-Baseline vereinheitlichen (Key-Rotation + Reverse-Proxy-Standard).
-4. Home Assistant Connector mit klaren Freigaberegeln spezifizieren.
+1. MVP-Scope anhand von `docs/MVP.md` als erste baubare Version abschließen.
+2. End-to-End Testpfad für SmartSortierer dokumentieren und stabilisieren.
+3. PEET Chat-Panel als MVP im Dashboard sichtbar machen.
+4. Security-Baseline vereinheitlichen (Key-Rotation + Reverse-Proxy-Standard).
 5. Architekturstatus im Dashboard visualisieren (Service Health + Datenfluss).
 
 ## Verknüpfte Dokumente
 - [README](../README.md)
 - [INSTALL](../INSTALL.md)
+- [MVP](MVP.md)
 - [ARCHITECTURE](ARCHITECTURE.md)
+- [MODULE_STECKBRIEFE](MODULE_STECKBRIEFE.md)
+- [ISSUES](ISSUES.md)
 - [SECURITY](SECURITY.md)
 - [CHANGELOG](../CHANGELOG.md)

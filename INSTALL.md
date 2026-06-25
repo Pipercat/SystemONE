@@ -25,7 +25,8 @@ Wichtige Variablen aus `.env.example`:
 |---|---|---|
 | `SS_API_KEY` | API-Zugriffsschutz für SmartSortierer-Endpunkte | `replace-with-long-random-key` |
 | `SS_SECRET_KEY` | Interne Signierung/Secrets | `replace-with-second-random-key` |
-| `SS_STORAGE_ROOT` | Basisordner für Dokumentablage | `./data/storage` (lokal) |
+| `SS_STORAGE_ROOT` | Container-Pfad für Dokumentablage | `/data/smartsortierer` |
+| `SS_STORAGE_HOST_PATH` | Lokaler Host-Pfad oder NAS-Mount für Dokumentablage | `../data/storage` (lokal, aus `infra/`) |
 | `POSTGRES_*` | Datenbank-Verbindung für API/Worker | `POSTGRES_DB=smartsortierer` |
 | `REDIS_*` | Queue/Background-Jobs | `REDIS_HOST=redis` |
 | `QDRANT_*` | Vektorsuche/RAG-Index | `QDRANT_COLLECTION=smartsortierer_docs` |
@@ -53,12 +54,12 @@ Wichtige Variablen aus `.env.example`:
 4. Stack starten:
    ```bash
    cd infra
-   docker compose up -d --build
+   docker compose --env-file ../.env up -d --build
    ```
 5. Status prüfen:
    ```bash
-   docker compose ps
-   docker compose logs --tail=100
+   docker compose --env-file ../.env ps
+   docker compose --env-file ../.env logs --tail=100
    ```
 6. Oberfläche öffnen:
    - `http://localhost`
@@ -72,10 +73,10 @@ Wichtige Variablen aus `.env.example`:
 **Lösung:**
 - Belegten Port identifizieren (`ss -ltnp` oder Docker Desktop Port-Ansicht).
 - Port-Mapping in `infra/docker-compose.yml` anpassen.
-- Stack neu starten (`docker compose down && docker compose up -d`).
+- Stack neu starten (`docker compose --env-file ../.env down && docker compose --env-file ../.env up -d`).
 
 ### Problem: Container ist `unhealthy`
-**Symptom:** `docker compose ps` zeigt `unhealthy`.
+**Symptom:** `docker compose --env-file ../.env ps` zeigt `unhealthy`.
 
 **Lösung:**
 - Logs des betroffenen Dienstes prüfen (`docker compose logs <service>`).
@@ -86,7 +87,7 @@ Wichtige Variablen aus `.env.example`:
 **Symptom:** Uploads schlagen fehl, Pfade nicht auffindbar.
 
 **Lösung:**
-- `SS_STORAGE_ROOT` auf existierenden Pfad setzen.
+- `SS_STORAGE_HOST_PATH` auf einen existierenden Host-Pfad setzen und `SS_STORAGE_ROOT` als Container-Pfad belassen.
 - Schreibrechte prüfen (`chown/chmod` je nach OS).
 - Bei NAS-Pfaden zuerst mit lokalem Testpfad starten.
 
@@ -96,8 +97,8 @@ Wichtige Variablen aus `.env.example`:
   ```bash
   git pull
   cd infra
-  docker compose pull
-  docker compose up -d --build
+  docker compose --env-file ../.env pull
+  docker compose --env-file ../.env up -d --build
   ```
 - **Wartung:** regelmäßig alte Images/Volumes prüfen (`docker system df`).
 - **Backup-Konzept:**
